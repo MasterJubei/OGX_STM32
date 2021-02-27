@@ -1,0 +1,8 @@
+XBOXONESParser.cpp:57:6:bool XBOXONESParser::checkDpad(ButtonEnum)	16	static
+XBOXONESParser.cpp:72:10:uint16_t XBOXONESParser::getButtonPress(ButtonEnum)	16	static
+XBOXONESParser.cpp:84:6:bool XBOXONESParser::getButtonClick(ButtonEnum)	24	static
+XBOXONESParser.cpp:108:9:int16_t XBOXONESParser::getAnalogHat(AnalogHatEnum)	16	static
+XBOXONESParser.cpp:112:6:void XBOXONESParser::Parse(uint8_t, uint8_t*)	32	static
+XBOXONESParser.cpp:171:6:void XBOXONESParser::Reset()	24	static
+XBOXONESParser.cpp:186:6:void XBOXONESParser::setRumbleOff()	24	static
+XBOXONESParser.cpp:200:6:void XBOXONESParser::setRumbleOn(uint8_t, uint8_t, uint8_t, uint8_t)	24	static

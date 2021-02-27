@@ -1,0 +1,3 @@
+parsetools.h:54:14:void MultiByteValueParser::Initialize(MultiValueBuffer*)	16	static
+parsetools.cpp:26:6:bool MultiByteValueParser::Parse(uint8_t**, uint16_t*)	24	static
+parsetools.cpp:41:6:bool PTPListParser::Parse(uint8_t**, uint16_t*, PTP_ARRAY_EL_FUNC, const void*)	24	static

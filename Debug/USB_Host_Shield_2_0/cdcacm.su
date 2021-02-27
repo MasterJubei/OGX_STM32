@@ -1,0 +1,53 @@
+UsbCore.h:137:25:virtual uint8_t USBDeviceConfig::Init(uint8_t, uint8_t, bool)	16	static
+UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
+UsbCore.h:145:25:virtual uint8_t USBDeviceConfig::Release()	16	static
+UsbCore.h:149:25:virtual uint8_t USBDeviceConfig::Poll()	16	static
+UsbCore.h:153:25:virtual uint8_t USBDeviceConfig::GetAddress()	16	static
+UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
+UsbCore.h:161:22:virtual bool USBDeviceConfig::VIDPIDOK(uint16_t, uint16_t)	16	static
+UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
+UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
+UsbCore.h:226:22:AddressPool& USB::GetAddressPool()	16	static
+UsbCore.h:230:17:uint8_t USB::RegisterDeviceClass(USBDeviceConfig*)	24	static
+parsetools.h:36:9:MultiValueBuffer::MultiValueBuffer()	16	static
+parsetools.h:47:9:MultiByteValueParser::MultiByteValueParser()	16	static
+parsetools.h:54:14:void MultiByteValueParser::Initialize(MultiValueBuffer*)	16	static
+parsetools.h:69:9:ByteSkipper::ByteSkipper()	16	static
+parsetools.h:72:14:void ByteSkipper::Initialize(MultiValueBuffer*)	16	static
+parsetools.h:77:14:bool ByteSkipper::Skip(uint8_t**, uint16_t*, uint16_t)	24	static
+confdescparser.h:35:22:virtual void UsbConfigXtracter::EndpointXtract(uint8_t, uint8_t, uint8_t, uint8_t, const USB_ENDPOINT_DESCRIPTOR*)	16	static
+cdcacm.h:209:25:virtual uint8_t ACM::GetAddress()	16	static
+cdcacm.h:213:22:virtual bool ACM::isReady()	16	static
+cdcacm.h:217:30:virtual tty_features ACM::enhanced_status()	16	static
+cdcacm.h:221:30:virtual tty_features ACM::enhanced_features()	24	static
+cdcacm.h:232:22:virtual void ACM::autoflowRTS(bool)	16	static
+cdcacm.h:235:22:virtual void ACM::autoflowDSR(bool)	16	static
+cdcacm.h:238:22:virtual void ACM::autoflowXON(bool)	16	static
+cdcacm.h:241:22:virtual void ACM::half_duplex(bool)	16	static
+cdcacm.h:244:22:virtual void ACM::wide(bool)	16	static
+UsbCore.h:134:7:constexpr USBDeviceConfig::USBDeviceConfig()	16	static
+confdescparser.h:30:7:constexpr UsbConfigXtracter::UsbConfigXtracter()	16	static
+cdcacm.cpp:23:1:ACM::ACM(USB*, CDCAsyncOper*)	40	static
+cdcacm.cpp:46:9:virtual uint8_t ACM::Init(uint8_t, uint8_t, bool)	192	static
+cdcacm.cpp:231:6:virtual void ACM::EndpointXtract(uint8_t, uint8_t, uint8_t, uint8_t, const USB_ENDPOINT_DESCRIPTOR*)	24	static
+cdcacm.cpp:258:9:virtual uint8_t ACM::Release()	16	static
+cdcacm.cpp:272:9:virtual uint8_t ACM::Poll()	16	static
+cdcacm.cpp:280:9:uint8_t ACM::RcvData(uint16_t*, uint8_t*)	40	static
+cdcacm.cpp:288:9:uint8_t ACM::SndData(uint16_t, uint8_t*)	48	static
+cdcacm.cpp:296:9:uint8_t ACM::SetCommFeature(uint16_t, uint8_t, uint8_t*)	80	static
+cdcacm.cpp:304:9:uint8_t ACM::GetCommFeature(uint16_t, uint8_t, uint8_t*)	80	static
+cdcacm.cpp:312:9:uint8_t ACM::ClearCommFeature(uint16_t)	64	static
+cdcacm.cpp:320:9:uint8_t ACM::SetLineCoding(const LINE_CODING*)	56	static
+cdcacm.cpp:328:9:uint8_t ACM::GetLineCoding(LINE_CODING*)	56	static
+cdcacm.cpp:336:9:uint8_t ACM::SetControlLineState(uint8_t)	56	static
+cdcacm.cpp:344:9:uint8_t ACM::SendBreak(uint16_t)	64	static
+cdcacm.cpp:352:6:void ACM::PrintEndpointDescriptor(const USB_ENDPOINT_DESCRIPTOR*)	16	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+UsbCore.h:205:7:constexpr USBReadParser::USBReadParser()	16	static
+confdescparser.h:79:1:ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ConfigDescParser(UsbConfigXtracter*) [with unsigned char CLASS_ID = 2; unsigned char SUBCLASS_ID = 2; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	16	static
+confdescparser.h:79:1:ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ConfigDescParser(UsbConfigXtracter*) [with unsigned char CLASS_ID = 10; unsigned char SUBCLASS_ID = 0; unsigned char PROTOCOL_ID = 0; unsigned char MASK = 1]	16	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = short unsigned int]	16	static
+confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 10; unsigned char SUBCLASS_ID = 0; unsigned char PROTOCOL_ID = 0; unsigned char MASK = 1]	32	static
+confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 2; unsigned char SUBCLASS_ID = 2; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	32	static
+confdescparser.h:103:6:bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor(uint8_t**, uint16_t*) [with unsigned char CLASS_ID = 10; unsigned char SUBCLASS_ID = 0; unsigned char PROTOCOL_ID = 0; unsigned char MASK = 1]	56	static
+confdescparser.h:103:6:bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor(uint8_t**, uint16_t*) [with unsigned char CLASS_ID = 2; unsigned char SUBCLASS_ID = 2; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	56	static

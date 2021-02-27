@@ -1,0 +1,11 @@
+usbhid.cpp:34:9:uint8_t USBHID::GetReportDescr(uint16_t, USBReadParser*)	128	static
+usbhid.cpp:50:9:uint8_t USBHID::SetReport(uint8_t, uint8_t, uint8_t, uint8_t, uint16_t, uint8_t*)	56	static
+usbhid.cpp:54:9:uint8_t USBHID::GetReport(uint8_t, uint8_t, uint8_t, uint8_t, uint16_t, uint8_t*)	56	static
+usbhid.cpp:58:9:uint8_t USBHID::GetIdle(uint8_t, uint8_t, uint8_t*)	56	static
+usbhid.cpp:62:9:uint8_t USBHID::SetIdle(uint8_t, uint8_t, uint8_t)	48	static
+usbhid.cpp:66:9:uint8_t USBHID::SetProtocol(uint8_t, uint8_t)	48	static
+usbhid.cpp:70:9:uint8_t USBHID::GetProtocol(uint8_t, uint8_t*)	56	static
+usbhid.cpp:74:6:void USBHID::PrintEndpointDescriptor(const USB_ENDPOINT_DESCRIPTOR*)	16	static
+usbhid.cpp:90:6:void USBHID::PrintHidDescriptor(const USB_HID_DESCRIPTOR*)	16	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = short unsigned int]	16	static

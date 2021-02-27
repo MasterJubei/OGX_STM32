@@ -1,0 +1,5 @@
+message.cpp:31:6:void E_Notifyc(char, int)	16	static
+message.cpp:41:6:void E_Notify(const char*, int)	24	static
+message.cpp:49:6:void E_NotifyStr(const char*, int)	24	static
+message.cpp:57:6:void E_Notify(uint8_t, int)	16	static
+message.cpp:67:6:void E_Notify(double, int)	24	static

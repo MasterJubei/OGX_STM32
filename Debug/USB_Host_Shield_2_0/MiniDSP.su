@@ -1,0 +1,15 @@
+UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
+UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
+UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
+UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
+hidcomposite.h:95:25:virtual uint8_t HIDComposite::GetAddress()	16	static
+hidcomposite.h:99:22:virtual bool HIDComposite::isReady()	16	static
+hiduniversal.h:25:14:virtual bool HIDUniversal::SelectInterface(uint8_t, uint8_t)	16	static
+hiduniversal.h:32:14:virtual void HIDUniversal::ParseHIDData(USBHID*, uint8_t, bool, uint8_t, uint8_t*)	40	static
+hiduniversal.h:50:14:virtual void HIDUniversal::EndpointXtract(uint8_t, uint8_t, uint8_t, uint8_t, const USB_ENDPOINT_DESCRIPTOR*)	32	static
+MiniDSP.h:141:22:virtual bool MiniDSP::VIDPIDOK(uint16_t, uint16_t)	16	static
+MiniDSP.cpp:24:6:virtual void MiniDSP::ParseHIDData(USBHID*, bool, uint8_t, uint8_t*)	32	static
+MiniDSP.cpp:57:9:virtual uint8_t MiniDSP::OnInitSuccessful()	16	static
+MiniDSP.cpp:71:9:uint8_t MiniDSP::Checksum(const uint8_t*, uint8_t) const	32	static
+MiniDSP.cpp:79:6:void MiniDSP::SendCommand(uint8_t*, uint8_t) const	104	static
+MiniDSP.cpp:107:6:void MiniDSP::RequestStatus() const	24	static

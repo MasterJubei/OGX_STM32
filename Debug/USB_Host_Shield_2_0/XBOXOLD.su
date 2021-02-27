@@ -1,0 +1,26 @@
+UsbCore.h:137:25:virtual uint8_t USBDeviceConfig::Init(uint8_t, uint8_t, bool)	16	static
+UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
+UsbCore.h:145:25:virtual uint8_t USBDeviceConfig::Release()	16	static
+UsbCore.h:149:25:virtual uint8_t USBDeviceConfig::Poll()	16	static
+UsbCore.h:153:25:virtual uint8_t USBDeviceConfig::GetAddress()	16	static
+UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
+UsbCore.h:161:22:virtual bool USBDeviceConfig::VIDPIDOK(uint16_t, uint16_t)	16	static
+UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
+UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
+UsbCore.h:226:22:AddressPool& USB::GetAddressPool()	16	static
+UsbCore.h:230:17:uint8_t USB::RegisterDeviceClass(USBDeviceConfig*)	24	static
+UsbCore.h:134:7:constexpr USBDeviceConfig::USBDeviceConfig()	16	static
+XBOXOLD.h:78:25:virtual uint8_t XBOXOLD::GetAddress()	16	static
+XBOXOLD.h:86:22:virtual bool XBOXOLD::isReady()	16	static
+XBOXOLD.h:96:22:virtual bool XBOXOLD::VIDPIDOK(uint16_t, uint16_t)	16	static
+XBOXOLD.cpp:47:1:XBOXOLD::XBOXOLD(USB*)	24	static
+XBOXOLD.cpp:63:9:virtual uint8_t XBOXOLD::Init(uint8_t, uint8_t, bool)	80	static
+XBOXOLD.cpp:237:9:virtual uint8_t XBOXOLD::Release()	16	static
+XBOXOLD.cpp:245:9:virtual uint8_t XBOXOLD::Poll()	40	static
+XBOXOLD.cpp:257:6:void XBOXOLD::readReport()	24	static
+XBOXOLD.cpp:283:6:void XBOXOLD::printReport(uint16_t)	16	static
+XBOXOLD.cpp:295:9:uint8_t XBOXOLD::getButtonPress(ButtonEnum)	24	static
+XBOXOLD.cpp:302:6:bool XBOXOLD::getButtonClick(ButtonEnum)	24	static
+XBOXOLD.cpp:317:9:int16_t XBOXOLD::getAnalogHat(AnalogHatEnum)	16	static
+XBOXOLD.cpp:322:6:void XBOXOLD::XboxCommand(uint8_t*, uint16_t)	56	static
+XBOXOLD.cpp:327:6:void XBOXOLD::setRumbleOn(uint8_t, uint8_t)	24	static

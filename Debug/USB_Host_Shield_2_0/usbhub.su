@@ -1,0 +1,27 @@
+UsbCore.h:137:25:virtual uint8_t USBDeviceConfig::Init(uint8_t, uint8_t, bool)	16	static
+UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
+UsbCore.h:145:25:virtual uint8_t USBDeviceConfig::Release()	16	static
+UsbCore.h:149:25:virtual uint8_t USBDeviceConfig::Poll()	16	static
+UsbCore.h:153:25:virtual uint8_t USBDeviceConfig::GetAddress()	16	static
+UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
+UsbCore.h:161:22:virtual bool USBDeviceConfig::VIDPIDOK(uint16_t, uint16_t)	16	static
+UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
+UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
+UsbCore.h:218:14:void USB::SetHubPreMask()	16	static
+UsbCore.h:226:22:AddressPool& USB::GetAddressPool()	16	static
+UsbCore.h:230:17:uint8_t USB::RegisterDeviceClass(USBDeviceConfig*)	24	static
+usbhub.h:199:25:virtual uint8_t USBHub::GetAddress()	16	static
+usbhub.h:203:22:virtual bool USBHub::DEVCLASSOK(uint8_t)	16	static
+usbhub.h:216:16:uint8_t USBHub::ClearPortFeature(uint8_t, uint8_t, uint8_t)	48	static
+usbhub.h:221:16:uint8_t USBHub::GetHubDescriptor(uint8_t, uint16_t, uint8_t*)	56	static
+usbhub.h:231:16:uint8_t USBHub::GetPortStatus(uint8_t, uint16_t, uint8_t*)	56	static
+usbhub.h:246:16:uint8_t USBHub::SetPortFeature(uint8_t, uint8_t, uint8_t)	48	static
+UsbCore.h:134:7:constexpr USBDeviceConfig::USBDeviceConfig()	16	static
+usbhub.cpp:21:1:USBHub::USBHub(USB*)	16	static
+usbhub.cpp:44:9:virtual uint8_t USBHub::Init(uint8_t, uint8_t, bool)	120	static
+usbhub.cpp:216:9:virtual uint8_t USBHub::Release()	16	static
+usbhub.cpp:229:9:virtual uint8_t USBHub::Poll()	24	static
+usbhub.cpp:242:9:uint8_t USBHub::CheckHubStatus()	48	static
+usbhub.cpp:309:6:virtual void USBHub::ResetHubPort(uint8_t)	32	static
+usbhub.cpp:332:9:uint8_t USBHub::PortStatusChange(uint8_t, HubEvent&)	32	static
+usbhub.cpp:378:6:void PrintHubPortStatus(USBHub*, uint8_t, uint8_t, bool)	24	static

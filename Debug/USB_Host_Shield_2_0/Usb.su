@@ -1,0 +1,48 @@
+avrpins.h:1282:1:static GPIO_PinState P9::IsSet()	8	static
+avrpins.h:1283:1:static void P10::Set()	8	static
+avrpins.h:1283:1:static void P10::Clear()	8	static
+UsbCore.h:226:22:AddressPool& USB::GetAddressPool()	16	static
+Usb.cpp:25:1:USB::USB()	16	static
+Usb.cpp:31:6:void USB::init()	16	static
+Usb.cpp:36:9:uint8_t USB::getUsbTaskState()	16	static
+Usb.cpp:40:6:void USB::setUsbTaskState(uint8_t)	16	static
+Usb.cpp:44:9:EpInfo* USB::getEpInfoEntry(uint8_t, uint8_t)	32	static
+Usb.cpp:64:9:uint8_t USB::setEpInfoEntry(uint8_t, uint8_t, EpInfo*)	32	static
+Usb.cpp:80:9:uint8_t USB::SetAddress(uint8_t, uint8_t, EpInfo**, uint16_t*)	32	static
+Usb.cpp:126:9:uint8_t USB::ctrlReq(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint16_t, uint16_t, uint16_t, uint8_t*, USBReadParser*)	56	static
+Usb.cpp:209:9:uint8_t USB::inTransfer(uint8_t, uint8_t, uint16_t*, uint8_t*, uint8_t)	48	static
+Usb.cpp:224:9:uint8_t USB::InTransfer(EpInfo*, uint16_t, uint16_t*, uint8_t*, uint8_t)	32	static
+Usb.cpp:303:9:uint8_t USB::outTransfer(uint8_t, uint8_t, uint16_t, uint8_t*)	40	static
+Usb.cpp:315:9:uint8_t USB::OutTransfer(EpInfo*, uint16_t, uint16_t, uint8_t*)	48	static
+Usb.cpp:401:9:uint8_t USB::dispatchPkt(uint8_t, uint8_t, uint16_t)	32	static
+Usb.cpp:455:6:void USB::Task()	24	static
+Usb.cpp:561:9:uint8_t USB::DefaultAddressing(uint8_t, uint8_t, bool)	32	static
+Usb.cpp:601:9:uint8_t USB::AttemptConfig(uint8_t, uint8_t, uint8_t, bool)	32	static
+Usb.cpp:683:9:uint8_t USB::Configuring(uint8_t, uint8_t, bool)	72	static
+Usb.cpp:781:9:uint8_t USB::ReleaseDevice(uint8_t)	24	static
+Usb.cpp:796:9:uint8_t USB::getDevDescr(uint8_t, uint8_t, uint16_t, uint8_t*)	48	static
+Usb.cpp:801:9:uint8_t USB::getConfDescr(uint8_t, uint8_t, uint16_t, uint8_t, uint8_t*)	48	static
+Usb.cpp:807:9:uint8_t USB::getConfDescr(uint8_t, uint8_t, uint8_t, USBReadParser*)	128	static
+Usb.cpp:826:9:uint8_t USB::getStrDescr(uint8_t, uint8_t, uint16_t, uint8_t, uint16_t, uint8_t*)	48	static
+Usb.cpp:831:9:uint8_t USB::setAddr(uint8_t, uint8_t, uint8_t)	56	static
+Usb.cpp:840:9:uint8_t USB::setConf(uint8_t, uint8_t, uint8_t)	48	static
+usbhost.h:166:1:MAX3421e<SPI_SS, INTR>::MAX3421e() [with SPI_SS = P10; INTR = P9]	16	static
+address.h:90:7:constexpr AddressPool::AddressPool()	16	static
+address.h:171:9:AddressPoolImpl<MAX_DEVICES_ALLOWED>::AddressPoolImpl() [with unsigned char MAX_DEVICES_ALLOWED = 16]	16	static
+address.h:188:28:UsbDevice* AddressPoolImpl<MAX_DEVICES_ALLOWED>::GetUsbDevicePtr(uint8_t) [with unsigned char MAX_DEVICES_ALLOWED = 16]	24	static
+usbhost.h:177:6:void MAX3421e<SPI_SS, INTR>::regWr(uint8_t, uint8_t) [with SPI_SS = P10; INTR = P9]	24	static
+usbhost.h:278:9:uint8_t MAX3421e<SPI_SS, INTR>::regRd(uint8_t) [with SPI_SS = P10; INTR = P9]	24	static
+usbhost.h:220:10:uint8_t* MAX3421e<SPI_SS, INTR>::bytesWr(uint8_t, uint8_t, uint8_t*) [with SPI_SS = P10; INTR = P9]	32	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+usbhost.h:317:10:uint8_t* MAX3421e<SPI_SS, INTR>::bytesRd(uint8_t, uint8_t, uint8_t*) [with SPI_SS = P10; INTR = P9]	24	static
+usbhost.h:538:9:uint8_t MAX3421e<SPI_SS, INTR>::Task() [with SPI_SS = P10; INTR = P9]	24	static
+usbhost.h:152:17:uint8_t MAX3421e<SPI_SS, INTR>::getVbusState() [with SPI_SS = P10; INTR = P9]	16	static
+address.h:210:25:uint8_t AddressPoolImpl<MAX_DEVICES_ALLOWED>::AllocAddress(uint8_t, bool, uint8_t) [with unsigned char MAX_DEVICES_ALLOWED = 16]	24	static
+address.h:262:22:void AddressPoolImpl<MAX_DEVICES_ALLOWED>::FreeAddress(uint8_t) [with unsigned char MAX_DEVICES_ALLOWED = 16]	24	static
+address.h:113:14:void AddressPoolImpl<MAX_DEVICES_ALLOWED>::InitEntry(uint8_t) [with unsigned char MAX_DEVICES_ALLOWED = 16]	16	static
+address.h:162:14:void AddressPoolImpl<MAX_DEVICES_ALLOWED>::InitAllAddresses() [with unsigned char MAX_DEVICES_ALLOWED = 16]	24	static
+address.h:122:17:uint8_t AddressPoolImpl<MAX_DEVICES_ALLOWED>::FindAddressIndex(uint8_t) [with unsigned char MAX_DEVICES_ALLOWED = 16]	24	static
+usbhost.h:557:9:uint8_t MAX3421e<SPI_SS, INTR>::IntHandler() [with SPI_SS = P10; INTR = P9]	24	static
+address.h:142:14:void AddressPoolImpl<MAX_DEVICES_ALLOWED>::FreeAddressByIndex(uint8_t) [with unsigned char MAX_DEVICES_ALLOWED = 16]	24	static
+usbhost.h:503:6:void MAX3421e<SPI_SS, INTR>::busprobe() [with SPI_SS = P10; INTR = P9]	24	static
+address.h:132:17:uint8_t AddressPoolImpl<MAX_DEVICES_ALLOWED>::FindChildIndex(UsbDeviceAddress, uint8_t) [with unsigned char MAX_DEVICES_ALLOWED = 16]	24	static
