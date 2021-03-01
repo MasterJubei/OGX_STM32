@@ -105,12 +105,13 @@ typedef struct ps4ButtonsTag
 // HID Game
 struct gameHID_t {
 
-      int8_t JoyX; 	// X 1 byte, signed value
-      int8_t JoyY; 	// Y 1 byte, signed value
-      int8_t Joy2X;
-      int8_t Joy2Y;
-      int8_t Joy_LT;
-      int8_t Joy_RT;
+	int8_t Joy_LT;
+	int8_t Joy_RT;
+    int8_t JoyX; 	// X 1 byte, signed value
+    int8_t JoyY; 	// Y 1 byte, signed value
+    int8_t Joy2X;
+    int8_t Joy2Y;
+
       PS4_CC_BUTTONS ps4ButtonsTag;
       //WII_CC_BUTTONS Buttons; 	// Button, one byte, button is bit #0
 };
@@ -170,10 +171,9 @@ int main(void)
   uint8_t LeftHatY_val;
   uint8_t RightHatX_val;
   uint8_t RightHatY_val;
-  //gameHID.Buttons = 0; 	// Button, one byte, button is bit #0
 
-  //int8_t counter1 = 0; // counter for making the fake values wrapping around
-
+  uint8_t L2_val;
+  uint8_t R2_val;
 
   if (Usb.Init() == -1) {
   		Serial.print(F("\r\nOSC did not start"));
@@ -192,25 +192,19 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		Usb.Task();
 		USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-		 // Send HID report
-		//counter1 = (counter1+1)%32-127; // faking X,Y and button values
-		//gameHID.JoyX = counter1*2;
-		//gameHID.JoyY = counter1*4;
-		//gameHID.JoyB1 = ~gameHID.JoyB1; //
-		//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-		//HAL_Delay(100);
 
 		if (PS4.connected()) {
-			LeftHatX_val = PS4.getanalogHat(LeftHatX);
-			LeftHatY_val = PS4.getanalogHat(LeftHatY);
+			LeftHatX_val = PS4.getAnalogHat(LeftHatX);
+			LeftHatY_val = PS4.getAnalogHat(LeftHatY);
+			RightHatX_val = PS4.getAnalogHat(RightHatX);
+			RightHatY_val = PS4.getAnalogHat(RightHatY);
 
-			if (PS4.getAnalogHat(LeftHatX) > 137 || PS4.getAnalogHat(LeftHatX) < 117 || PS4.getAnalogHat(LeftHatY) > 137 || PS4.getAnalogHat(LeftHatY) < 117 || PS4.getAnalogHat(RightHatX) > 137 || PS4.getAnalogHat(RightHatX) < 117 || PS4.getAnalogHat(RightHatY) > 137 || PS4.getAnalogHat(RightHatY) < 117) {
+			if (LeftHatX_val > 137 || LeftHatX_val < 117 || LeftHatY_val > 137 || LeftHatY_val < 117 || RightHatX_val > 137 || RightHatX_val < 117 || RightHatY_val > 137 || RightHatY_val < 117) {
 
 				gameHID.JoyX = PS4.getAnalogHat(LeftHatX) - 128;
 				gameHID.JoyY = PS4.getAnalogHat(LeftHatY) - 128;
 				gameHID.Joy2X = PS4.getAnalogHat(RightHatX) - 128;
 				gameHID.Joy2Y = PS4.getAnalogHat(RightHatY) - 128;
-
 
 				//Serial.print(F("\r\nLeftHatX: "));
 				//Serial.print(PS4.getAnalogHat(LeftHatX));
@@ -227,20 +221,25 @@ int main(void)
 				gameHID.Joy2Y = 0;
 			}
 
-			if (PS4.getAnalogButton(L2) || PS4.getAnalogButton(R2)) { // These are the only analog buttons on the PS4 controller
+			//if (PS4.getAnalogButton(L2) || PS4.getAnalogButton(R2)) { // These are the only analog buttons on the PS4 controller
 				gameHID.Joy_LT = PS4.getAnalogButton(L2) - 128;
 				gameHID.Joy_RT = PS4.getAnalogButton(R2) - 128;
+
+//				Serial.print(F("\rnJoy_LT: "));
+//				Serial.print(gameHID.Joy_LT);
 
 				//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 				//Serial.print(F("\r\nL2: "));
 				//Serial.print(PS4.getAnalogButton(L2));
 				//Serial.print(F("\tR2: "));
 				//Serial.print(PS4.getAnalogButton(R2));
-			}
+			//}
 			if (PS4.getAnalogButton(L2) != oldL2Value || PS4.getAnalogButton(R2) != oldR2Value) // Only write value if it's different
 				PS4.setRumbleOn(PS4.getAnalogButton(L2), PS4.getAnalogButton(R2));
 			oldL2Value = PS4.getAnalogButton(L2);
 			oldR2Value = PS4.getAnalogButton(R2);
+//			Serial.print(F("\r\nL2: "));
+//			Serial.print(gameHID.Joy_LT);
 
 			if (PS4.getButtonClick(PS)) {
 				gameHID.ps4ButtonsTag.button_ps = 1;
@@ -353,7 +352,7 @@ int main(void)
 
 				if (PS4.getButtonPress(OPTIONS)) {
 					gameHID.ps4ButtonsTag.button_start = 1;
-					USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
+					//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 					//Serial.print(F("\r\nOptions"));
 					printAngle = !printAngle;
 				} else {
