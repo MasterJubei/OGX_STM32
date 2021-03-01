@@ -50,7 +50,13 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
  ../USB_Host_Shield_2_0/confdescparser.h ../USB_Host_Shield_2_0/usbhid.h \
  ../USB_Host_Shield_2_0/hidusagestr.h ../USB_Host_Shield_2_0/hidboot.h \
  ../USB_Host_Shield_2_0/PS4Parser.h \
- ../USB_Host_Shield_2_0/controllerEnums.h ../USB_Host_Shield_2_0/usbhub.h
+ ../USB_Host_Shield_2_0/controllerEnums.h ../USB_Host_Shield_2_0/usbhub.h \
+ ../Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc/usbd_hid.h \
+ ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
+ ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
+ ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h \
+ ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
+ ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h
 
 ../Core/Inc/main.h:
 
@@ -189,3 +195,15 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
 ../USB_Host_Shield_2_0/controllerEnums.h:
 
 ../USB_Host_Shield_2_0/usbhub.h:
+
+../Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc/usbd_hid.h:
+
+../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:
+
+../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:
+
+../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h:
+
+../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:
+
+../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h:
