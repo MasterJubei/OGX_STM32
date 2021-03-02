@@ -83,6 +83,8 @@ static uint8_t oldL2Value, oldR2Value;
 static bool buttonPressed;
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
+uint8_t rumble_once = 0;
+uint8_t ps4_connected = 0;
 
 typedef struct ps4ButtonsTag
 {
@@ -172,12 +174,11 @@ int main(void)
   uint8_t RightHatX_val;
   uint8_t RightHatY_val;
   uint32_t cpu_freq = 0;
-  uint8_t rumble_once = 0;
 
   uint16_t timer_val = 0 ;
   uint16_t timer_val2 = 0 ;
 
-  HAL_TIM_Base_Start(&htim14);
+  HAL_TIM_Base_Start_IT(&htim14);
 //  uint8_t L2_val;
 //  uint8_t R2_val;
   Serial.print(F("\r\nCPU Frequency is: "));
@@ -212,11 +213,9 @@ int main(void)
 		USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 
 		if (PS4.connected()) {
-			if(!rumble_once) {
-				PS4.setRumbleOn(RumbleLow);
-				PS4.setRumbleOff();
-				rumble_once = 1;
-			}
+			ps4_connected = 1;
+			__HAL_TIM_CLEAR_IT(&htim14, TIM_IT_UPDATE);
+
 
 			LeftHatX_val = PS4.getAnalogHat(LeftHatX);
 			LeftHatY_val = PS4.getAnalogHat(LeftHatY);
@@ -472,7 +471,6 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-	//HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5);
 
 	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000000); // NOTE: Edited, so it increments every us
 	//HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() /   1680000); // NOTE: Edited, so it increments every us
@@ -501,7 +499,7 @@ static void MX_TIM14_Init(void)
   htim14.Instance = TIM14;
   htim14.Init.Prescaler = (168/2)*100 -1;
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim14.Init.Period = 65535;
+  htim14.Init.Period = 10000-1;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim14) != HAL_OK)
@@ -659,7 +657,22 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 
+	if(htim == &htim14) {
+		//Serial.print("\r\nTesting");
+		if(!rumble_once && ps4_connected) {
+			Serial.print("\r\nPS4 Controller Connected");
+			PS4.setRumbleOn(RumbleLow);
+			rumble_once = 2;
+		}
+
+		else if(rumble_once == 2) {
+			PS4.setRumbleOff();
+			rumble_once = 1;
+		}
+	}
+}
 
 /* USER CODE END 4 */
 
