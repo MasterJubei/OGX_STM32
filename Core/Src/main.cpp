@@ -43,7 +43,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc1;
+//ADC_HandleTypeDef hadc1;
 
 SPI_HandleTypeDef hspi1;
 
@@ -154,7 +154,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_SPI1_Init();
   MX_USB_DEVICE_Init();
-  MX_ADC1_Init();
+  //MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   SPI_Handle = hspi1;
   UART_Handle = huart2;
@@ -234,8 +234,11 @@ int main(void)
 				//Serial.print(F("\tR2: "));
 				//Serial.print(PS4.getAnalogButton(R2));
 			//}
-			if (PS4.getAnalogButton(L2) != oldL2Value || PS4.getAnalogButton(R2) != oldR2Value) // Only write value if it's different
-				PS4.setRumbleOn(PS4.getAnalogButton(L2), PS4.getAnalogButton(R2));
+			if (PS4.getAnalogButton(L2) != oldL2Value || PS4.getAnalogButton(R2) != oldR2Value) {
+				// Only write value if it's different
+				//PS4.setRumbleOn(PS4.getAnalogButton(L2), PS4.getAnalogButton(R2));
+			}
+
 			oldL2Value = PS4.getAnalogButton(L2);
 			oldR2Value = PS4.getAnalogButton(R2);
 //			Serial.print(F("\r\nL2: "));
@@ -245,13 +248,13 @@ int main(void)
 				gameHID.ps4ButtonsTag.button_ps = 1;
 				//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 				//Serial.print(F("\r\nPS"));
-				PS4.disconnect();
+				//PS4.disconnect();
 			} else {
 				if (PS4.getButtonPress(TRIANGLE)) {
 					gameHID.ps4ButtonsTag.button_triangle = 1;
 					//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 					//Serial.print(F("\r\nTraingle"));
-					PS4.setRumbleOn(RumbleLow);
+					//PS4.setRumbleOn(RumbleLow);
 				} else {
 					gameHID.ps4ButtonsTag.button_triangle = 0;
 				}
@@ -259,7 +262,7 @@ int main(void)
 					gameHID.ps4ButtonsTag.button_circle = 1;
 					//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 					//Serial.print(F("\r\nCircle"));
-					PS4.setRumbleOn(RumbleHigh);
+					//PS4.setRumbleOn(RumbleHigh);
 				} else {
 					gameHID.ps4ButtonsTag.button_circle = 0;
 				}
@@ -267,7 +270,7 @@ int main(void)
 					gameHID.ps4ButtonsTag.button_cross = 1;
 					//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 					//Serial.print(F("\r\nCross"));
-					PS4.setLedFlash(10, 10); // Set it to blink rapidly
+					//PS4.setLedFlash(10, 10); // Set it to blink rapidly
 				} else {
 					gameHID.ps4ButtonsTag.button_cross = 0;;
 				}
@@ -275,7 +278,7 @@ int main(void)
 					gameHID.ps4ButtonsTag.button_square = 1;
 					//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 					//Serial.print(F("\r\nSquare"));
-					PS4.setLedFlash(0, 0); // Turn off blinking
+					//PS4.setLedFlash(0, 0); // Turn off blinking
 				} else {
 					gameHID.ps4ButtonsTag.button_square = 0;
 				}
@@ -284,7 +287,7 @@ int main(void)
 					gameHID.ps4ButtonsTag.button_dpad_up = 1;
 					//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 					//Serial.print(F("\r\nUp"));
-					PS4.setLed(Red);
+					//PS4.setLed(Red);
 				} else {
 					gameHID.ps4ButtonsTag.button_dpad_up = 0;
 				}
@@ -292,7 +295,7 @@ int main(void)
 					gameHID.ps4ButtonsTag.button_dpad_right = 1;
 					//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 					//Serial.print(F("\r\nRight"));
-					PS4.setLed(Blue);
+					//PS4.setLed(Blue);
 				} else {
 					gameHID.ps4ButtonsTag.button_dpad_right = 0;
 				}
@@ -300,7 +303,7 @@ int main(void)
 					gameHID.ps4ButtonsTag.button_dpad_down = 1;
 					//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 					//Serial.print(F("\r\nDown"));
-					PS4.setLed(Yellow);
+					//PS4.setLed(Yellow);
 				} else {
 					gameHID.ps4ButtonsTag.button_dpad_down = 0;
 				}
@@ -308,7 +311,7 @@ int main(void)
 					gameHID.ps4ButtonsTag.button_dpad_left = 1;
 					//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 					//Serial.print(F("\r\nLeft"));
-					PS4.setLed(Green);
+					//PS4.setLed(Green);
 				} else {
 					gameHID.ps4ButtonsTag.button_dpad_left = 0;
 				}
@@ -389,7 +392,7 @@ int main(void)
 			USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 		} else if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
 		    if (!buttonPressed) {
-		    	//Serial.print(F("\r\nButton Pressed"));
+		    	Serial.print(F("\r\nButton Pressed"));
 		        PS4.pair(); // Start paring routine if user button was just pressed
 		    }
 		    buttonPressed = true;
@@ -412,7 +415,7 @@ void SystemClock_Config(void)
   /** Configure the main internal regulator output voltage
   */
   __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
@@ -421,9 +424,9 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 4;
-  RCC_OscInitStruct.PLL.PLLN = 72;
+  RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 3;
+  RCC_OscInitStruct.PLL.PLLQ = 7;
   RCC_OscInitStruct.PLL.PLLR = 2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -435,10 +438,10 @@ void SystemClock_Config(void)
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
     Error_Handler();
   }
@@ -448,7 +451,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-	HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_10);
+	HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5);
 
 	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000000); // NOTE: Edited, so it increments every us
 
@@ -458,55 +461,56 @@ void SystemClock_Config(void)
 
 }
 
+
 /**
   * @brief ADC1 Initialization Function
   * @param None
   * @retval None
   */
-static void MX_ADC1_Init(void)
-{
-
-  /* USER CODE BEGIN ADC1_Init 0 */
-
-  /* USER CODE END ADC1_Init 0 */
-
-  ADC_ChannelConfTypeDef sConfig = {0};
-
-  /* USER CODE BEGIN ADC1_Init 1 */
-
-  /* USER CODE END ADC1_Init 1 */
-  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
-  */
-  hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
-  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc1.Init.ScanConvMode = DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 1;
-  hadc1.Init.DMAContinuousRequests = DISABLE;
-  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
-  if (HAL_ADC_Init(&hadc1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
-  */
-  sConfig.Channel = ADC_CHANNEL_13;
-  sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN ADC1_Init 2 */
-
-  /* USER CODE END ADC1_Init 2 */
-
-}
+//static void MX_ADC1_Init(void)
+//{
+//
+//  /* USER CODE BEGIN ADC1_Init 0 */
+//
+//  /* USER CODE END ADC1_Init 0 */
+//
+//  ADC_ChannelConfTypeDef sConfig = {0};
+//
+//  /* USER CODE BEGIN ADC1_Init 1 */
+//
+//  /* USER CODE END ADC1_Init 1 */
+//  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+//  */
+//  hadc1.Instance = ADC1;
+//  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+//  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+//  hadc1.Init.ScanConvMode = DISABLE;
+//  hadc1.Init.ContinuousConvMode = DISABLE;
+//  hadc1.Init.DiscontinuousConvMode = DISABLE;
+//  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+//  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+//  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+//  hadc1.Init.NbrOfConversion = 1;
+//  hadc1.Init.DMAContinuousRequests = DISABLE;
+//  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+//  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+//  */
+//  sConfig.Channel = ADC_CHANNEL_13;
+//  sConfig.Rank = 1;
+//  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  /* USER CODE BEGIN ADC1_Init 2 */
+//
+//  /* USER CODE END ADC1_Init 2 */
+//
+//}
 
 /**
   * @brief SPI1 Initialization Function

@@ -6,8 +6,6 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
-../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c \
-../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c \
 ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
 ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \
 ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c \
@@ -26,13 +24,10 @@ C_SRCS += \
 ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c \
 ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
 ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
-../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.c \
 ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c 
 
 C_DEPS += \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.d \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.d \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.d \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.d \
@@ -51,13 +46,10 @@ C_DEPS += \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.d \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.d \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.d \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.d 
 
 OBJS += \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.o \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.o \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.o \
@@ -76,17 +68,12 @@ OBJS += \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.o \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F4 '-DARDUINO=100' '-D__weak=__attribute__((weak))' '-D__packed=__attributes__((__packed__))' -DSTM32F446xx -DDEBUG -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.d" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
-Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.o: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
-	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F4 '-DARDUINO=100' '-D__weak=__attribute__((weak))' '-D__packed=__attributes__((__packed__))' -DSTM32F446xx -DDEBUG -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.d" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
-Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.o: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
-	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F4 '-DARDUINO=100' '-D__weak=__attribute__((weak))' '-D__packed=__attributes__((__packed__))' -DSTM32F446xx -DDEBUG -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.d" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F4 '-DARDUINO=100' '-D__weak=__attribute__((weak))' '-D__packed=__attributes__((__packed__))' -DSTM32F446xx -DDEBUG -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.d" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
@@ -123,8 +110,6 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o: ../Drivers/STM32F4xx_HA
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F4 '-DARDUINO=100' '-D__weak=__attribute__((weak))' '-D__packed=__attributes__((__packed__))' -DSTM32F446xx -DDEBUG -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.d" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F4 '-DARDUINO=100' '-D__weak=__attribute__((weak))' '-D__packed=__attributes__((__packed__))' -DSTM32F446xx -DDEBUG -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.d" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
-Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.o: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.c Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
-	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F4 '-DARDUINO=100' '-D__weak=__attribute__((weak))' '-D__packed=__attributes__((__packed__))' -DSTM32F446xx -DDEBUG -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.d" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.o: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F4 '-DARDUINO=100' '-D__weak=__attribute__((weak))' '-D__packed=__attributes__((__packed__))' -DSTM32F446xx -DDEBUG -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.d" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 
