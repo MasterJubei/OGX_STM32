@@ -136,17 +136,12 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
   /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  //HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5);
-//  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000000); // NOTE: Edited, so it increments every us
-//  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
-//  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0); // SysTick_IRQn interrupt configuration
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -171,10 +166,15 @@ int main(void)
   uint8_t LeftHatY_val;
   uint8_t RightHatX_val;
   uint8_t RightHatY_val;
+  uint32_t cpu_freq = 0;
+  uint8_t rumble_once = 0;
 
-  uint8_t L2_val;
-  uint8_t R2_val;
-
+//  uint8_t L2_val;
+//  uint8_t R2_val;
+  Serial.print(F("\r\nCPU Frequency is: "));
+  cpu_freq = HAL_RCC_GetHCLKFreq()/1000000;
+  Serial.print((int)cpu_freq);
+  Serial.print("MHz");
   if (Usb.Init() == -1) {
   		Serial.print(F("\r\nOSC did not start"));
   		while (1); // Halt
@@ -194,13 +194,18 @@ int main(void)
 		USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 
 		if (PS4.connected()) {
+			if(!rumble_once) {
+				PS4.setRumbleOn(RumbleLow);
+				PS4.setRumbleOff();
+				rumble_once = 1;
+			}
+
 			LeftHatX_val = PS4.getAnalogHat(LeftHatX);
 			LeftHatY_val = PS4.getAnalogHat(LeftHatY);
 			RightHatX_val = PS4.getAnalogHat(RightHatX);
 			RightHatY_val = PS4.getAnalogHat(RightHatY);
 
 			if (LeftHatX_val > 137 || LeftHatX_val < 117 || LeftHatY_val > 137 || LeftHatY_val < 117 || RightHatX_val > 137 || RightHatX_val < 117 || RightHatY_val > 137 || RightHatY_val < 117) {
-
 				gameHID.JoyX = PS4.getAnalogHat(LeftHatX) - 128;
 				gameHID.JoyY = PS4.getAnalogHat(LeftHatY) - 128;
 				gameHID.Joy2X = PS4.getAnalogHat(RightHatX) - 128;
@@ -386,8 +391,6 @@ int main(void)
 						}
 					}
 				}
-
-
 			}
 			USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 		} else if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
@@ -451,9 +454,10 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-	HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5);
+	//HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5);
 
-	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000000); // NOTE: Edited, so it increments every us
+	//HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000000); // NOTE: Edited, so it increments every us
+	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() /   1680000); // NOTE: Edited, so it increments every us
 
 	HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
