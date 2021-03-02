@@ -184,12 +184,13 @@ int main(void)
   cpu_freq = HAL_RCC_GetHCLKFreq()/1000000;
   Serial.print((int)cpu_freq);
   Serial.print("MHz");
-
+  Serial.print("\r\nStart");
   timer_val = __HAL_TIM_GET_COUNTER(&htim14);
-  HAL_Delay(50);
+  HAL_Delay(500000); //500ms
   timer_val2 = __HAL_TIM_GET_COUNTER(&htim14) - timer_val;
   Serial.print("\r\nTime Elapsed is: ");
-  Serial.print((int)timer_val2);
+  Serial.print((int)timer_val2/10);
+  Serial.print(" ms");
 
 
   if (Usb.Init() == -1) {
@@ -498,7 +499,7 @@ static void MX_TIM14_Init(void)
 
   /* USER CODE END TIM14_Init 1 */
   htim14.Instance = TIM14;
-  htim14.Init.Prescaler = 168/2 -1;
+  htim14.Init.Prescaler = (168/2)*100 -1;
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim14.Init.Period = 65535;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -658,31 +659,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-//HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)	//this overrides the __weak function in stm32f4xx_hal.c
-//{
-//  /* Configure the SysTick to have interrupt in 1us time basis instead of 1ms*/
-////if (HAL_SYSTICK_Config(SystemCoreClock / (1000U / uwTickFreq)) > 0U)
-//  if (HAL_SYSTICK_Config(SystemCoreClock / (1000000U / uwTickFreq)) > 0U)
-//  {
-//    return HAL_ERROR;
-//  }
-//
-//  /* Configure the SysTick IRQ priority */
-//  if (TickPriority < (1UL << __NVIC_PRIO_BITS))
-//  {
-//    HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0U);
-//    uwTickPrio = TickPriority;
-//  }
-//  else
-//  {
-//    return HAL_ERROR;
-//  }
-//
-//
-//
-//  /* Return function status */
-//  return HAL_OK;
-//}
+
 
 /* USER CODE END 4 */
 
