@@ -49,6 +49,9 @@ SPI_HandleTypeDef hspi1;
 
 UART_HandleTypeDef huart2;
 
+TIM_HandleTypeDef htim14;
+
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -58,7 +61,8 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_SPI1_Init(void);
-static void MX_ADC1_Init(void);
+//static void MX_ADC1_Init(void);
+static void MX_TIM14_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -149,6 +153,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_SPI1_Init();
   MX_USB_DEVICE_Init();
+  MX_TIM14_Init();
   //MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   SPI_Handle = hspi1;
@@ -169,12 +174,24 @@ int main(void)
   uint32_t cpu_freq = 0;
   uint8_t rumble_once = 0;
 
+  uint16_t timer_val = 0 ;
+  uint16_t timer_val2 = 0 ;
+
+  HAL_TIM_Base_Start(&htim14);
 //  uint8_t L2_val;
 //  uint8_t R2_val;
   Serial.print(F("\r\nCPU Frequency is: "));
   cpu_freq = HAL_RCC_GetHCLKFreq()/1000000;
   Serial.print((int)cpu_freq);
   Serial.print("MHz");
+
+  timer_val = __HAL_TIM_GET_COUNTER(&htim14);
+  HAL_Delay(50);
+  timer_val2 = __HAL_TIM_GET_COUNTER(&htim14) - timer_val;
+  Serial.print("\r\nTime Elapsed is: ");
+  Serial.print((int)timer_val2);
+
+
   if (Usb.Init() == -1) {
   		Serial.print(F("\r\nOSC did not start"));
   		while (1); // Halt
@@ -456,8 +473,8 @@ void SystemClock_Config(void)
   }
 	//HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5);
 
-	//HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000000); // NOTE: Edited, so it increments every us
-	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() /   1680000); // NOTE: Edited, so it increments every us
+	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000000); // NOTE: Edited, so it increments every us
+	//HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() /   1680000); // NOTE: Edited, so it increments every us
 
 	HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
@@ -465,6 +482,36 @@ void SystemClock_Config(void)
 
 }
 
+/**
+  * @brief TIM14 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM14_Init(void)
+{
+
+  /* USER CODE BEGIN TIM14_Init 0 */
+
+  /* USER CODE END TIM14_Init 0 */
+
+  /* USER CODE BEGIN TIM14_Init 1 */
+
+  /* USER CODE END TIM14_Init 1 */
+  htim14.Instance = TIM14;
+  htim14.Init.Prescaler = 168/2 -1;
+  htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim14.Init.Period = 65535;
+  htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim14) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM14_Init 2 */
+
+  /* USER CODE END TIM14_Init 2 */
+
+}
 
 /**
   * @brief ADC1 Initialization Function
@@ -611,6 +658,31 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+//HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)	//this overrides the __weak function in stm32f4xx_hal.c
+//{
+//  /* Configure the SysTick to have interrupt in 1us time basis instead of 1ms*/
+////if (HAL_SYSTICK_Config(SystemCoreClock / (1000U / uwTickFreq)) > 0U)
+//  if (HAL_SYSTICK_Config(SystemCoreClock / (1000000U / uwTickFreq)) > 0U)
+//  {
+//    return HAL_ERROR;
+//  }
+//
+//  /* Configure the SysTick IRQ priority */
+//  if (TickPriority < (1UL << __NVIC_PRIO_BITS))
+//  {
+//    HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0U);
+//    uwTickPrio = TickPriority;
+//  }
+//  else
+//  {
+//    return HAL_ERROR;
+//  }
+//
+//
+//
+//  /* Return function status */
+//  return HAL_OK;
+//}
 
 /* USER CODE END 4 */
 
