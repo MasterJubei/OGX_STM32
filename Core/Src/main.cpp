@@ -168,6 +168,7 @@ int main(void)
   gameHID.Joy2Y = 0;
   gameHID.Joy_LT = 0;
   gameHID.Joy_RT = 0;
+  gameHID.ps4ButtonsTag.dummy = 0;
 
   uint8_t LeftHatX_val;
   uint8_t LeftHatY_val;
@@ -193,8 +194,8 @@ int main(void)
   Serial.print("\r\nTime Elapsed is: ");
   Serial.print((int)timer_val2/10);
   Serial.print(" ms");
-  hal_gettick = HAL_GetTick();
-  hal_gettick/1000;
+//  hal_gettick = HAL_GetTick();
+//  hal_gettick/1000;
 
   Serial.print((int)hal_gettick);
 
@@ -477,11 +478,11 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000); // NOTE: Edited, so it increments every us
-
-	HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
-
-	HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0); // SysTick_IRQn interrupt configuration
+//	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000); // NOTE: Edited, so it increments every us
+//
+//	HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+//
+//	HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0); // SysTick_IRQn interrupt configuration
 
 }
 
