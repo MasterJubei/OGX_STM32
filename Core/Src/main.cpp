@@ -177,6 +177,7 @@ int main(void)
 
   uint16_t timer_val = 0 ;
   uint16_t timer_val2 = 0 ;
+  uint32_t hal_gettick = 0;
 
   HAL_TIM_Base_Start_IT(&htim14);
 //  uint8_t L2_val;
@@ -187,18 +188,22 @@ int main(void)
   Serial.print("MHz");
   Serial.print("\r\nStart");
   timer_val = __HAL_TIM_GET_COUNTER(&htim14);
-  HAL_Delay(500000); //500ms
+  HAL_Delay(500); //500ms
   timer_val2 = __HAL_TIM_GET_COUNTER(&htim14) - timer_val;
   Serial.print("\r\nTime Elapsed is: ");
   Serial.print((int)timer_val2/10);
   Serial.print(" ms");
+  hal_gettick = HAL_GetTick();
+  hal_gettick/1000;
+
+  Serial.print((int)hal_gettick);
 
 
   if (Usb.Init() == -1) {
   		Serial.print(F("\r\nOSC did not start"));
   		while (1); // Halt
-  	}
-  	Serial.print(F("\r\nPS4 Bluetooth Library Started"));
+  }
+  Serial.print(F("\r\nPS4 Bluetooth Library Started"));
 
   /* USER CODE END 2 */
 
@@ -472,8 +477,7 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000000); // NOTE: Edited, so it increments every us
-	//HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() /   1680000); // NOTE: Edited, so it increments every us
+	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000); // NOTE: Edited, so it increments every us
 
 	HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
@@ -497,7 +501,7 @@ static void MX_TIM14_Init(void)
 
   /* USER CODE END TIM14_Init 1 */
   htim14.Instance = TIM14;
-  htim14.Init.Prescaler = (168/2)*100 -1;
+  htim14.Init.Prescaler = (168/2)*100 -1; //increment every 100us
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim14.Init.Period = 10000-1;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
