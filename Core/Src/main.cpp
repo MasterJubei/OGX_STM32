@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "usb_device.h"	//st library
+#include "cmsis_os.h"	//st freertos
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <PS4BT.h>	//usb host shield library
@@ -50,6 +51,20 @@ UART_HandleTypeDef huart2;
 
 TIM_HandleTypeDef htim14;
 
+/* Definitions for getBT */
+osThreadId_t getBTHandle;
+const osThreadAttr_t getBT_attributes = {
+  .name = "getBT",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for sendUSB */
+osThreadId_t sendUSBHandle;
+const osThreadAttr_t sendUSB_attributes = {
+  .name = "sendUSB",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 
 /* USER CODE BEGIN PV */
 
@@ -60,8 +75,9 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_SPI1_Init(void);
-//static void MX_ADC1_Init(void);
 static void MX_TIM14_Init(void);
+void StartGetBT(void *argument);
+void StartSendUSB(void *argument);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -206,7 +222,44 @@ int main(void)
   Serial.print(F("\r\nPS4 Bluetooth Library Started"));
 
   /* USER CODE END 2 */
+  /* Init scheduler */
+  osKernelInitialize();
 
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+
+  /* Create the thread(s) */
+  /* creation of getBT */
+  getBTHandle = osThreadNew(StartGetBT, NULL, &getBT_attributes);
+
+  /* creation of sendUSB */
+  sendUSBHandle = osThreadNew(StartSendUSB, NULL, &sendUSB_attributes);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  /* USER CODE END RTOS_THREADS */
+
+  /* USER CODE BEGIN RTOS_EVENTS */
+  /* add events, ... */
+  /* USER CODE END RTOS_EVENTS */
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -214,12 +267,13 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  Serial.print(F("\r\nInside Main While loop"));
 		Usb.Task();
 		USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 
 		if (PS4.connected()) {
 			ps4_connected = 1;
-			__HAL_TIM_CLEAR_IT(&htim14, TIM_IT_UPDATE);
+			//__HAL_TIM_CLEAR_IT(&htim14, TIM_IT_UPDATE);
 
 
 			LeftHatX_val = PS4.getAnalogHat(LeftHatX);
@@ -476,13 +530,6 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-
-//	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000); // NOTE: Edited, so it increments every us
-//
-//	HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
-//
-//	HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0); // SysTick_IRQn interrupt configuration
-
 }
 
 /**
@@ -501,7 +548,7 @@ static void MX_TIM14_Init(void)
 
   /* USER CODE END TIM14_Init 1 */
   htim14.Instance = TIM14;
-  htim14.Init.Prescaler = (168/2)*100 -1; //increment every 100us
+  htim14.Init.Prescaler = (168/2)*100 -1;
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim14.Init.Period = 10000-1;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -661,25 +708,67 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-
-	if(htim == &htim14) {
-		//Serial.print("\r\nTesting");
-		if(!rumble_once && ps4_connected) {
-			Serial.print("\r\nPS4 Controller Connected");
-			PS4.setRumbleOn(RumbleLow);
-			rumble_once = 2;
-		}
-
-		else if(rumble_once == 2) {
-			PS4.setRumbleOff();
-			rumble_once = 1;
-		}
-	}
-}
+//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+//
+//	if(htim == &htim14) {
+//		//Serial.print("\r\nTesting");
+//		if(!rumble_once && ps4_connected) {
+//			Serial.print("\r\nPS4 Controller Connected");
+//			PS4.setRumbleOn(RumbleLow);
+//			rumble_once = 2;
+//		}
+//
+//		else if(rumble_once == 2) {
+//			PS4.setRumbleOff();
+//			rumble_once = 1;
+//		}
+//	}
+//}
 
 /* USER CODE END 4 */
+void StartGetBT(void *argument)
+{
+  /* init code for USB_DEVICE */
+  MX_USB_DEVICE_Init();
+  /* USER CODE BEGIN 5 */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END 5 */
+}
 
+/* USER CODE BEGIN Header_StartSendUSB */
+/**
+* @brief Function implementing the sendUSB thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartSendUSB */
+void StartSendUSB(void *argument)
+{
+  /* USER CODE BEGIN StartSendUSB */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartSendUSB */
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM13) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 /**
   * @brief  This function is executed in case of error occurrence.
   * @retval None
