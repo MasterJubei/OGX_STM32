@@ -41871,11 +41871,11 @@ Discarded input sections
  .text._ZN7Max_LCD4initEv
                 0x0000000000000000       0x22 USB_Host_Shield_2_0/max_LCD.o
  .text._ZN7Max_LCD5beginEhhh
-                0x0000000000000000      0x1c0 USB_Host_Shield_2_0/max_LCD.o
+                0x0000000000000000      0x1b8 USB_Host_Shield_2_0/max_LCD.o
  .text._ZN7Max_LCD5clearEv
-                0x0000000000000000       0x24 USB_Host_Shield_2_0/max_LCD.o
+                0x0000000000000000       0x1e USB_Host_Shield_2_0/max_LCD.o
  .text._ZN7Max_LCD4homeEv
-                0x0000000000000000       0x24 USB_Host_Shield_2_0/max_LCD.o
+                0x0000000000000000       0x1e USB_Host_Shield_2_0/max_LCD.o
  .rodata        0x0000000000000000       0x10 USB_Host_Shield_2_0/max_LCD.o
  .text._ZN7Max_LCD9setCursorEhh
                 0x0000000000000000       0x64 USB_Host_Shield_2_0/max_LCD.o
@@ -41906,11 +41906,11 @@ Discarded input sections
  .text._ZN7Max_LCD10createCharEhPh
                 0x0000000000000000       0x5a USB_Host_Shield_2_0/max_LCD.o
  .text._ZN7Max_LCD7commandEh
-                0x0000000000000000       0x3c USB_Host_Shield_2_0/max_LCD.o
+                0x0000000000000000       0x38 USB_Host_Shield_2_0/max_LCD.o
  .text._ZN7Max_LCD5writeEh
                 0x0000000000000000       0x34 USB_Host_Shield_2_0/max_LCD.o
  .text._ZN7Max_LCD8sendbyteEh
-                0x0000000000000000       0xf0 USB_Host_Shield_2_0/max_LCD.o
+                0x0000000000000000       0xe8 USB_Host_Shield_2_0/max_LCD.o
  .text._ZN8MAX3421eI3P102P9E6gpioWrEh
                 0x0000000000000000       0x32 USB_Host_Shield_2_0/max_LCD.o
  .text._ZN8MAX3421eI3P102P9E5regWrEhh

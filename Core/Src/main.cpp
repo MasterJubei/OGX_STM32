@@ -20,12 +20,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "usb_device.h"	//st library
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
 #include <PS4BT.h>	//usb host shield library
 #include <usbhub.h>	//usb host shield library
 #include "usbd_hid.h" //st library
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

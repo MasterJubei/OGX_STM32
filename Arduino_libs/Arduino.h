@@ -14,7 +14,7 @@
 #define RAD_TO_DEG (180.0 / M_PI)
 
 #define delay(ms) HAL_Delay(ms)
-#define delayMicroseconds(us) HAL_Delay(us*1000)
+#define delayMicroseconds(us) HAL_Delay(us/1000)
 #define millis() (HAL_GetTick() / 1)
 #define micros() HAL_GetTick()*1000
 
