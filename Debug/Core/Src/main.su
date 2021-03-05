@@ -10,7 +10,6 @@ BTHID.h:91:14:void BTHID::pair()	16	static
 BTHID.h:121:14:virtual void BTHID::onInit()	16	static
 BTHID.h:141:22:virtual void BTHID::ParseBTHIDControlData(uint8_t, uint8_t*)	24	static
 PS4Parser.h:127:9:PS4Parser::PS4Parser()	16	static
-PS4Parser.h:194:14:bool PS4Parser::isTouching(uint8_t, uint8_t)	16	static
 PS4Parser.h:320:14:void PS4Parser::setLed(uint8_t, uint8_t, uint8_t)	16	static
 PS4Parser.h:331:14:void PS4Parser::setLed(ColorsEnum)	16	static
 PS4BT.h:36:9:PS4BT::PS4BT(BTD*, bool, const char*)	24	static
@@ -21,21 +20,21 @@ PS4BT.h:73:22:virtual void PS4BT::ResetBTHID()	16	static
 PS4BT.h:79:22:virtual void PS4BT::sendOutputReport(PS4Output*)	96	static
 PS4BT.h:107:14:void PS4BT::enable_sixaxis()	24	static
 PS4BT.h:115:14:void PS4BT::HID_Command(uint8_t*, uint8_t)	40	static
-main.cpp:152:5:int main()	24	static
-main.cpp:267:6:void SystemClock_Config()	184	static
-main.cpp:319:13:void MX_TIM14_Init()	8	static
-main.cpp:400:13:void MX_SPI1_Init()	8	static
-main.cpp:438:13:void MX_USART2_UART_Init()	8	static
-main.cpp:471:13:void MX_GPIO_Init()	48	static
-main.cpp:508:6:void StartGetBT(void*)	24	static
-main.cpp:755:6:void StartSendUSB(void*)	16	static
-main.cpp:766:6:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)	16	static
-main.cpp:782:6:void Error_Handler()	4	static,ignoring_inline_asm
+main.cpp:157:5:int main()	8	static
+main.cpp:264:6:void SystemClock_Config()	184	static
+main.cpp:316:13:void MX_TIM14_Init()	8	static
+main.cpp:347:13:void MX_SPI1_Init()	8	static
+main.cpp:385:13:void MX_USART2_UART_Init()	8	static
+main.cpp:418:13:void MX_GPIO_Init()	48	static
+main.cpp:455:6:void StartGetBT(void*)	16	static
+main.cpp:610:6:void StartSendUSB(void*)	16	static
+main.cpp:626:6:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)	16	static
+main.cpp:642:6:void Error_Handler()	4	static,ignoring_inline_asm
 usbhost.h:422:8:int8_t MAX3421e<SPI_SS, INTR>::Init() [with SPI_SS = P10; INTR = P9]	16	static
 usbhost.h:57:21:static void SPi<SPI_CLK, SPI_MOSI, SPI_MISO, SPI_SS>::init() [with SPI_CLK = P13; SPI_MOSI = P11; SPI_MISO = P12; SPI_SS = P10]	4	static
 usbhost.h:177:6:void MAX3421e<SPI_SS, INTR>::regWr(uint8_t, uint8_t) [with SPI_SS = P10; INTR = P9]	24	static
 usbhost.h:408:10:uint16_t MAX3421e<SPI_SS, INTR>::reset() [with SPI_SS = P10; INTR = P9]	24	static
 usbhost.h:278:9:uint8_t MAX3421e<SPI_SS, INTR>::regRd(uint8_t) [with SPI_SS = P10; INTR = P9]	24	static
 usbhost.h:503:6:void MAX3421e<SPI_SS, INTR>::busprobe() [with SPI_SS = P10; INTR = P9]	24	static
-main.cpp:791:1:void __static_initialization_and_destruction_0(int, int)	16	static
-main.cpp:791:1:cpp)	8	static
+main.cpp:651:1:void __static_initialization_and_destruction_0(int, int)	16	static
+main.cpp:651:1:cpp)	8	static

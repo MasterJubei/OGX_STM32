@@ -84,10 +84,13 @@ void StartSendUSB(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+#define PC_SETUP 1
+#define OG_XBOX_SETUP 1
 SPI_HandleTypeDef SPI_Handle;
 UART_HandleTypeDef UART_Handle;
 //SerialClass Serial(&UART_Handle);
 SerialClass Serial(&huart2);
+
 
 USB Usb;
 BTD Btd(&Usb);
@@ -124,6 +127,7 @@ typedef struct ps4ButtonsTag
 } PS4_CC_BUTTONS;
 
 // HID Game
+
 struct gameHID_t {
 
 	int8_t Joy_LT;
@@ -134,7 +138,7 @@ struct gameHID_t {
     int8_t Joy2Y;
 
       PS4_CC_BUTTONS ps4ButtonsTag;
-      //WII_CC_BUTTONS Buttons; 	// Button, one byte, button is bit #0
+      	// Button, one byte, button is bit #0
 };
 
 struct gameHID_t gameHID;
@@ -143,6 +147,36 @@ uint8_t LeftHatY_val;
 uint8_t RightHatX_val;
 uint8_t RightHatY_val;
 
+
+uint32_t cpu_freq = 0;
+uint16_t timer_val = 0 ;
+uint16_t timer_val2 = 0 ;
+uint32_t hal_gettick = 0;
+
+struct xboxHID_t
+{
+    uint8_t startByte; //Always 0x00
+    uint8_t bLength;
+    uint8_t dButtons;
+    uint8_t reserved;
+    uint8_t A;
+    uint8_t B;
+    uint8_t X;
+    uint8_t Y;
+    uint8_t BLACK;
+    uint8_t WHITE;
+    uint8_t L;
+    uint8_t R;
+    int16_t leftStickX;
+    int16_t leftStickY;
+    int16_t rightStickX;
+    int16_t rightStickY;
+    //These last few values aren't part of the xbox controller HID report, but are added here by me to store extra stuff.
+    uint8_t left_actuator;
+    uint8_t right_actuator;
+    uint8_t rumbleUpdate;
+};
+struct xboxHID_t xboxHID;
 /* USER CODE END 0 */
 
 /**
@@ -181,14 +215,6 @@ int main(void)
   UART_Handle = huart2;
 
 
-
-
-
-  uint32_t cpu_freq = 0;
-
-  uint16_t timer_val = 0 ;
-  uint16_t timer_val2 = 0 ;
-  uint32_t hal_gettick = 0;
 
   HAL_TIM_Base_Start_IT(&htim14);
 //  uint8_t L2_val;
@@ -343,56 +369,6 @@ static void MX_TIM14_Init(void)
 }
 
 /**
-  * @brief ADC1 Initialization Function
-  * @param None
-  * @retval None
-  */
-//static void MX_ADC1_Init(void)
-//{
-//
-//  /* USER CODE BEGIN ADC1_Init 0 */
-//
-//  /* USER CODE END ADC1_Init 0 */
-//
-//  ADC_ChannelConfTypeDef sConfig = {0};
-//
-//  /* USER CODE BEGIN ADC1_Init 1 */
-//
-//  /* USER CODE END ADC1_Init 1 */
-//  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
-//  */
-//  hadc1.Instance = ADC1;
-//  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
-//  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
-//  hadc1.Init.ScanConvMode = DISABLE;
-//  hadc1.Init.ContinuousConvMode = DISABLE;
-//  hadc1.Init.DiscontinuousConvMode = DISABLE;
-//  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-//  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-//  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-//  hadc1.Init.NbrOfConversion = 1;
-//  hadc1.Init.DMAContinuousRequests = DISABLE;
-//  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
-//  if (HAL_ADC_Init(&hadc1) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
-//  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
-//  */
-//  sConfig.Channel = ADC_CHANNEL_13;
-//  sConfig.Rank = 1;
-//  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
-//  /* USER CODE BEGIN ADC1_Init 2 */
-//
-//  /* USER CODE END ADC1_Init 2 */
-//
-//}
-
-/**
   * @brief SPI1 Initialization Function
   * @param None
   * @retval None
@@ -516,29 +492,22 @@ void StartGetBT(void *argument)
   }
   Serial.print(F("\r\nPS4 Bluetooth Library Started"));
 
-
+  gameHID.JoyX = 0;
+  gameHID.JoyY = 0;
+  gameHID.Joy2X = 0;
+  gameHID.Joy2Y = 0;
+  gameHID.Joy_LT = 0;
+  gameHID.Joy_RT = 0;
+  gameHID.ps4ButtonsTag.dummy = 0;
   /* Infinite loop */
   for(;;)
   {
 	    /* USER CODE END WHILE */
 
 	    /* USER CODE BEGIN 3 */
-		  gameHID.JoyX = 0;
-		  gameHID.JoyY = 0;
-		  gameHID.Joy2X = 0;
-		  gameHID.Joy2Y = 0;
-		  gameHID.Joy_LT = 0;
-		  gameHID.Joy_RT = 0;
-		  gameHID.ps4ButtonsTag.dummy = 0;
-		  //Serial.print(F("\r\nInside Main While loop"));
 			Usb.Task();
-			USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-
 			if (PS4.connected()) {
 				ps4_connected = 1;
-				//__HAL_TIM_CLEAR_IT(&htim14, TIM_IT_UPDATE);
-
-
 				LeftHatX_val = PS4.getAnalogHat(LeftHatX);
 				LeftHatY_val = PS4.getAnalogHat(LeftHatY);
 				RightHatX_val = PS4.getAnalogHat(RightHatX);
@@ -549,15 +518,6 @@ void StartGetBT(void *argument)
 					gameHID.JoyY = PS4.getAnalogHat(LeftHatY) - 128;
 					gameHID.Joy2X = PS4.getAnalogHat(RightHatX) - 128;
 					gameHID.Joy2Y = PS4.getAnalogHat(RightHatY) - 128;
-
-					//Serial.print(F("\r\nLeftHatX: "));
-					//Serial.print(PS4.getAnalogHat(LeftHatX));
-					//Serial.print(F("\tLeftHatY: "));
-					//Serial.print(PS4.getAnalogHat(LeftHatY));
-					//Serial.print(F("\tRightHatX: "));
-					//Serial.print(PS4.getAnalogHat(RightHatX));
-					//Serial.print(F("\tRightHatY: "));
-					//Serial.print(PS4.getAnalogHat(RightHatY));
 				} else {
 					gameHID.JoyX = 0;
 					gameHID.JoyY = 0;
@@ -565,181 +525,105 @@ void StartGetBT(void *argument)
 					gameHID.Joy2Y = 0;
 				}
 
-				//if (PS4.getAnalogButton(L2) || PS4.getAnalogButton(R2)) { // These are the only analog buttons on the PS4 controller
-					gameHID.Joy_LT = PS4.getAnalogButton(L2) - 128;
-					gameHID.Joy_RT = PS4.getAnalogButton(R2) - 128;
-
-	//				Serial.print(F("\rnJoy_LT: "));
-	//				Serial.print(gameHID.Joy_LT);
-
-					//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-					//Serial.print(F("\r\nL2: "));
-					//Serial.print(PS4.getAnalogButton(L2));
-					//Serial.print(F("\tR2: "));
-					//Serial.print(PS4.getAnalogButton(R2));
-				//}
-				if (PS4.getAnalogButton(L2) != oldL2Value || PS4.getAnalogButton(R2) != oldR2Value) {
-					// Only write value if it's different
-					//PS4.setRumbleOn(PS4.getAnalogButton(L2), PS4.getAnalogButton(R2));
-				}
-
-				oldL2Value = PS4.getAnalogButton(L2);
-				oldR2Value = PS4.getAnalogButton(R2);
-	//			Serial.print(F("\r\nL2: "));
-	//			Serial.print(gameHID.Joy_LT);
+				gameHID.Joy_LT = PS4.getAnalogButton(L2) - 128;
+				gameHID.Joy_RT = PS4.getAnalogButton(R2) - 128;
 
 				if (PS4.getButtonClick(PS)) {
 					gameHID.ps4ButtonsTag.button_ps = 1;
-					//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-					//Serial.print(F("\r\nPS"));
-					//PS4.disconnect();
 				} else {
-					if (PS4.getButtonPress(TRIANGLE)) {
-						gameHID.ps4ButtonsTag.button_triangle = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nTraingle"));
-						//PS4.setRumbleOn(RumbleLow);
-					} else {
-						gameHID.ps4ButtonsTag.button_triangle = 0;
-					}
-					if (PS4.getButtonPress(CIRCLE)) {
-						gameHID.ps4ButtonsTag.button_circle = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nCircle"));
-						//PS4.setRumbleOn(RumbleHigh);
-					} else {
-						gameHID.ps4ButtonsTag.button_circle = 0;
-					}
-					if (PS4.getButtonPress(CROSS)) {
-						gameHID.ps4ButtonsTag.button_cross = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nCross"));
-						//PS4.setLedFlash(10, 10); // Set it to blink rapidly
-					} else {
-						gameHID.ps4ButtonsTag.button_cross = 0;;
-					}
-					if (PS4.getButtonPress(SQUARE)) {
-						gameHID.ps4ButtonsTag.button_square = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nSquare"));
-						//PS4.setLedFlash(0, 0); // Turn off blinking
-					} else {
-						gameHID.ps4ButtonsTag.button_square = 0;
-					}
 
-					if (PS4.getButtonPress(UP)) {
-						gameHID.ps4ButtonsTag.button_dpad_up = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nUp"));
-						//PS4.setLed(Red);
-					} else {
-						gameHID.ps4ButtonsTag.button_dpad_up = 0;
-					}
-					if (PS4.getButtonPress(RIGHT)) {
-						gameHID.ps4ButtonsTag.button_dpad_right = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nRight"));
-						//PS4.setLed(Blue);
-					} else {
-						gameHID.ps4ButtonsTag.button_dpad_right = 0;
-					}
-					if (PS4.getButtonPress(DOWN)) {
-						gameHID.ps4ButtonsTag.button_dpad_down = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nDown"));
-						//PS4.setLed(Yellow);
-					} else {
-						gameHID.ps4ButtonsTag.button_dpad_down = 0;
-					}
-					if (PS4.getButtonPress(LEFT)) {
-						gameHID.ps4ButtonsTag.button_dpad_left = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nLeft"));
-						//PS4.setLed(Green);
-					} else {
-						gameHID.ps4ButtonsTag.button_dpad_left = 0;
-					}
-
-					if (PS4.getButtonPress(L1)) {
-						gameHID.ps4ButtonsTag.button_left_trigger = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nL1"));
-					} else {
-						gameHID.ps4ButtonsTag.button_left_trigger = 0;
-					}
-					if (PS4.getButtonPress(L3)) {
-						gameHID.ps4ButtonsTag.button_left_thumb = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nL3"));
-					} else {
-						gameHID.ps4ButtonsTag.button_left_thumb = 0;
-					}
-					if (PS4.getButtonPress(R1)) {
-						gameHID.ps4ButtonsTag.button_right_trigger = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nR1"));
-					} else {
-						gameHID.ps4ButtonsTag.button_right_trigger = 0;
-					}
-					if (PS4.getButtonPress(R3)) {
-						gameHID.ps4ButtonsTag.button_right_thumb = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nR3"));
-					} else {
-						gameHID.ps4ButtonsTag.button_right_thumb = 0;
-					}
-
-					if (PS4.getButtonPress(SHARE)) {
-						gameHID.ps4ButtonsTag.button_share = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nShare"));
-					} else {
-						gameHID.ps4ButtonsTag.button_share = 0;
-					}
-
-					if (PS4.getButtonPress(OPTIONS)) {
-						gameHID.ps4ButtonsTag.button_start = 1;
-						//USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-						//Serial.print(F("\r\nOptions"));
-						printAngle = !printAngle;
-					} else {
-						gameHID.ps4ButtonsTag.button_start = 0;
-					}
-					if (PS4.getButtonClick(TOUCHPAD)) {
-						//Serial.print(F("\r\nTouchpad"));
-						printTouch = !printTouch;
-					}
-
-					if (printAngle) { // Print angle calculated using the accelerometer only
-						//Serial.print("\r\nPitch: "); // As I have set "-specs=nano.specs" in the linker flags, printf does not support printing floating point number
-						//Serial.print(PS4.getAngle(Pitch));
-						//Serial.print("\tRoll: ");
-						//Serial.print(PS4.getAngle(Roll));
-					}
-
-					if (printTouch) { // Print the x, y coordinates of the touchpad
-						if (PS4.isTouching(0) || PS4.isTouching(1)) // Print newline and carriage return if any of the fingers are touching the touchpad
-							//Serial.print(F("\r\n"));
-						for (uint8_t i = 0; i < 2; i++) { // The touchpad track two fingers
-							if (PS4.isTouching(i)) { // Print the position of the finger if it is touching the touchpad
-								//Serial.print(F("X")); //Serial.print(i + 1); //Serial.print(F(": "));
-								//Serial.print(PS4.getX(i));
-								//Serial.print(F("\tY")); //Serial.print(i + 1); //Serial.print(F(": "));
-								//Serial.print(PS4.getY(i));
-								//Serial.print(F("\t"));
-							}
-						}
-					}
+				if (PS4.getButtonPress(TRIANGLE)) {
+					gameHID.ps4ButtonsTag.button_triangle = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_triangle = 0;
 				}
-				USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
-			} else if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
-			    if (!buttonPressed) {
-			    	Serial.print(F("\r\nButton Pressed"));
-			        PS4.pair(); // Start paring routine if user button was just pressed
-			    }
-			    buttonPressed = true;
-			} else
-			    buttonPressed = false;
+
+				if (PS4.getButtonPress(CIRCLE)) {
+					gameHID.ps4ButtonsTag.button_circle = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_circle = 0;
+				}
+
+				if (PS4.getButtonPress(CROSS)) {
+					gameHID.ps4ButtonsTag.button_cross = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_cross = 0;;
+				}
+
+				if (PS4.getButtonPress(SQUARE)) {
+					gameHID.ps4ButtonsTag.button_square = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_square = 0;
+				}
+
+				if (PS4.getButtonPress(UP)) {
+					gameHID.ps4ButtonsTag.button_dpad_up = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_dpad_up = 0;
+				}
+
+				if (PS4.getButtonPress(RIGHT)) {
+					gameHID.ps4ButtonsTag.button_dpad_right = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_dpad_right = 0;
+				}
+
+				if (PS4.getButtonPress(DOWN)) {
+					gameHID.ps4ButtonsTag.button_dpad_down = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_dpad_down = 0;
+				}
+
+				if (PS4.getButtonPress(LEFT)) {
+					gameHID.ps4ButtonsTag.button_dpad_left = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_dpad_left = 0;
+				}
+
+				if (PS4.getButtonPress(L1)) {
+					gameHID.ps4ButtonsTag.button_left_trigger = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_left_trigger = 0;
+				}
+
+				if (PS4.getButtonPress(L3)) {
+					gameHID.ps4ButtonsTag.button_left_thumb = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_left_thumb = 0;
+				}
+
+				if (PS4.getButtonPress(R1)) {
+					gameHID.ps4ButtonsTag.button_right_trigger = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_right_trigger = 0;
+				}
+
+				if (PS4.getButtonPress(R3)) {
+					gameHID.ps4ButtonsTag.button_right_thumb = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_right_thumb = 0;
+				}
+
+				if (PS4.getButtonPress(SHARE)) {
+					gameHID.ps4ButtonsTag.button_share = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_share = 0;
+				}
+
+				if (PS4.getButtonPress(OPTIONS)) {
+					gameHID.ps4ButtonsTag.button_start = 1;
+				} else {
+					gameHID.ps4ButtonsTag.button_start = 0;
+				}
+			}
+		} else if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
+			if (!buttonPressed) {
+				Serial.print(F("\r\nButton Pressed"));
+				PS4.pair(); // Start paring routine if user button was just pressed
+			}
+			buttonPressed = true;
+		} else
+			buttonPressed = false;
     osDelay(1);
   }
   /* USER CODE END 5 */
@@ -758,6 +642,11 @@ void StartSendUSB(void *argument)
   /* Infinite loop */
   for(;;)
   {
+	//We are defined as a USB Fullspeed device.
+	//Polling rate is determined in usbd_hid.h as HID_FS_BINTERVAL, set to 0x08U
+	//Most settings are defined in usbd_conf.h
+	//So even though we are updating the report often, we still only send at 125hz.
+	USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
     osDelay(1);
   }
   /* USER CODE END StartSendUSB */

@@ -46,6 +46,7 @@ extern "C" {
 
 #define USB_HID_CONFIG_DESC_SIZ                    34U
 #define USB_HID_DESC_SIZ                           9U
+//#define HID_MOUSE_REPORT_DESC_SIZE                 74U
 #define HID_MOUSE_REPORT_DESC_SIZE                 74U
 
 #define HID_DESCRIPTOR_TYPE                        0x21U
@@ -55,6 +56,7 @@ extern "C" {
 #define HID_HS_BINTERVAL                           0x07U
 #endif /* HID_HS_BINTERVAL */
 
+//Fullspeed polling rate is defined in usbd_conf.h
 #ifndef HID_FS_BINTERVAL
 #define HID_FS_BINTERVAL                           0x0AU
 #endif /* HID_FS_BINTERVAL */
