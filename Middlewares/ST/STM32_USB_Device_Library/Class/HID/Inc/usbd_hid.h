@@ -41,19 +41,24 @@ extern "C" {
 /** @defgroup USBD_HID_Exported_Defines
   * @{
   */
-#define HID_EPIN_ADDR                              0x81U
-#define HID_EPIN_SIZE                              0x04U
 
-#define USB_HID_CONFIG_DESC_SIZ                    34U
+
 #if PC_SETUP
 #define USB_HID_DESC_SIZ                           9U
+#define HID_EPIN_ADDR                              0x81U
+#define HID_EPIN_SIZE                              0x04U
+#define USB_HID_CONFIG_DESC_SIZ                    34U
+#define HID_MOUSE_REPORT_DESC_SIZE                 74U
+
 #endif
 
 #if OG_XBOX_SETUP
-#define USB_HID_DESC_SIZ                           9U
+#define USB_HID_DESC_SIZ                           18U
+#define HID_EPIN_ADDR                              0x81U
+#define HID_EPIN_SIZE                              0x20U
+#define USB_HID_CONFIG_DESC_SIZ                    32U
+#define HID_MOUSE_REPORT_DESC_SIZE                 0U
 #endif
-//#define HID_MOUSE_REPORT_DESC_SIZE                 74U
-#define HID_MOUSE_REPORT_DESC_SIZE                 74U
 
 #define HID_DESCRIPTOR_TYPE                        0x21U
 #define HID_REPORT_DESC                            0x22U
@@ -83,6 +88,8 @@ extern "C" {
 /** @defgroup USBD_CORE_Exported_TypesDefinitions
   * @{
   */
+
+
 typedef enum
 {
   HID_IDLE = 0,

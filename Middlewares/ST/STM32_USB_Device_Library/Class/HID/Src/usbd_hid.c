@@ -94,6 +94,7 @@ static uint8_t USBD_HID_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum);
 
 static uint8_t *USBD_HID_GetFSCfgDesc(uint16_t *length);
 static uint8_t *USBD_HID_GetHSCfgDesc(uint16_t *length);
+
 static uint8_t *USBD_HID_GetOtherSpeedCfgDesc(uint16_t *length);
 static uint8_t *USBD_HID_GetDeviceQualifierDesc(uint16_t *length);
 
@@ -104,6 +105,8 @@ static uint8_t *USBD_HID_GetDeviceQualifierDesc(uint16_t *length);
 /** @defgroup USBD_HID_Private_Variables
   * @{
   */
+uint8_t xid_ran = 0;
+uint8_t usb_failed = 0;
 
 USBD_ClassTypeDef USBD_HID =
 {
@@ -119,7 +122,9 @@ USBD_ClassTypeDef USBD_HID =
   NULL,
   USBD_HID_GetHSCfgDesc,
   USBD_HID_GetFSCfgDesc,
+#if PC_SETUP
   USBD_HID_GetOtherSpeedCfgDesc,
+#endif
   USBD_HID_GetDeviceQualifierDesc,
 };
 
@@ -275,6 +280,7 @@ __ALIGN_BEGIN static uint8_t USBD_HID_CfgHSDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN
 };
 #endif
 
+#if PC_SETUP
 /* USB HID device Other Speed Configuration Descriptor */
 __ALIGN_BEGIN static uint8_t USBD_HID_OtherSpeedCfgDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN_END =
 {
@@ -326,8 +332,9 @@ __ALIGN_BEGIN static uint8_t USBD_HID_OtherSpeedCfgDesc[USB_HID_CONFIG_DESC_SIZ]
   HID_FS_BINTERVAL,                                   /* bInterval: Polling Interval */
   /* 34 */
 };
+#endif
 
-
+#if PC_SETUP
 /* USB HID device Configuration Descriptor */
 __ALIGN_BEGIN static uint8_t USBD_HID_Desc[USB_HID_DESC_SIZ] __ALIGN_END =
 {
@@ -342,6 +349,22 @@ __ALIGN_BEGIN static uint8_t USBD_HID_Desc[USB_HID_DESC_SIZ] __ALIGN_END =
   HID_MOUSE_REPORT_DESC_SIZE,                         /* wItemLength: Total length of Report descriptor */
   0x00,
 };
+#endif
+
+#if OG_XBOX_SETUP
+/* USB HID device Configuration Descriptor XID */
+__ALIGN_BEGIN static uint8_t USBD_HID_Desc[16] __ALIGN_END =
+{
+	    0x10,                                          //bLength - Length of report. 16 bytes
+	    0x42,                                          //bDescriptorType - always 0x42
+	    0x00, 0x01,                                    //bcdXid
+	    0x01,                                          //bType - 1=Xbox Gamecontroller
+	    0x02,                                          //bSubType, 0x02 = Gamepad S, 0x01 = Gamepad (Duke)
+	    0x14,                                          //bMaxInputReportSize //HID Report from controller - 20 bytes
+	    0x06,                                          //bMaxOutputReportSize - Rumble report from host - 6 bytes
+	    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF //wAlternateProductIds
+};
+#endif
 
 /* USB Standard Device Descriptor */
 __ALIGN_BEGIN static uint8_t USBD_HID_DeviceQualifierDesc[USB_LEN_DEV_QUALIFIER_DESC] __ALIGN_END =
@@ -359,50 +382,8 @@ __ALIGN_BEGIN static uint8_t USBD_HID_DeviceQualifierDesc[USB_LEN_DEV_QUALIFIER_
 };
 
 
-//#if OG_XBOX_SETUP
-///* USB HID device Configuration Descriptor */
-//__ALIGN_BEGIN static uint8_t USBD_HID_Desc[USB_HID_DESC_SIZ] __ALIGN_END = {
-//		  //Configuration Descriptor//
-//		    0x09,       //bLength of config descriptor
-//		    0x02,       //bDescriptorType, 2=Configuration Descriptor
-//		    0x20, 0x00, //wTotalLength 2-bytes, total length (including interface and endpoint descriptors)
-//		    0x01,       //bNumInterfaces, just 1
-//		    0x01,       //bConfigurationValue
-//		    0x00,       //iConfiguration - index to string descriptors. we dont use them
-//		    0x80,       //bmAttributes - 0x80 = USB Bus Powered
-//		    0xFA,       //bMaxPower - maximum power in 2mA units. 0xFA=500mA. Genuine OG controller is normally 100mA (0x32)
-//
-//		    //Interface Descriptor//
-//		    0x09, //bLength of interface descriptor
-//		    0x04, //bDescriptorType, 4=Interface  Descriptor
-//		    0x00, //bInterfaceNumber
-//		    0x00, //bAlternateSetting
-//		    0x02, //bNumEndpoints - we have two endpoints (IN for button presses, and OUT for rumble values)
-//		    0x58, //bInterfaceClass - From OG Xbox controller
-//		    0x42, //bInterfaceSubClass - From OG Xbox controller
-//		    0x00, //bInterfaceProtocol
-//		    0x00, //iInterface - index to string descriptors. we dont use them
-//
-//		    //Endpoint Descriptor (IN)//
-//		    0x07,       //bLength of endpoint descriptor
-//		    0x05,       //bDescriptorType, 5=Endpoint Descriptor
-//		    0x81,       //bEndpointAddress, Address=1, Direction IN
-//		    0x03,       //bmAttributes, 3=Interrupt Endpoint
-//		    0x20, 0x00, //wMaxPacketSize
-//		    0x04,       //bInterval, Interval for polling the interrupt endpoint. 4ms
-//
-//		    //Endpoint Descriptor (OUT)//
-//		    0x07,       //bLength of endpoint descriptor
-//		    0x05,       //bDescriptorType, 5=Endpoint Descriptor
-//		    0x02,       //bEndpointAddress, Address=2, Direction OUT
-//		    0x03,       //bmAttributes, 3=Interrupt Endpoint
-//		    0x20, 0x00, //wMaxPacketSize
-//		    0x04        //bInterval, Interval for polling the interrupt endpoint. 4ms
-//};
-//#endif
-
 #if PC_SETUP
-/* HID Descriptor */
+/* HID Report Descriptor */
 __ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __ALIGN_END = {
 	    0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
 	    0x09, 0x05,                    // USAGE (Game Pad)
@@ -445,70 +426,33 @@ __ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __
 };
 #endif
 
-#if OG_XBOX_SETUP
-/* HID Descriptor */
-__ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __ALIGN_END = {
-	    0x10,                                          //bLength - Length of report. 16 bytes
-	    0x42,                                          //bDescriptorType - always 0x42
-	    0x00, 0x01,                                    //bcdXid
-	    0x01,                                          //bType - 1=Xbox Gamecontroller
-	    0x02,                                          //bSubType, 0x02 = Gamepad S, 0x01 = Gamepad (Duke)
-	    0x14,                                          //bMaxInputReportSize //HID Report from controller - 20 bytes
-	    0x06,                                          //bMaxOutputReportSize - Rumble report from host - 6 bytes
-	    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF //wAlternateProductIds
-};
-#endif
 
-//This is the default one from cubemx
-//__ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __ALIGN_END =
-//{
-//  0x05,   0x01,
-//  0x09,   0x02,
-//  0xA1,   0x01,
-//  0x09,   0x01,
+//#if OG_XBOX_SETUP
+///* HID Descriptor */
+//__ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __ALIGN_END = {
 //
-//  0xA1,   0x00,
-//  0x05,   0x09,
-//  0x19,   0x01,
-//  0x29,   0x03,
-//
-//  0x15,   0x00,
-//  0x25,   0x01,
-//  0x95,   0x03,
-//  0x75,   0x01,
-//
-//  0x81,   0x02,
-//  0x95,   0x01,
-//  0x75,   0x05,
-//  0x81,   0x01,
-//
-//  0x05,   0x01,
-//  0x09,   0x30,
-//  0x09,   0x31,
-//  0x09,   0x38,
-//
-//  0x15,   0x81,
-//  0x25,   0x7F,
-//  0x75,   0x08,
-//  0x95,   0x03,
-//
-//  0x81,   0x06,
-//  0xC0,   0x09,
-//  0x3c,   0x05,
-//  0xff,   0x09,
-//
-//  0x01,   0x15,
-//  0x00,   0x25,
-//  0x01,   0x75,
-//  0x01,   0x95,
-//
-//  0x02,   0xb1,
-//  0x22,   0x75,
-//  0x06,   0x95,
-//  0x01,   0xb1,
-//
-//  0x01,   0xc0
 //};
+//#endif
+
+__ALIGN_BEGIN static uint8_t DUKE_HID_CAPABILITIES_IN[20] __ALIGN_END = {
+	    0x00, //Always 0x00
+	    0x14, //bLength - length of packet in bytes
+	    0xFF,
+	    0x00, //This byte is 0x00 because this particular byte is not used in the button report.
+	    0xFF,
+	    0xFF, 0xFF, 0xFF,
+	    0xFF, 0xFF, 0xFF,
+	    0xFF, 0xFF, 0xFF,
+	    0xFF, 0xFF, 0xFF,
+	    0xFF, 0xFF, 0xFF
+};
+
+__ALIGN_BEGIN static uint8_t DUKE_HID_CAPABILITIES_OUT[6] = {
+	    0x00,                  //Always 0x00
+	    0x06,                  //bLength - length of packet in bytes
+	    0xFF, 0xFF, 0xFF, 0xFF //bits corresponding to the rumble bits. all 0xFF as they are used.
+};
+
 
 /**
   * @}
@@ -535,6 +479,7 @@ static uint8_t USBD_HID_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
 
   if (hhid == NULL)
   {
+	  usb_failed = 1;
     pdev->pClassData = NULL;
     return (uint8_t)USBD_EMEM;
   }
@@ -594,6 +539,7 @@ static uint8_t USBD_HID_DeInit(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
   */
 static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 {
+  xid_ran++;
   USBD_HID_HandleTypeDef *hhid = (USBD_HID_HandleTypeDef *)pdev->pClassData;
   USBD_StatusTypeDef ret = USBD_OK;
   uint16_t len;
@@ -602,6 +548,7 @@ static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
 
   if (hhid == NULL)
   {
+	  usb_failed = 1;
     return (uint8_t)USBD_FAIL;
   }
 
@@ -648,12 +595,14 @@ static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
           break;
 
         case USB_REQ_GET_DESCRIPTOR:
+#if PC_SETUP
           if ((req->wValue >> 8) == HID_REPORT_DESC)
           {
             len = MIN(HID_MOUSE_REPORT_DESC_SIZE, req->wLength);
             pbuf = HID_MOUSE_ReportDesc;
           }
-          else if ((req->wValue >> 8) == HID_DESCRIPTOR_TYPE)
+#endif
+           if ((req->wValue >> 8) == HID_DESCRIPTOR_TYPE)
           {
             pbuf = USBD_HID_Desc;
             len = MIN(USB_HID_DESC_SIZ, req->wLength);
@@ -701,6 +650,26 @@ static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
       }
       break;
 
+    case 0xC1:			//this is for the og xbox, this is the custom vendor request
+    	xid_ran = 1;
+    	if(req->bRequest == 0x06 && req->wValue == 0x4200) {
+    		len = 16;
+    		pbuf = USBD_HID_Desc;
+    		(void)USBD_CtlSendData(pdev, pbuf, len);
+    	}
+    	else if(req->bRequest == 0x01 && req->wValue == 0x0100) {
+    		len = 20;
+    		pbuf = DUKE_HID_CAPABILITIES_IN;
+    		(void)USBD_CtlSendData(pdev, pbuf, len);
+    	}
+    	else if (req->bRequest == 0x01 && req->wValue == 0x0200) {
+    		len = 6;
+    		pbuf = DUKE_HID_CAPABILITIES_OUT;
+    		(void)USBD_CtlSendData(pdev, pbuf, len);
+    	}
+    break;
+
+
     default:
       USBD_CtlError(pdev, req);
       ret = USBD_FAIL;
@@ -723,6 +692,7 @@ uint8_t USBD_HID_SendReport(USBD_HandleTypeDef *pdev, uint8_t *report, uint16_t 
 
   if (hhid == NULL)
   {
+	  //usb_failed = 1;
     return (uint8_t)USBD_FAIL;
   }
 
@@ -808,13 +778,14 @@ static uint8_t *USBD_HID_GetHSCfgDesc(uint16_t *length)
   * @param  length : pointer data length
   * @retval pointer to descriptor buffer
   */
+#if PC_SETUP
 static uint8_t *USBD_HID_GetOtherSpeedCfgDesc(uint16_t *length)
 {
   *length = (uint16_t)sizeof(USBD_HID_OtherSpeedCfgDesc);
 
   return USBD_HID_OtherSpeedCfgDesc;
 }
-
+#endif
 /**
   * @brief  USBD_HID_DataIn
   *         handle data IN Stage
@@ -841,17 +812,9 @@ static uint8_t USBD_HID_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum)
   */
 static uint8_t *USBD_HID_GetDeviceQualifierDesc(uint16_t *length)
 {
-#if PC_SETUP
+
   *length = (uint16_t)sizeof(USBD_HID_DeviceQualifierDesc);
-
   return USBD_HID_DeviceQualifierDesc;
-#endif
-
-#if OG_XBOX_SETUP
-  *length = 0;
-  return 0;
-#endif
-
 }
 
 /**

@@ -62,19 +62,19 @@
   * @brief Private defines.
   * @{
   */
-#if PC_SETUP
+//#if PC_SETUP
 #define USBD_VID     1155
 #define USBD_PID_FS     22315
 #define USBD_MANUFACTURER_STRING     "STMicroelectronics"
 #define USBD_PRODUCT_STRING_FS     "STM32 Human interface"
-#endif
+//#endif
 
-#if OG_XBOX_SETUP
-#define USBD_VID 0x45e
-#define USBD_PID_FS     0x202
-#define USBD_MANUFACTURER_STRING     "Microsoft Corp."
-#define USBD_PRODUCT_STRING_FS     "Xbox Controller"
-#endif
+//#if OG_XBOX_SETUP
+//#define USBD_VID 0x45e
+//#define USBD_PID_FS     0x202
+//#define USBD_MANUFACTURER_STRING     "Microsoft Corp."
+//#define USBD_PRODUCT_STRING_FS     "Xbox Controller"
+//#endif
 
 #define USBD_LANGID_STRING     1033
 #define USBD_CONFIGURATION_STRING_FS     "HID Config"

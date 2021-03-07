@@ -181,11 +181,14 @@ struct xboxHID_t
     int16_t rightStickX;
     int16_t rightStickY;
     //These last few values aren't part of the xbox controller HID report, but are added here by me to store extra stuff.
-    uint8_t left_actuator;
-    uint8_t right_actuator;
-    uint8_t rumbleUpdate;
+    //uint8_t left_actuator;
+    //uint8_t right_actuator;
+    //uint8_t rumbleUpdate;
 };
 struct xboxHID_t xboxHID;
+
+extern uint8_t xid_ran;
+extern uint8_t usb_failed;
 /* USER CODE END 0 */
 
 /**
@@ -508,12 +511,37 @@ void StartGetBT(void *argument)
   gameHID.Joy_LT = 0;
   gameHID.Joy_RT = 0;
   gameHID.ps4ButtonsTag.dummy = 0;
+
+  xboxHID.startByte = 0;
+  xboxHID.bLength = 20;
+  xboxHID.dButtons = 0;
+  xboxHID.A = 0;
+  xboxHID.B = 0;
+  xboxHID.Y = 0;
+  xboxHID.X = 0;
+  xboxHID.BLACK = 0;
+  xboxHID.WHITE = 0;
+  xboxHID.L = 0;
+  xboxHID.R = 0;
+  xboxHID.leftStickX = 0;
+  xboxHID.leftStickY = 0;
+  xboxHID.rightStickX = 0;
+  xboxHID.rightStickY = 0;
+
   /* Infinite loop */
   for(;;)
   {
+
 	    /* USER CODE END WHILE */
 
 	    /* USER CODE BEGIN 3 */
+			if(xid_ran > 0) {
+				Serial.print("\r\nHey the xid code ran ");
+				Serial.print(xid_ran);
+			}
+			if(usb_failed) {
+				Serial.print("\r\nUSBd failed");
+			}
 			Usb.Task();
 			if (PS4.connected()) {
 				ps4_connected = 1;
@@ -548,8 +576,8 @@ void StartGetBT(void *argument)
 				gameHID.Joy_LT = PS4.getAnalogButton(L2) - 128;
 				gameHID.Joy_RT = PS4.getAnalogButton(R2) - 128;
 
-				xboxHID.left_actuator = gameHID.Joy_LT;
-				xboxHID.right_actuator = gameHID.Joy_RT;
+				xboxHID.L = gameHID.Joy_LT;
+				xboxHID.R = gameHID.Joy_RT;
 
 
 				if (PS4.getButtonClick(PS)) {
@@ -708,7 +736,7 @@ void StartSendUSB(void *argument)
 
 #if OG_XBOX_SETUP
 	//Serial.print(xboxHID.leftStickX);
-	USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct xboxHID_t));
+	USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &xboxHID, sizeof(struct xboxHID_t));
 #endif
     osDelay(1);
   }
