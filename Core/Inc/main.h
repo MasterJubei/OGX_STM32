@@ -71,7 +71,8 @@ void Error_Handler(void);
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
-
+#define PC_SETUP 0
+#define OG_XBOX_SETUP 1
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

@@ -123,6 +123,7 @@ USBD_ClassTypeDef USBD_HID =
   USBD_HID_GetDeviceQualifierDesc,
 };
 
+#if PC_SETUP
 /* USB HID device FS Configuration Descriptor */
 __ALIGN_BEGIN static uint8_t USBD_HID_CfgFSDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN_END =
 {
@@ -174,7 +175,53 @@ __ALIGN_BEGIN static uint8_t USBD_HID_CfgFSDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN
   HID_FS_BINTERVAL,                                   /* bInterval: Polling Interval */
   /* 34 */
 };
+#endif
 
+#if OG_XBOX_SETUP
+/* USB HID device FS Configuration Descriptor */
+/* From OGX360 Project*/
+__ALIGN_BEGIN static uint8_t USBD_HID_CfgFSDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN_END =
+{
+	    //Configuration Descriptor//
+	    0x09,       //bLength of config descriptor
+	    0x02,       //bDescriptorType, 2=Configuration Descriptor
+	    0x20, 0x00, //wTotalLength 2-bytes, total length (including interface and endpoint descriptors)
+	    0x01,       //bNumInterfaces, just 1
+	    0x01,       //bConfigurationValue
+	    0x00,       //iConfiguration - index to string descriptors. we dont use them
+	    0x80,       //bmAttributes - 0x80 = USB Bus Powered
+	    0xFA,       //bMaxPower - maximum power in 2mA units. 0xFA=500mA. Genuine OG controller is normally 100mA (0x32)
+
+	    //Interface Descriptor//
+	    0x09, //bLength of interface descriptor
+	    0x04, //bDescriptorType, 4=Interface  Descriptor
+	    0x00, //bInterfaceNumber
+	    0x00, //bAlternateSetting
+	    0x02, //bNumEndpoints - we have two endpoints (IN for button presses, and OUT for rumble values)
+	    0x58, //bInterfaceClass - From OG Xbox controller
+	    0x42, //bInterfaceSubClass - From OG Xbox controller
+	    0x00, //bInterfaceProtocol
+	    0x00, //iInterface - index to string descriptors. we dont use them
+
+	    //Endpoint Descriptor (IN)//
+	    0x07,       //bLength of endpoint descriptor
+	    0x05,       //bDescriptorType, 5=Endpoint Descriptor
+	    0x81,       //bEndpointAddress, Address=1, Direction IN
+	    0x03,       //bmAttributes, 3=Interrupt Endpoint
+	    0x20, 0x00, //wMaxPacketSize
+	    0x04,       //bInterval, Interval for polling the interrupt endpoint. 4ms
+
+	    //Endpoint Descriptor (OUT)//
+	    0x07,       //bLength of endpoint descriptor
+	    0x05,       //bDescriptorType, 5=Endpoint Descriptor
+	    0x02,       //bEndpointAddress, Address=2, Direction OUT
+	    0x03,       //bmAttributes, 3=Interrupt Endpoint
+	    0x20, 0x00, //wMaxPacketSize
+	    0x04        //bInterval, Interval for polling the interrupt endpoint. 4ms
+};
+#endif
+
+#if PC_SETUP
 /* USB HID device HS Configuration Descriptor */
 __ALIGN_BEGIN static uint8_t USBD_HID_CfgHSDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN_END =
 {
@@ -226,6 +273,7 @@ __ALIGN_BEGIN static uint8_t USBD_HID_CfgHSDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN
   HID_HS_BINTERVAL,                                   /* bInterval: Polling Interval */
   /* 34 */
 };
+#endif
 
 /* USB HID device Other Speed Configuration Descriptor */
 __ALIGN_BEGIN static uint8_t USBD_HID_OtherSpeedCfgDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN_END =
@@ -310,6 +358,51 @@ __ALIGN_BEGIN static uint8_t USBD_HID_DeviceQualifierDesc[USB_LEN_DEV_QUALIFIER_
   0x00,
 };
 
+
+//#if OG_XBOX_SETUP
+///* USB HID device Configuration Descriptor */
+//__ALIGN_BEGIN static uint8_t USBD_HID_Desc[USB_HID_DESC_SIZ] __ALIGN_END = {
+//		  //Configuration Descriptor//
+//		    0x09,       //bLength of config descriptor
+//		    0x02,       //bDescriptorType, 2=Configuration Descriptor
+//		    0x20, 0x00, //wTotalLength 2-bytes, total length (including interface and endpoint descriptors)
+//		    0x01,       //bNumInterfaces, just 1
+//		    0x01,       //bConfigurationValue
+//		    0x00,       //iConfiguration - index to string descriptors. we dont use them
+//		    0x80,       //bmAttributes - 0x80 = USB Bus Powered
+//		    0xFA,       //bMaxPower - maximum power in 2mA units. 0xFA=500mA. Genuine OG controller is normally 100mA (0x32)
+//
+//		    //Interface Descriptor//
+//		    0x09, //bLength of interface descriptor
+//		    0x04, //bDescriptorType, 4=Interface  Descriptor
+//		    0x00, //bInterfaceNumber
+//		    0x00, //bAlternateSetting
+//		    0x02, //bNumEndpoints - we have two endpoints (IN for button presses, and OUT for rumble values)
+//		    0x58, //bInterfaceClass - From OG Xbox controller
+//		    0x42, //bInterfaceSubClass - From OG Xbox controller
+//		    0x00, //bInterfaceProtocol
+//		    0x00, //iInterface - index to string descriptors. we dont use them
+//
+//		    //Endpoint Descriptor (IN)//
+//		    0x07,       //bLength of endpoint descriptor
+//		    0x05,       //bDescriptorType, 5=Endpoint Descriptor
+//		    0x81,       //bEndpointAddress, Address=1, Direction IN
+//		    0x03,       //bmAttributes, 3=Interrupt Endpoint
+//		    0x20, 0x00, //wMaxPacketSize
+//		    0x04,       //bInterval, Interval for polling the interrupt endpoint. 4ms
+//
+//		    //Endpoint Descriptor (OUT)//
+//		    0x07,       //bLength of endpoint descriptor
+//		    0x05,       //bDescriptorType, 5=Endpoint Descriptor
+//		    0x02,       //bEndpointAddress, Address=2, Direction OUT
+//		    0x03,       //bmAttributes, 3=Interrupt Endpoint
+//		    0x20, 0x00, //wMaxPacketSize
+//		    0x04        //bInterval, Interval for polling the interrupt endpoint. 4ms
+//};
+//#endif
+
+#if PC_SETUP
+/* HID Descriptor */
 __ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __ALIGN_END = {
 	    0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
 	    0x09, 0x05,                    // USAGE (Game Pad)
@@ -350,94 +443,21 @@ __ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __
 	    0xc0,                          //     END_COLLECTION
 	    0xc0                           // END_COLLECTION
 };
-//This mostly works except throttle
-//__ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __ALIGN_END =
-//{
-//		0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
-//		    0x09, 0x05,                    // USAGE (Game Pad)
-//		    0xa1, 0x01,                    // COLLECTION (Application)
-//		    0xa1, 0x01,                    //     COLLECTION (Application)
-//		    0x05, 0x01,                    //     USAGE_PAGE (Generic Desktop)
-//		    0x09, 0x30,                    //     USAGE (X)
-//		    0x09, 0x31,                    //     USAGE (Y)
-//		    0x09, 0x32,                    //     USAGE (Z)
-//		    0x09, 0x33,                    //     USAGE (Rx)
-//		    0x15, 0x80,                    //     LOGICAL_MINIMUM (-128)
-//		    0x25, 0x7f,                    //     LOGICAL_MAXIMUM (127)
-//		    0x75, 0x08,                    //     REPORT_SIZE (8)
-//		    0x95, 0x04,                    //     REPORT_COUNT (4)
-//		    0x81, 0x02,                    //     INPUT (Data,Var,Abs)
-//		    0xc0,                          // END_COLLECTION
-//		    0xa1, 0x02,                    // COLLECTION (Logical)
-//		    0x05, 0x02,                    //   USAGE_PAGE (Simulation Controls)
-//		    0x09, 0xbb,                    //   USAGE (Throttle)
-//		    0x15, 0x80,                    //   LOGICAL_MINIMUM (-128)
-//		    0x25, 0x7f,                    //   LOGICAL_MAXIMUM (127)
-//		    0x75, 0x08,                    //   REPORT_SIZE (8)
-//		    0x95, 0x02,                    //   REPORT_COUNT (2)
-//		    0x81, 0x02,                    //   INPUT (Data,Var,Abs)
-//		    0xc0,                          //     END_COLLECTION
-//		    0xa1, 0x02,                    // COLLECTION (Logical)
-//		    0x05, 0x09,                    //     USAGE_PAGE (Button)
-//		    0x15, 0x00,                    //   LOGICAL_MINIMUM (0)
-//		    0x25, 0x01,                    //   LOGICAL_MAXIMUM (1)
-//		    0x19, 0x01,                    //   USAGE_MINIMUM (Button 1)
-//		    0x29, 0x10,                    //   USAGE_MAXIMUM (Button 16)
-//		    0x75, 0x01,                    //   REPORT_SIZE (1)
-//		    0x95, 0x10,                    //   REPORT_COUNT (16)
-//		    0x81, 0x02,                    //   INPUT (Data,Var,Abs)
-//		    0xc0,                          //         END_COLLECTION
-//		    0xc0                           //     END_COLLECTION                         //     END_COLLECTION
-//};
-//only left thumbstick, this works
-//__ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __ALIGN_END =
-//{
-//	    0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
-//	    0x09, 0x04,                    // USAGE (Joystick)
-//	    0xa1, 0x01,                    // COLLECTION (Application)
-//	    0xa1, 0x02,                    //   COLLECTION (Logical)
-//	    0x05, 0x01,                    //     USAGE_PAGE (Generic Desktop)
-//	    0x09, 0x30,                    //     USAGE (X)
-//	    0x09, 0x31,                    //     USAGE (Y)
-//	    0x15, 0x81,                    //     LOGICAL_MINIMUM (-127)
-//	    0x25, 0x7f,                    //     LOGICAL_MAXIMUM (127)
-//	    0x75, 0x08,                    //     REPORT_SIZE (8)
-//	    0x95, 0x02,                    //     REPORT_COUNT (2)
-//	    0x81, 0x02,                     //     INPUT (Data,Var,Abs)
-//	    0xc0, 0xc0
-//};
+#endif
 
-//This is the hackerster.io example
-//__ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __ALIGN_END =
-//{
-//		0x05, 0x01, // Usage Page ( Generic Desktop controls)
-//		0x09, 0x04, // Usage (Joystick)
-//		0xA1, 0x01, // Collection (Application)
-//
-//		0xA1, 0x02, // Collection (Logical)
-//		0x05, 0x01, // Usage Page (Generic Ctrls)
-//		0x09, 0x30, // Usage X
-//		0x09, 0x31, // Usage Y
-//		0x15, 0x81, // Logical Minimum (-127)
-//		0x25, 0x7F, // Logical Maximum (127)
-//		0x75, 0x08, // Report Size (8) -> 8 bits (1 byte value)
-//		0x95, 0x02, // Report Count (2) -> 2x = 2 bytes -> no bit stuffing
-//		0x81, 0x02, // Input (Data,Var,Abs,...)
-//		0x05, 0x09, // Usage Page (Button)
-//		0x09, 0x01, // Usage Button1
-//		0x15, 0x00, // Logical Minimum (0)
-//		0x25, 0x01, // Logical Maximum (1)
-//		0x75, 0x01, // Report Size (1) -> 1 bit
-//		0x95, 0x01, // Report Count (1) -> 1 value : need to stuff 7 more bits
-//		0x81, 0x02, // Input (Data,Var,Abs...)
-//		0x75, 0x07, // Report Size (7) -> 7 bit
-//		0x95, 0x01, // Report Count (1) -> 1 value  7 bits for byte alignment
-//		0x81, 0x03, // Input (Const,Var,Abs,,,,,)
-//		0xC0, // end collection Logical
-//		0xC0, // End Collection =>  46 bytes
-//			   //  Report 2 bytes signed for XY and 1byte  unsigned for button info bit-0
-//};
-//
+#if OG_XBOX_SETUP
+/* HID Descriptor */
+__ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __ALIGN_END = {
+	    0x10,                                          //bLength - Length of report. 16 bytes
+	    0x42,                                          //bDescriptorType - always 0x42
+	    0x00, 0x01,                                    //bcdXid
+	    0x01,                                          //bType - 1=Xbox Gamecontroller
+	    0x02,                                          //bSubType, 0x02 = Gamepad S, 0x01 = Gamepad (Duke)
+	    0x14,                                          //bMaxInputReportSize //HID Report from controller - 20 bytes
+	    0x06,                                          //bMaxOutputReportSize - Rumble report from host - 6 bytes
+	    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF //wAlternateProductIds
+};
+#endif
 
 //This is the default one from cubemx
 //__ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __ALIGN_END =
@@ -769,9 +789,16 @@ static uint8_t *USBD_HID_GetFSCfgDesc(uint16_t *length)
   */
 static uint8_t *USBD_HID_GetHSCfgDesc(uint16_t *length)
 {
+#if PC_SETUP
   *length = (uint16_t)sizeof(USBD_HID_CfgHSDesc);
 
   return USBD_HID_CfgHSDesc;
+#endif
+
+	#if(OG_XBOX_SETUP)
+	*length = 0;
+	return 0;
+	#endif
 }
 
 /**
@@ -814,9 +841,17 @@ static uint8_t USBD_HID_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum)
   */
 static uint8_t *USBD_HID_GetDeviceQualifierDesc(uint16_t *length)
 {
+#if PC_SETUP
   *length = (uint16_t)sizeof(USBD_HID_DeviceQualifierDesc);
 
   return USBD_HID_DeviceQualifierDesc;
+#endif
+
+#if OG_XBOX_SETUP
+  *length = 0;
+  return 0;
+#endif
+
 }
 
 /**

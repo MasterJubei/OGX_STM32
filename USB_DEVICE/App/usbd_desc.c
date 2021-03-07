@@ -62,12 +62,21 @@
   * @brief Private defines.
   * @{
   */
-
+#if PC_SETUP
 #define USBD_VID     1155
-#define USBD_LANGID_STRING     1033
-#define USBD_MANUFACTURER_STRING     "STMicroelectronics"
 #define USBD_PID_FS     22315
+#define USBD_MANUFACTURER_STRING     "STMicroelectronics"
 #define USBD_PRODUCT_STRING_FS     "STM32 Human interface"
+#endif
+
+#if OG_XBOX_SETUP
+#define USBD_VID 0x45e
+#define USBD_PID_FS     0x202
+#define USBD_MANUFACTURER_STRING     "Microsoft Corp."
+#define USBD_PRODUCT_STRING_FS     "Xbox Controller"
+#endif
+
+#define USBD_LANGID_STRING     1033
 #define USBD_CONFIGURATION_STRING_FS     "HID Config"
 #define USBD_INTERFACE_STRING_FS     "HID Interface"
 
@@ -152,6 +161,8 @@ USBD_DescriptorsTypeDef FS_Desc =
 #if defined ( __ICCARM__ ) /* IAR Compiler */
   #pragma data_alignment=4
 #endif /* defined ( __ICCARM__ ) */
+
+#if PC_SETUP
 /** USB standard device descriptor. */
 __ALIGN_BEGIN uint8_t USBD_FS_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END =
 {
@@ -180,6 +191,27 @@ __ALIGN_BEGIN uint8_t USBD_FS_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END =
   USBD_IDX_SERIAL_STR,        /*Index of serial number string*/
   USBD_MAX_NUM_CONFIGURATION  /*bNumConfigurations*/
 };
+#endif
+
+#if OG_XBOX_SETUP
+/** USB standard device descriptor. */
+__ALIGN_BEGIN uint8_t USBD_FS_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END = {
+	    0x12,       //bLength - length of packet in bytes
+	    0x01,       //bDescriptorType - 0x01 = Device Descriptor
+	    0x10, 0x01, //bcdUSB - 2 bytes. Sets USB Spec 1.1 (0110)
+	    0x00,       //bDeviceClass
+	    0x00,       //bDeviceSubClass
+	    0x00,       //dDeviceProtocol
+	    0x20,       //bMaxPacketSize
+	    0x5E, 0x04, //Vendor ID (LSB First) = 0x045E
+	    0x89, 0x02, //Product ID (LSB First) = 0x0289
+	    0x21, 0x01, //bcdDevice - 1.21
+	    0x00,       //iManufacturer = none
+	    0x00,       //iProduct = none
+	    0x00,       //iSerialNumber = none
+	    0x01        //bNumConfigurations = 1
+};
+#endif
 
 /* USB_DeviceDescriptor */
 /** BOS descriptor. */

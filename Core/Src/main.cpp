@@ -35,6 +35,14 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define XBOX_DUP (1 << 0)
+#define XBOX_DDOWN (1 << 1)
+#define XBOX_DLEFT (1 << 2)
+#define XBOX_DRIGHT (1 << 3)
+#define XBOX_START_BTN (1 << 4)
+#define XBOX_BACK_BTN (1 << 5)
+#define XBOX_LS_BTN (1 << 6)
+#define XBOX_RS_BTN (1 << 7)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -84,13 +92,14 @@ void StartSendUSB(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-#define PC_SETUP 1
-#define OG_XBOX_SETUP 1
+//#define PC_SETUP 1
+
+/* Digital Button Masks */
+
+
 SPI_HandleTypeDef SPI_Handle;
 UART_HandleTypeDef UART_Handle;
-//SerialClass Serial(&UART_Handle);
 SerialClass Serial(&huart2);
-
 
 USB Usb;
 BTD Btd(&Usb);
@@ -518,104 +527,151 @@ void StartGetBT(void *argument)
 					gameHID.JoyY = PS4.getAnalogHat(LeftHatY) - 128;
 					gameHID.Joy2X = PS4.getAnalogHat(RightHatX) - 128;
 					gameHID.Joy2Y = PS4.getAnalogHat(RightHatY) - 128;
+
+					xboxHID.leftStickX = gameHID.JoyX << 8;	//only getting 8 bit value from bt
+					xboxHID.leftStickY = gameHID.JoyY << 8;	//xbox uses 16 bit signed
+					xboxHID.rightStickX = gameHID.Joy2X << 8;
+					xboxHID.rightStickY = gameHID.Joy2Y << 8;
+
 				} else {
 					gameHID.JoyX = 0;
 					gameHID.JoyY = 0;
 					gameHID.Joy2X = 0;
 					gameHID.Joy2Y = 0;
+
+					xboxHID.leftStickX = 0;
+					xboxHID.leftStickY = 0;
+					xboxHID.rightStickX = 0;
+					xboxHID.rightStickY = 0;
 				}
 
 				gameHID.Joy_LT = PS4.getAnalogButton(L2) - 128;
 				gameHID.Joy_RT = PS4.getAnalogButton(R2) - 128;
 
+				xboxHID.left_actuator = gameHID.Joy_LT;
+				xboxHID.right_actuator = gameHID.Joy_RT;
+
+
 				if (PS4.getButtonClick(PS)) {
 					gameHID.ps4ButtonsTag.button_ps = 1;
 				} else {
+					gameHID.ps4ButtonsTag.button_ps = 0;
+				}
 
 				if (PS4.getButtonPress(TRIANGLE)) {
 					gameHID.ps4ButtonsTag.button_triangle = 1;
+					xboxHID.Y = 0xFF;
 				} else {
 					gameHID.ps4ButtonsTag.button_triangle = 0;
+					xboxHID.Y = 0;
 				}
 
 				if (PS4.getButtonPress(CIRCLE)) {
 					gameHID.ps4ButtonsTag.button_circle = 1;
+					xboxHID.B = 0xFF;
 				} else {
 					gameHID.ps4ButtonsTag.button_circle = 0;
+					xboxHID.B = 0;
 				}
 
 				if (PS4.getButtonPress(CROSS)) {
 					gameHID.ps4ButtonsTag.button_cross = 1;
+					xboxHID.A = 0xFF;
 				} else {
-					gameHID.ps4ButtonsTag.button_cross = 0;;
+					gameHID.ps4ButtonsTag.button_cross = 0;
+					xboxHID.A = 0;
 				}
 
 				if (PS4.getButtonPress(SQUARE)) {
 					gameHID.ps4ButtonsTag.button_square = 1;
+					xboxHID.X = 0xFF;
 				} else {
 					gameHID.ps4ButtonsTag.button_square = 0;
+					xboxHID.X = 0;
 				}
 
 				if (PS4.getButtonPress(UP)) {
 					gameHID.ps4ButtonsTag.button_dpad_up = 1;
+					xboxHID.dButtons |= XBOX_DUP;
 				} else {
 					gameHID.ps4ButtonsTag.button_dpad_up = 0;
+					xboxHID.dButtons ^= XBOX_DUP;
 				}
 
 				if (PS4.getButtonPress(RIGHT)) {
 					gameHID.ps4ButtonsTag.button_dpad_right = 1;
+					xboxHID.dButtons |= XBOX_DRIGHT;
 				} else {
 					gameHID.ps4ButtonsTag.button_dpad_right = 0;
+					xboxHID.dButtons ^= XBOX_DRIGHT;
 				}
 
 				if (PS4.getButtonPress(DOWN)) {
 					gameHID.ps4ButtonsTag.button_dpad_down = 1;
+					xboxHID.dButtons |= XBOX_DDOWN;
 				} else {
 					gameHID.ps4ButtonsTag.button_dpad_down = 0;
+					xboxHID.dButtons ^= XBOX_DDOWN;
 				}
 
 				if (PS4.getButtonPress(LEFT)) {
 					gameHID.ps4ButtonsTag.button_dpad_left = 1;
+					xboxHID.dButtons |= XBOX_DLEFT;
+
 				} else {
 					gameHID.ps4ButtonsTag.button_dpad_left = 0;
+					xboxHID.dButtons ^= XBOX_DLEFT;
 				}
 
 				if (PS4.getButtonPress(L1)) {
 					gameHID.ps4ButtonsTag.button_left_trigger = 1;
+					xboxHID.BLACK = 0xFF;
+
 				} else {
 					gameHID.ps4ButtonsTag.button_left_trigger = 0;
+					xboxHID.BLACK = 0;
 				}
 
 				if (PS4.getButtonPress(L3)) {
 					gameHID.ps4ButtonsTag.button_left_thumb = 1;
+					xboxHID.dButtons |= XBOX_LS_BTN;
 				} else {
 					gameHID.ps4ButtonsTag.button_left_thumb = 0;
+					xboxHID.dButtons ^= XBOX_LS_BTN;
 				}
 
 				if (PS4.getButtonPress(R1)) {
 					gameHID.ps4ButtonsTag.button_right_trigger = 1;
+					xboxHID.WHITE = 0xFF;
 				} else {
 					gameHID.ps4ButtonsTag.button_right_trigger = 0;
+					xboxHID.WHITE = 0;
 				}
 
 				if (PS4.getButtonPress(R3)) {
 					gameHID.ps4ButtonsTag.button_right_thumb = 1;
+					xboxHID.dButtons |= XBOX_RS_BTN;
 				} else {
 					gameHID.ps4ButtonsTag.button_right_thumb = 0;
+					xboxHID.dButtons ^= XBOX_RS_BTN;
 				}
 
 				if (PS4.getButtonPress(SHARE)) {
 					gameHID.ps4ButtonsTag.button_share = 1;
+					xboxHID.dButtons |= XBOX_BACK_BTN;
 				} else {
 					gameHID.ps4ButtonsTag.button_share = 0;
+					xboxHID.dButtons ^= XBOX_BACK_BTN;
 				}
 
 				if (PS4.getButtonPress(OPTIONS)) {
 					gameHID.ps4ButtonsTag.button_start = 1;
+					xboxHID.dButtons |= XBOX_START_BTN;
 				} else {
 					gameHID.ps4ButtonsTag.button_start = 0;
+					xboxHID.dButtons ^= XBOX_START_BTN;
 				}
-			}
+
 		} else if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
 			if (!buttonPressed) {
 				Serial.print(F("\r\nButton Pressed"));
@@ -646,7 +702,14 @@ void StartSendUSB(void *argument)
 	//Polling rate is determined in usbd_hid.h as HID_FS_BINTERVAL, set to 0x08U
 	//Most settings are defined in usbd_conf.h
 	//So even though we are updating the report often, we still only send at 125hz.
+#if(PC_SETUP)
 	USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
+#endif
+
+#if OG_XBOX_SETUP
+	//Serial.print(xboxHID.leftStickX);
+	USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct xboxHID_t));
+#endif
     osDelay(1);
   }
   /* USER CODE END StartSendUSB */

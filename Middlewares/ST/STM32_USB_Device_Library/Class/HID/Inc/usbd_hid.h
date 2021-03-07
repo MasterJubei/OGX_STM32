@@ -45,7 +45,13 @@ extern "C" {
 #define HID_EPIN_SIZE                              0x04U
 
 #define USB_HID_CONFIG_DESC_SIZ                    34U
+#if PC_SETUP
 #define USB_HID_DESC_SIZ                           9U
+#endif
+
+#if OG_XBOX_SETUP
+#define USB_HID_DESC_SIZ                           9U
+#endif
 //#define HID_MOUSE_REPORT_DESC_SIZE                 74U
 #define HID_MOUSE_REPORT_DESC_SIZE                 74U
 
