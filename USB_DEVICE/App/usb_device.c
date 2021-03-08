@@ -32,7 +32,7 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
+uint8_t usb_failed2 = 0;
 /* USER CODE END PV */
 
 /* USER CODE BEGIN PFP */
@@ -70,14 +70,17 @@ void MX_USB_DEVICE_Init(void)
   /* Init Device Library, add supported class and start the library. */
   if (USBD_Init(&hUsbDeviceFS, &FS_Desc, DEVICE_FS) != USBD_OK)
   {
+	usb_failed2 = 1;
     Error_Handler();
   }
   if (USBD_RegisterClass(&hUsbDeviceFS, &USBD_HID) != USBD_OK)
   {
+	  usb_failed2 = 1;
     Error_Handler();
   }
   if (USBD_Start(&hUsbDeviceFS) != USBD_OK)
   {
+	  usb_failed2 = 1;
     Error_Handler();
   }
 

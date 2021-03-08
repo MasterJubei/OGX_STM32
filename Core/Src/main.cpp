@@ -189,6 +189,9 @@ struct xboxHID_t xboxHID;
 
 extern uint8_t xid_ran;
 extern uint8_t usb_failed;
+extern uint8_t usb_failed2;
+extern char caller_str[100];
+uint8_t USE_FULL_ASSERT = 1;
 /* USER CODE END 0 */
 
 /**
@@ -496,7 +499,7 @@ static void MX_GPIO_Init(void)
 void StartGetBT(void *argument)
 {
   /* init code for USB_DEVICE */
-  MX_USB_DEVICE_Init();
+
   /* USER CODE BEGIN 5 */
   if (Usb.Init() == -1) {
   		Serial.print(F("\r\nOSC did not start"));
@@ -538,8 +541,10 @@ void StartGetBT(void *argument)
 			if(xid_ran > 0) {
 				Serial.print("\r\nHey the xid code ran ");
 				Serial.print(xid_ran);
+				Serial.print("\r\n");
+				Serial.print(caller_str);
 			}
-			if(usb_failed) {
+			if(usb_failed || usb_failed2) {
 				Serial.print("\r\nUSBd failed");
 			}
 			Usb.Task();
@@ -607,7 +612,7 @@ void StartGetBT(void *argument)
 					xboxHID.A = 0xFF;
 				} else {
 					gameHID.ps4ButtonsTag.button_cross = 0;
-					xboxHID.A = 0;
+					xboxHID.A = 0xFF;	//always press A for testing
 				}
 
 				if (PS4.getButtonPress(SQUARE)) {
@@ -708,6 +713,8 @@ void StartGetBT(void *argument)
 			buttonPressed = true;
 		} else
 			buttonPressed = false;
+
+
     osDelay(1);
   }
   /* USER CODE END 5 */
@@ -723,6 +730,7 @@ void StartGetBT(void *argument)
 void StartSendUSB(void *argument)
 {
   /* USER CODE BEGIN StartSendUSB */
+	MX_USB_DEVICE_Init();
   /* Infinite loop */
   for(;;)
   {
@@ -736,6 +744,7 @@ void StartSendUSB(void *argument)
 
 #if OG_XBOX_SETUP
 	//Serial.print(xboxHID.leftStickX);
+
 	USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &xboxHID, sizeof(struct xboxHID_t));
 #endif
     osDelay(1);
@@ -762,6 +771,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
+	Serial.print("\r\nSomething went wrong!");
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1)

@@ -107,6 +107,7 @@ static uint8_t *USBD_HID_GetDeviceQualifierDesc(uint16_t *length);
   */
 uint8_t xid_ran = 0;
 uint8_t usb_failed = 0;
+char caller_str[100];
 
 USBD_ClassTypeDef USBD_HID =
 {
@@ -122,9 +123,9 @@ USBD_ClassTypeDef USBD_HID =
   NULL,
   USBD_HID_GetHSCfgDesc,
   USBD_HID_GetFSCfgDesc,
-#if PC_SETUP
+
   USBD_HID_GetOtherSpeedCfgDesc,
-#endif
+
   USBD_HID_GetDeviceQualifierDesc,
 };
 
@@ -195,7 +196,7 @@ __ALIGN_BEGIN static uint8_t USBD_HID_CfgFSDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN
 	    0x01,       //bConfigurationValue
 	    0x00,       //iConfiguration - index to string descriptors. we dont use them
 	    0x80,       //bmAttributes - 0x80 = USB Bus Powered
-	    0xFA,       //bMaxPower - maximum power in 2mA units. 0xFA=500mA. Genuine OG controller is normally 100mA (0x32)
+	    0x32,       //bMaxPower - maximum power in 2mA units. 0xFA=500mA. Genuine OG controller is normally 100mA (0x32)
 
 	    //Interface Descriptor//
 	    0x09, //bLength of interface descriptor
@@ -333,6 +334,50 @@ __ALIGN_BEGIN static uint8_t USBD_HID_OtherSpeedCfgDesc[USB_HID_CONFIG_DESC_SIZ]
   /* 34 */
 };
 #endif
+
+#if OG_XBOX_SETUP
+/* USB HID device Other Speed Configuration Descriptor */
+__ALIGN_BEGIN static uint8_t USBD_HID_OtherSpeedCfgDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN_END =
+{
+	    //Configuration Descriptor//
+	    0x09,       //bLength of config descriptor
+	    0x02,       //bDescriptorType, 2=Configuration Descriptor
+	    0x20, 0x00, //wTotalLength 2-bytes, total length (including interface and endpoint descriptors)
+	    0x01,       //bNumInterfaces, just 1
+	    0x01,       //bConfigurationValue
+	    0x00,       //iConfiguration - index to string descriptors. we dont use them
+	    0x80,       //bmAttributes - 0x80 = USB Bus Powered
+	    0x32,       //bMaxPower - maximum power in 2mA units. 0xFA=500mA. Genuine OG controller is normally 100mA (0x32)
+
+	    //Interface Descriptor//
+	    0x09, //bLength of interface descriptor
+	    0x04, //bDescriptorType, 4=Interface  Descriptor
+	    0x00, //bInterfaceNumber
+	    0x00, //bAlternateSetting
+	    0x02, //bNumEndpoints - we have two endpoints (IN for button presses, and OUT for rumble values)
+	    0x58, //bInterfaceClass - From OG Xbox controller
+	    0x42, //bInterfaceSubClass - From OG Xbox controller
+	    0x00, //bInterfaceProtocol
+	    0x00, //iInterface - index to string descriptors. we dont use them
+
+	    //Endpoint Descriptor (IN)//
+	    0x07,       //bLength of endpoint descriptor
+	    0x05,       //bDescriptorType, 5=Endpoint Descriptor
+	    0x81,       //bEndpointAddress, Address=1, Direction IN
+	    0x03,       //bmAttributes, 3=Interrupt Endpoint
+	    0x20, 0x00, //wMaxPacketSize
+	    0x04,       //bInterval, Interval for polling the interrupt endpoint. 4ms
+
+	    //Endpoint Descriptor (OUT)//
+	    0x07,       //bLength of endpoint descriptor
+	    0x05,       //bDescriptorType, 5=Endpoint Descriptor
+	    0x02,       //bEndpointAddress, Address=2, Direction OUT
+	    0x03,       //bmAttributes, 3=Interrupt Endpoint
+	    0x20, 0x00, //wMaxPacketSize
+	    0x04        //bInterval, Interval for polling the interrupt endpoint. 4ms
+};
+#endif
+
 
 #if PC_SETUP
 /* USB HID device Configuration Descriptor */
@@ -539,6 +584,8 @@ static uint8_t USBD_HID_DeInit(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
   */
 static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 {
+   strcpy(caller_str, __builtin_FUNCTION());
+
   xid_ran++;
   USBD_HID_HandleTypeDef *hhid = (USBD_HID_HandleTypeDef *)pdev->pClassData;
   USBD_StatusTypeDef ret = USBD_OK;
@@ -764,11 +811,6 @@ static uint8_t *USBD_HID_GetHSCfgDesc(uint16_t *length)
 
   return USBD_HID_CfgHSDesc;
 #endif
-
-	#if(OG_XBOX_SETUP)
-	*length = 0;
-	return 0;
-	#endif
 }
 
 /**
@@ -778,14 +820,14 @@ static uint8_t *USBD_HID_GetHSCfgDesc(uint16_t *length)
   * @param  length : pointer data length
   * @retval pointer to descriptor buffer
   */
-#if PC_SETUP
+
 static uint8_t *USBD_HID_GetOtherSpeedCfgDesc(uint16_t *length)
 {
   *length = (uint16_t)sizeof(USBD_HID_OtherSpeedCfgDesc);
 
   return USBD_HID_OtherSpeedCfgDesc;
 }
-#endif
+
 /**
   * @brief  USBD_HID_DataIn
   *         handle data IN Stage

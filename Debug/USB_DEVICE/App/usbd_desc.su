@@ -5,6 +5,5 @@ usbd_desc.c:340:11:USBD_FS_ManufacturerStrDescriptor	16	static
 usbd_desc.c:353:11:USBD_FS_SerialStrDescriptor	16	static
 usbd_desc.c:373:11:USBD_FS_ConfigStrDescriptor	16	static
 usbd_desc.c:392:11:USBD_FS_InterfaceStrDescriptor	16	static
-usbd_desc.c:412:11:USBD_FS_USR_BOSDescriptor	16	static
 usbd_desc.c:425:13:Get_SerialNum	24	static
 usbd_desc.c:449:13:IntToUnicode	32	static
