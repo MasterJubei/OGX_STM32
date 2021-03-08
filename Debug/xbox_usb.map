@@ -49412,7 +49412,7 @@ LOAD c:/st/stm32cubeide_1.5.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.exte
 LOAD c:/st/stm32cubeide_1.5.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.9-2020-q2-update.win32_1.5.0.202011040924/tools/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libm.a
 LOAD c:/st/stm32cubeide_1.5.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.9-2020-q2-update.win32_1.5.0.202011040924/tools/bin/../lib/gcc/arm-none-eabi/9.3.1/thumb/v7e-m+fp/hard\libgcc.a
 
-.debug_info     0x0000000000000000    0x5d38e
+.debug_info     0x0000000000000000    0x5d38f
  .debug_info    0x0000000000000000     0x4bd4 Arduino_libs/Print.o
  .debug_info    0x0000000000004bd4     0x2dbb Arduino_libs/SerialClass.o
  .debug_info    0x000000000000798f     0xca7d Core/Src/main.o
@@ -49446,13 +49446,13 @@ LOAD c:/st/stm32cubeide_1.5.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.exte
  .debug_info    0x0000000000035f86      0x4f1 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
  .debug_info    0x0000000000036477      0xd8a Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.o
  .debug_info    0x0000000000037201      0xf24 USB_DEVICE/App/usb_device.o
- .debug_info    0x0000000000038125      0xe69 USB_DEVICE/App/usbd_desc.o
- .debug_info    0x0000000000038f8e     0x23b8 USB_DEVICE/Target/usbd_conf.o
- .debug_info    0x000000000003b346     0xb1e7 USB_Host_Shield_2_0/BTD.o
- .debug_info    0x000000000004652d     0x9671 USB_Host_Shield_2_0/BTHID.o
- .debug_info    0x000000000004fb9e     0x435b USB_Host_Shield_2_0/PS4Parser.o
- .debug_info    0x0000000000053ef9     0x5cd1 USB_Host_Shield_2_0/Usb.o
- .debug_info    0x0000000000059bca     0x37c4 USB_Host_Shield_2_0/parsetools.o
+ .debug_info    0x0000000000038125      0xe6a USB_DEVICE/App/usbd_desc.o
+ .debug_info    0x0000000000038f8f     0x23b8 USB_DEVICE/Target/usbd_conf.o
+ .debug_info    0x000000000003b347     0xb1e7 USB_Host_Shield_2_0/BTD.o
+ .debug_info    0x000000000004652e     0x9671 USB_Host_Shield_2_0/BTHID.o
+ .debug_info    0x000000000004fb9f     0x435b USB_Host_Shield_2_0/PS4Parser.o
+ .debug_info    0x0000000000053efa     0x5cd1 USB_Host_Shield_2_0/Usb.o
+ .debug_info    0x0000000000059bcb     0x37c4 USB_Host_Shield_2_0/parsetools.o
 
 .debug_abbrev   0x0000000000000000     0x867b
  .debug_abbrev  0x0000000000000000      0x585 Arduino_libs/Print.o
