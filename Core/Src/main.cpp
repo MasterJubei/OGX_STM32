@@ -542,20 +542,21 @@ void StartGetBT(void *argument)
 	    /* USER CODE END WHILE */
 
 	    /* USER CODE BEGIN 3 */
-	    if(entered_xid_req) {
-		    Serial.print("\r\nEntered xid req");
-	    }
-		if(unknown_bmrequest) {
-			Serial.print("\r\nUnknown bmrequest");
-		}
-		if(hid_setup_ran > 0) {
-			Serial.print("\r\nHey the xid code ran ");
-			Serial.print("\r\n");
-			Serial.print(caller_str);
-		}
-		if(usb_failed || usb_failed2) {
-			Serial.print("\r\nUSBd failed");
-		}
+//	    if(entered_xid_req) {
+//		    Serial.print("\r\nEntered xid req");
+//	    }
+//		if(unknown_bmrequest) {
+//			Serial.print("\r\nUnknown bmrequest");
+//		}
+//		if(hid_setup_ran > 0) {
+//			Serial.print("\r\nHey the xid code ran ");
+//			Serial.print("\r\n");
+//			Serial.print(caller_str);
+//		}
+//		if(usb_failed || usb_failed2) {
+//			Serial.print("\r\nUSBd failed");
+//		}
+
 		Usb.Task();
 		if (PS4.connected()) {
 			ps4_connected = 1;
@@ -565,37 +566,38 @@ void StartGetBT(void *argument)
 			RightHatY_val = PS4.getAnalogHat(RightHatY);
 
 			/* Let's have a builtin deadzone */
-			if (LeftHatX_val > 137 || LeftHatX_val < 117 || LeftHatY_val > 137 || LeftHatY_val < 117 || RightHatX_val > 137 || RightHatX_val < 117 || RightHatY_val > 137 || RightHatY_val < 117) {
+			if (LeftHatX_val > 137 || LeftHatX_val < 117 || LeftHatY_val > 137 || LeftHatY_val < 117) {// || RightHatX_val > 137 || RightHatX_val < 117 || RightHatY_val > 137 || RightHatY_val < 117) {
 				gameHID.JoyX = PS4.getAnalogHat(LeftHatX) - 128;
 				gameHID.JoyY = PS4.getAnalogHat(LeftHatY) - 128;
-				gameHID.Joy2X = PS4.getAnalogHat(RightHatX) - 128;
-				gameHID.Joy2Y = PS4.getAnalogHat(RightHatY) - 128;
-
 				xboxHID.leftStickX = gameHID.JoyX << 8;	//only getting 8 bit value from bt
 				xboxHID.leftStickY = gameHID.JoyY << 8;	//xbox uses 16 bit signed
-				xboxHID.rightStickX = gameHID.Joy2X << 8;
-				xboxHID.rightStickY = gameHID.Joy2Y << 8;
-
 				/* The Y axis by default is inverted on the Xbox */
-				xboxHID.leftStickY = -xboxHID.leftStickY;	//xbox uses 16 bit signed
-				xboxHID.rightStickY = -xboxHID.rightStickY;
+				xboxHID.leftStickY = -xboxHID.leftStickY-128;
 
 			} else {
 				gameHID.JoyX = 0;
 				gameHID.JoyY = 0;
-				gameHID.Joy2X = 0;
-				gameHID.Joy2Y = 0;
-
 				xboxHID.leftStickX = 0;
 				xboxHID.leftStickY = 0;
+			}
+			if(RightHatX_val > 137 || RightHatX_val < 117 || RightHatY_val > 137 || RightHatY_val < 117) {
+				gameHID.Joy2X = PS4.getAnalogHat(RightHatX) - 128;
+				gameHID.Joy2Y = PS4.getAnalogHat(RightHatY) - 128;
+				xboxHID.rightStickX = gameHID.Joy2X << 8;
+				xboxHID.rightStickY = gameHID.Joy2Y << 8;
+
+				/* The Y axis by default is inverted on the Xbox */
+				xboxHID.rightStickY = -xboxHID.rightStickY - 128;
+
+			} else {
+				gameHID.Joy2X = 0;
+				gameHID.Joy2Y = 0;
 				xboxHID.rightStickX = 0;
 				xboxHID.rightStickY = 0;
 			}
 
-
 			xboxHID.L = PS4.getAnalogButton(L2);
 			xboxHID.R = PS4.getAnalogButton(R2);
-
 			gameHID.Joy_LT = xboxHID.L - 128;
 			gameHID.Joy_RT = xboxHID.R - 128;
 
@@ -748,10 +750,11 @@ void StartSendUSB(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	//We are defined as a USB Fullspeed device.
-	//Polling rate is determined in usbd_hid.h as HID_FS_BINTERVAL, set to 0x08U
-	//Most settings are defined in usbd_conf.h
-	//So even though we are updating the report often, we still only send at 125hz.
+	/*We are defined as a USB Fullspeed device.
+	Polling rate is determined in usbd_hid.h as HID_FS_BINTERVAL, set to 0x04U
+	Most settings are defined in usbd_conf.h
+	So even though we are updating the report often, we still only send at 250hz.
+	Host determines when to read with the usb protocol*/
 #if(PC_SETUP)
 	USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 #endif

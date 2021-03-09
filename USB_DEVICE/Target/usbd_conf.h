@@ -76,7 +76,7 @@
 /*---------- -----------*/
 #define USBD_SELF_POWERED     1U
 /*---------- -----------*/
-#define HID_FS_BINTERVAL     0x8U //This is our polling rate
+#define HID_FS_BINTERVAL     0x4U //This is our polling rate
 
 /****************************************/
 /* #define for FS and HS identification */
