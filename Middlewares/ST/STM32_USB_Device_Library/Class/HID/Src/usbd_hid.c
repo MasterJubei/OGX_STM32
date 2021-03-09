@@ -105,7 +105,7 @@ static uint8_t *USBD_HID_GetDeviceQualifierDesc(uint16_t *length);
 /** @defgroup USBD_HID_Private_Variables
   * @{
   */
-uint8_t xid_ran = 0;
+uint8_t hid_setup_ran = 0;
 uint8_t usb_failed = 0;
 char caller_str[100];
 
@@ -584,9 +584,8 @@ static uint8_t USBD_HID_DeInit(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
   */
 static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 {
-   strcpy(caller_str, __builtin_FUNCTION());
 
-  xid_ran++;
+
   USBD_HID_HandleTypeDef *hhid = (USBD_HID_HandleTypeDef *)pdev->pClassData;
   USBD_StatusTypeDef ret = USBD_OK;
   uint16_t len;
@@ -697,8 +696,8 @@ static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
       }
       break;
 
-    case 0xC1:			//this is for the og xbox, this is the custom vendor request
-    	xid_ran = 1;
+    case (0xC1 & USB_REQ_TYPE_MASK):			//this is for the og xbox, this is the custom vendor request
+    	 hid_setup_ran++;
     	if(req->bRequest == 0x06 && req->wValue == 0x4200) {
     		len = 16;
     		pbuf = USBD_HID_Desc;

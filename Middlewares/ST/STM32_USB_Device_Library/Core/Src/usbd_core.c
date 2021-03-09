@@ -121,6 +121,7 @@ USBD_StatusTypeDef USBD_Init(USBD_HandleTypeDef *pdev,
   return ret;
 }
 
+
 /**
   * @brief  USBD_DeInit
   *         Re-Initialize the device library

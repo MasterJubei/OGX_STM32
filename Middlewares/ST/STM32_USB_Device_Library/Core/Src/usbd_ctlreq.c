@@ -80,6 +80,39 @@ static void USBD_SetFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req)
 static void USBD_ClrFeature(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
 static uint8_t USBD_GetLen(uint8_t *buf);
 
+uint8_t unknown_bmrequest = 0;
+uint8_t entered_xid_req = 0;
+
+__ALIGN_BEGIN static uint8_t USBD_HID_Desc[16] __ALIGN_END =
+{
+	    0x10,                                          //bLength - Length of report. 16 bytes
+	    0x42,                                          //bDescriptorType - always 0x42
+	    0x00, 0x01,                                    //bcdXid
+	    0x01,                                          //bType - 1=Xbox Gamecontroller
+	    0x02,                                          //bSubType, 0x02 = Gamepad S, 0x01 = Gamepad (Duke)
+	    0x14,                                          //bMaxInputReportSize //HID Report from controller - 20 bytes
+	    0x06,                                          //bMaxOutputReportSize - Rumble report from host - 6 bytes
+	    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF //wAlternateProductIds
+};
+
+__ALIGN_BEGIN static uint8_t DUKE_HID_CAPABILITIES_IN[20] __ALIGN_END = {
+	    0x00, //Always 0x00
+	    0x14, //bLength - length of packet in bytes
+	    0xFF,
+	    0x00, //This byte is 0x00 because this particular byte is not used in the button report.
+	    0xFF,
+	    0xFF, 0xFF, 0xFF,
+	    0xFF, 0xFF, 0xFF,
+	    0xFF, 0xFF, 0xFF,
+	    0xFF, 0xFF, 0xFF,
+	    0xFF, 0xFF, 0xFF
+};
+
+__ALIGN_BEGIN static uint8_t DUKE_HID_CAPABILITIES_OUT[6] = {
+	    0x00,                  //Always 0x00
+	    0x06,                  //bLength - length of packet in bytes
+	    0xFF, 0xFF, 0xFF, 0xFF //bits corresponding to the rumble bits. all 0xFF as they are used.
+};
 /**
   * @}
   */
@@ -101,55 +134,79 @@ USBD_StatusTypeDef USBD_StdDevReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef
 {
   USBD_StatusTypeDef ret = USBD_OK;
 
-  switch (req->bmRequest & USB_REQ_TYPE_MASK)
-  {
-    case USB_REQ_TYPE_CLASS:
-    case USB_REQ_TYPE_VENDOR:
-      ret = (USBD_StatusTypeDef)pdev->pClass->Setup(pdev, req);
-      break;
 
-    case USB_REQ_TYPE_STANDARD:
-      switch (req->bRequest)
-      {
-        case USB_REQ_GET_DESCRIPTOR:
-          USBD_GetDescriptor(pdev, req);
-          break;
+  if(req->bmRequest == 0xC1) {
+	  uint16_t len = 0;
+	  uint8_t *pbuf = NULL;
+  	if(req->bRequest == 0x06 && req->wValue == 0x4200) {
+  		len = 16;
+  		pbuf = USBD_HID_Desc;
+  		(void)USBD_CtlSendData(pdev, pbuf, len);
+  	}
+  	else if(req->bRequest == 0x01 && req->wValue == 0x0100) {
+  		len = 20;
+  		pbuf = DUKE_HID_CAPABILITIES_IN;
+  		(void)USBD_CtlSendData(pdev, pbuf, len);
+  	}
+  	else if (req->bRequest == 0x01 && req->wValue == 0x0200) {
+  		len = 6;
+  		pbuf = DUKE_HID_CAPABILITIES_OUT;
+  		(void)USBD_CtlSendData(pdev, pbuf, len);
+  	}
+	  ret = (USBD_StatusTypeDef)pdev->pClass->Setup(pdev, req);
 
-        case USB_REQ_SET_ADDRESS:
-          USBD_SetAddress(pdev, req);
-          break;
 
-        case USB_REQ_SET_CONFIGURATION:
-          ret = USBD_SetConfig(pdev, req);
-          break;
+  } else {
+	  switch (req->bmRequest & USB_REQ_TYPE_MASK)
+	  {
+		case USB_REQ_TYPE_CLASS:
+		case USB_REQ_TYPE_VENDOR:
+		  ret = (USBD_StatusTypeDef)pdev->pClass->Setup(pdev, req);
+		  break;
 
-        case USB_REQ_GET_CONFIGURATION:
-          USBD_GetConfig(pdev, req);
-          break;
+		case USB_REQ_TYPE_STANDARD:
+		  switch (req->bRequest)
+		  {
+			case USB_REQ_GET_DESCRIPTOR:
+			  USBD_GetDescriptor(pdev, req);
+			  break;
 
-        case USB_REQ_GET_STATUS:
-          USBD_GetStatus(pdev, req);
-          break;
+			case USB_REQ_SET_ADDRESS:
+			  USBD_SetAddress(pdev, req);
+			  break;
 
-        case USB_REQ_SET_FEATURE:
-          USBD_SetFeature(pdev, req);
-          break;
+			case USB_REQ_SET_CONFIGURATION:
+			  ret = USBD_SetConfig(pdev, req);
+			  break;
 
-        case USB_REQ_CLEAR_FEATURE:
-          USBD_ClrFeature(pdev, req);
-          break;
+			case USB_REQ_GET_CONFIGURATION:
+			  USBD_GetConfig(pdev, req);
+			  break;
 
-        default:
-          USBD_CtlError(pdev, req);
-          break;
-      }
-      break;
+			case USB_REQ_GET_STATUS:
+			  USBD_GetStatus(pdev, req);
+			  break;
 
-    default:
-      USBD_CtlError(pdev, req);
-      break;
-  }
+			case USB_REQ_SET_FEATURE:
+			  USBD_SetFeature(pdev, req);
+			  break;
 
+			case USB_REQ_CLEAR_FEATURE:
+			  USBD_ClrFeature(pdev, req);
+			  break;
+
+			default:
+			  USBD_CtlError(pdev, req);
+			  break;
+		  }
+		  break;
+
+		default:
+		  unknown_bmrequest = 1;
+		  USBD_CtlError(pdev, req);
+		  break;
+	  }
+	}
   return ret;
 }
 

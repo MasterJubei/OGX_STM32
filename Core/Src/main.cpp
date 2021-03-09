@@ -187,11 +187,13 @@ struct xboxHID_t
 };
 struct xboxHID_t xboxHID;
 
-extern uint8_t xid_ran;
+extern uint8_t hid_setup_ran;
 extern uint8_t usb_failed;
 extern uint8_t usb_failed2;
 extern char caller_str[100];
 uint8_t USE_FULL_ASSERT = 1;
+extern uint8_t unknown_bmrequest;
+extern uint8_t entered_xid_req;
 /* USER CODE END 0 */
 
 /**
@@ -538,9 +540,14 @@ void StartGetBT(void *argument)
 	    /* USER CODE END WHILE */
 
 	    /* USER CODE BEGIN 3 */
-			if(xid_ran > 0) {
+		  if(entered_xid_req) {
+			  Serial.print("\r\nEntered xid req");
+		  }
+	  	  	if(unknown_bmrequest) {
+	  	  		Serial.print("\r\nUnknown bmrequest");
+	  	  	}
+			if(hid_setup_ran > 0) {
 				Serial.print("\r\nHey the xid code ran ");
-				Serial.print(xid_ran);
 				Serial.print("\r\n");
 				Serial.print(caller_str);
 			}
