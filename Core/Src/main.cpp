@@ -150,12 +150,10 @@ struct gameHID_t {
       	// Button, one byte, button is bit #0
 };
 
-struct gameHID_t gameHID;
 uint8_t LeftHatX_val;
 uint8_t LeftHatY_val;
 uint8_t RightHatX_val;
 uint8_t RightHatY_val;
-
 
 uint32_t cpu_freq = 0;
 uint16_t timer_val = 0 ;
@@ -164,7 +162,7 @@ uint32_t hal_gettick = 0;
 
 struct xboxHID_t
 {
-    uint8_t startByte; //Always 0x00
+    uint8_t startByte;
     uint8_t bLength;
     uint8_t dButtons;
     uint8_t reserved;
@@ -185,8 +183,9 @@ struct xboxHID_t
     //uint8_t right_actuator;
     //uint8_t rumbleUpdate;
 };
-struct xboxHID_t xboxHID;
 
+struct gameHID_t gameHID;
+struct xboxHID_t xboxHID;
 extern uint8_t hid_setup_ran;
 extern uint8_t usb_failed;
 extern uint8_t usb_failed2;
@@ -509,6 +508,7 @@ void StartGetBT(void *argument)
   }
   Serial.print(F("\r\nPS4 Bluetooth Library Started"));
 
+  /*Initialize our gamepad, this is for use on a PC*/
   gameHID.JoyX = 0;
   gameHID.JoyY = 0;
   gameHID.Joy2X = 0;
@@ -517,13 +517,15 @@ void StartGetBT(void *argument)
   gameHID.Joy_RT = 0;
   gameHID.ps4ButtonsTag.dummy = 0;
 
-  xboxHID.startByte = 0;
+
+  /* Initalize our Xbox Controller data that we will send in our hid reports */
+  xboxHID.startByte = 0x00;
   xboxHID.bLength = 20;
-  xboxHID.dButtons = 0;
+  xboxHID.dButtons = 0x00;
   xboxHID.A = 0;
   xboxHID.B = 0;
-  xboxHID.Y = 0;
   xboxHID.X = 0;
+  xboxHID.Y = 0;
   xboxHID.BLACK = 0;
   xboxHID.WHITE = 0;
   xboxHID.L = 0;
@@ -540,177 +542,184 @@ void StartGetBT(void *argument)
 	    /* USER CODE END WHILE */
 
 	    /* USER CODE BEGIN 3 */
-		  if(entered_xid_req) {
-			  Serial.print("\r\nEntered xid req");
-		  }
-	  	  	if(unknown_bmrequest) {
-	  	  		Serial.print("\r\nUnknown bmrequest");
-	  	  	}
-			if(hid_setup_ran > 0) {
-				Serial.print("\r\nHey the xid code ran ");
-				Serial.print("\r\n");
-				Serial.print(caller_str);
+	    if(entered_xid_req) {
+		    Serial.print("\r\nEntered xid req");
+	    }
+		if(unknown_bmrequest) {
+			Serial.print("\r\nUnknown bmrequest");
+		}
+		if(hid_setup_ran > 0) {
+			Serial.print("\r\nHey the xid code ran ");
+			Serial.print("\r\n");
+			Serial.print(caller_str);
+		}
+		if(usb_failed || usb_failed2) {
+			Serial.print("\r\nUSBd failed");
+		}
+		Usb.Task();
+		if (PS4.connected()) {
+			ps4_connected = 1;
+			LeftHatX_val = PS4.getAnalogHat(LeftHatX);
+			LeftHatY_val = PS4.getAnalogHat(LeftHatY);
+			RightHatX_val = PS4.getAnalogHat(RightHatX);
+			RightHatY_val = PS4.getAnalogHat(RightHatY);
+
+			/* Let's have a builtin deadzone */
+			if (LeftHatX_val > 137 || LeftHatX_val < 117 || LeftHatY_val > 137 || LeftHatY_val < 117 || RightHatX_val > 137 || RightHatX_val < 117 || RightHatY_val > 137 || RightHatY_val < 117) {
+				gameHID.JoyX = PS4.getAnalogHat(LeftHatX) - 128;
+				gameHID.JoyY = PS4.getAnalogHat(LeftHatY) - 128;
+				gameHID.Joy2X = PS4.getAnalogHat(RightHatX) - 128;
+				gameHID.Joy2Y = PS4.getAnalogHat(RightHatY) - 128;
+
+				xboxHID.leftStickX = gameHID.JoyX << 8;	//only getting 8 bit value from bt
+				xboxHID.leftStickY = gameHID.JoyY << 8;	//xbox uses 16 bit signed
+				xboxHID.rightStickX = gameHID.Joy2X << 8;
+				xboxHID.rightStickY = gameHID.Joy2Y << 8;
+
+				/* The Y axis by default is inverted on the Xbox */
+				xboxHID.leftStickY = -xboxHID.leftStickY;	//xbox uses 16 bit signed
+				xboxHID.rightStickY = -xboxHID.rightStickY;
+
+			} else {
+				gameHID.JoyX = 0;
+				gameHID.JoyY = 0;
+				gameHID.Joy2X = 0;
+				gameHID.Joy2Y = 0;
+
+				xboxHID.leftStickX = 0;
+				xboxHID.leftStickY = 0;
+				xboxHID.rightStickX = 0;
+				xboxHID.rightStickY = 0;
 			}
-			if(usb_failed || usb_failed2) {
-				Serial.print("\r\nUSBd failed");
+
+
+			xboxHID.L = PS4.getAnalogButton(L2);
+			xboxHID.R = PS4.getAnalogButton(R2);
+
+			gameHID.Joy_LT = xboxHID.L - 128;
+			gameHID.Joy_RT = xboxHID.R - 128;
+
+			//Serial.print(gameHID.Joy_LT);
+
+			if (PS4.getButtonClick(PS)) {
+				gameHID.ps4ButtonsTag.button_ps = 1;
+			} else {
+				gameHID.ps4ButtonsTag.button_ps = 0;
 			}
-			Usb.Task();
-			if (PS4.connected()) {
-				ps4_connected = 1;
-				LeftHatX_val = PS4.getAnalogHat(LeftHatX);
-				LeftHatY_val = PS4.getAnalogHat(LeftHatY);
-				RightHatX_val = PS4.getAnalogHat(RightHatX);
-				RightHatY_val = PS4.getAnalogHat(RightHatY);
 
-				if (LeftHatX_val > 137 || LeftHatX_val < 117 || LeftHatY_val > 137 || LeftHatY_val < 117 || RightHatX_val > 137 || RightHatX_val < 117 || RightHatY_val > 137 || RightHatY_val < 117) {
-					gameHID.JoyX = PS4.getAnalogHat(LeftHatX) - 128;
-					gameHID.JoyY = PS4.getAnalogHat(LeftHatY) - 128;
-					gameHID.Joy2X = PS4.getAnalogHat(RightHatX) - 128;
-					gameHID.Joy2Y = PS4.getAnalogHat(RightHatY) - 128;
+			if (PS4.getButtonPress(TRIANGLE)) {
+				gameHID.ps4ButtonsTag.button_triangle = 1;
+				xboxHID.Y = 0xFF;
+			} else {
+				gameHID.ps4ButtonsTag.button_triangle = 0;
+				xboxHID.Y = 0;
+			}
 
-					xboxHID.leftStickX = gameHID.JoyX << 8;	//only getting 8 bit value from bt
-					xboxHID.leftStickY = gameHID.JoyY << 8;	//xbox uses 16 bit signed
-					xboxHID.rightStickX = gameHID.Joy2X << 8;
-					xboxHID.rightStickY = gameHID.Joy2Y << 8;
+			if (PS4.getButtonPress(CIRCLE)) {
+				gameHID.ps4ButtonsTag.button_circle = 1;
+				xboxHID.B = 0xFF;
+			} else {
+				gameHID.ps4ButtonsTag.button_circle = 0;
+				xboxHID.B = 0;
+			}
 
-				} else {
-					gameHID.JoyX = 0;
-					gameHID.JoyY = 0;
-					gameHID.Joy2X = 0;
-					gameHID.Joy2Y = 0;
+			if (PS4.getButtonPress(CROSS)) {
+				gameHID.ps4ButtonsTag.button_cross = 1;
+				xboxHID.A = 0xFF;
+			} else {
+				gameHID.ps4ButtonsTag.button_cross = 0;
+				xboxHID.A = 0;
+			}
 
-					xboxHID.leftStickX = 0;
-					xboxHID.leftStickY = 0;
-					xboxHID.rightStickX = 0;
-					xboxHID.rightStickY = 0;
-				}
+			if (PS4.getButtonPress(SQUARE)) {
+				gameHID.ps4ButtonsTag.button_square = 1;
+				xboxHID.X = 0xFF;
+			} else {
+				gameHID.ps4ButtonsTag.button_square = 0;
+				xboxHID.X = 0;
+			}
 
-				gameHID.Joy_LT = PS4.getAnalogButton(L2) - 128;
-				gameHID.Joy_RT = PS4.getAnalogButton(R2) - 128;
+			if (PS4.getButtonPress(UP)) {
+				gameHID.ps4ButtonsTag.button_dpad_up = 1;
+				xboxHID.dButtons |= XBOX_DUP;
+			} else {
+				gameHID.ps4ButtonsTag.button_dpad_up = 0;
+				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DUP;
+			}
 
-				xboxHID.L = gameHID.Joy_LT;
-				xboxHID.R = gameHID.Joy_RT;
+			if (PS4.getButtonPress(RIGHT)) {
+				gameHID.ps4ButtonsTag.button_dpad_right = 1;
+				xboxHID.dButtons |= XBOX_DRIGHT;
+			} else {
+				gameHID.ps4ButtonsTag.button_dpad_right = 0;
+				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DRIGHT;
+			}
 
+			if (PS4.getButtonPress(DOWN)) {
+				gameHID.ps4ButtonsTag.button_dpad_down = 1;
+				xboxHID.dButtons |= XBOX_DDOWN;
+			} else {
+				gameHID.ps4ButtonsTag.button_dpad_down = 0;
+				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DDOWN;
+			}
 
-				if (PS4.getButtonClick(PS)) {
-					gameHID.ps4ButtonsTag.button_ps = 1;
-				} else {
-					gameHID.ps4ButtonsTag.button_ps = 0;
-				}
+			if (PS4.getButtonPress(LEFT)) {
+				gameHID.ps4ButtonsTag.button_dpad_left = 1;
+				xboxHID.dButtons |= XBOX_DLEFT;
 
-				if (PS4.getButtonPress(TRIANGLE)) {
-					gameHID.ps4ButtonsTag.button_triangle = 1;
-					xboxHID.Y = 0xFF;
-				} else {
-					gameHID.ps4ButtonsTag.button_triangle = 0;
-					xboxHID.Y = 0;
-				}
+			} else {
+				gameHID.ps4ButtonsTag.button_dpad_left = 0;
+				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DLEFT;
+			}
 
-				if (PS4.getButtonPress(CIRCLE)) {
-					gameHID.ps4ButtonsTag.button_circle = 1;
-					xboxHID.B = 0xFF;
-				} else {
-					gameHID.ps4ButtonsTag.button_circle = 0;
-					xboxHID.B = 0;
-				}
+			if (PS4.getButtonPress(L1)) {
+				gameHID.ps4ButtonsTag.button_left_trigger = 1;
+				xboxHID.BLACK = 0xFF;
 
-				if (PS4.getButtonPress(CROSS)) {
-					gameHID.ps4ButtonsTag.button_cross = 1;
-					xboxHID.A = 0xFF;
-				} else {
-					gameHID.ps4ButtonsTag.button_cross = 0;
-					xboxHID.A = 0xFF;	//always press A for testing
-				}
+			} else {
+				gameHID.ps4ButtonsTag.button_left_trigger = 0;
+				xboxHID.BLACK = 0;
+			}
 
-				if (PS4.getButtonPress(SQUARE)) {
-					gameHID.ps4ButtonsTag.button_square = 1;
-					xboxHID.X = 0xFF;
-				} else {
-					gameHID.ps4ButtonsTag.button_square = 0;
-					xboxHID.X = 0;
-				}
+			if (PS4.getButtonPress(L3)) {
+				gameHID.ps4ButtonsTag.button_left_thumb = 1;
+				xboxHID.dButtons |= XBOX_LS_BTN;
+			} else {
+				gameHID.ps4ButtonsTag.button_left_thumb = 0;
+				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_LS_BTN;
+			}
 
-				if (PS4.getButtonPress(UP)) {
-					gameHID.ps4ButtonsTag.button_dpad_up = 1;
-					xboxHID.dButtons |= XBOX_DUP;
-				} else {
-					gameHID.ps4ButtonsTag.button_dpad_up = 0;
-					xboxHID.dButtons ^= XBOX_DUP;
-				}
+			if (PS4.getButtonPress(R1)) {
+				gameHID.ps4ButtonsTag.button_right_trigger = 1;
+				xboxHID.WHITE = 0xFF;
+			} else {
+				gameHID.ps4ButtonsTag.button_right_trigger = 0;
+				xboxHID.WHITE = 0;
+			}
 
-				if (PS4.getButtonPress(RIGHT)) {
-					gameHID.ps4ButtonsTag.button_dpad_right = 1;
-					xboxHID.dButtons |= XBOX_DRIGHT;
-				} else {
-					gameHID.ps4ButtonsTag.button_dpad_right = 0;
-					xboxHID.dButtons ^= XBOX_DRIGHT;
-				}
+			if (PS4.getButtonPress(R3)) {
+				gameHID.ps4ButtonsTag.button_right_thumb = 1;
+				xboxHID.dButtons |= XBOX_RS_BTN;
+			} else {
+				gameHID.ps4ButtonsTag.button_right_thumb = 0;
+				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_RS_BTN;
+			}
 
-				if (PS4.getButtonPress(DOWN)) {
-					gameHID.ps4ButtonsTag.button_dpad_down = 1;
-					xboxHID.dButtons |= XBOX_DDOWN;
-				} else {
-					gameHID.ps4ButtonsTag.button_dpad_down = 0;
-					xboxHID.dButtons ^= XBOX_DDOWN;
-				}
+			if (PS4.getButtonPress(SHARE)) {
+				gameHID.ps4ButtonsTag.button_share = 1;
+				xboxHID.dButtons |= XBOX_BACK_BTN;
+			} else {
+				gameHID.ps4ButtonsTag.button_share = 0;
+				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_BACK_BTN;
+			}
 
-				if (PS4.getButtonPress(LEFT)) {
-					gameHID.ps4ButtonsTag.button_dpad_left = 1;
-					xboxHID.dButtons |= XBOX_DLEFT;
-
-				} else {
-					gameHID.ps4ButtonsTag.button_dpad_left = 0;
-					xboxHID.dButtons ^= XBOX_DLEFT;
-				}
-
-				if (PS4.getButtonPress(L1)) {
-					gameHID.ps4ButtonsTag.button_left_trigger = 1;
-					xboxHID.BLACK = 0xFF;
-
-				} else {
-					gameHID.ps4ButtonsTag.button_left_trigger = 0;
-					xboxHID.BLACK = 0;
-				}
-
-				if (PS4.getButtonPress(L3)) {
-					gameHID.ps4ButtonsTag.button_left_thumb = 1;
-					xboxHID.dButtons |= XBOX_LS_BTN;
-				} else {
-					gameHID.ps4ButtonsTag.button_left_thumb = 0;
-					xboxHID.dButtons ^= XBOX_LS_BTN;
-				}
-
-				if (PS4.getButtonPress(R1)) {
-					gameHID.ps4ButtonsTag.button_right_trigger = 1;
-					xboxHID.WHITE = 0xFF;
-				} else {
-					gameHID.ps4ButtonsTag.button_right_trigger = 0;
-					xboxHID.WHITE = 0;
-				}
-
-				if (PS4.getButtonPress(R3)) {
-					gameHID.ps4ButtonsTag.button_right_thumb = 1;
-					xboxHID.dButtons |= XBOX_RS_BTN;
-				} else {
-					gameHID.ps4ButtonsTag.button_right_thumb = 0;
-					xboxHID.dButtons ^= XBOX_RS_BTN;
-				}
-
-				if (PS4.getButtonPress(SHARE)) {
-					gameHID.ps4ButtonsTag.button_share = 1;
-					xboxHID.dButtons |= XBOX_BACK_BTN;
-				} else {
-					gameHID.ps4ButtonsTag.button_share = 0;
-					xboxHID.dButtons ^= XBOX_BACK_BTN;
-				}
-
-				if (PS4.getButtonPress(OPTIONS)) {
-					gameHID.ps4ButtonsTag.button_start = 1;
-					xboxHID.dButtons |= XBOX_START_BTN;
-				} else {
-					gameHID.ps4ButtonsTag.button_start = 0;
-					xboxHID.dButtons ^= XBOX_START_BTN;
-				}
+			if (PS4.getButtonPress(OPTIONS)) {
+				gameHID.ps4ButtonsTag.button_start = 1;
+				xboxHID.dButtons |= XBOX_START_BTN;
+			} else {
+				gameHID.ps4ButtonsTag.button_start = 0;
+				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_START_BTN;
+			}
 
 		} else if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
 			if (!buttonPressed) {
@@ -720,8 +729,6 @@ void StartGetBT(void *argument)
 			buttonPressed = true;
 		} else
 			buttonPressed = false;
-
-
     osDelay(1);
   }
   /* USER CODE END 5 */
