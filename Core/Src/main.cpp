@@ -54,9 +54,7 @@
 //ADC_HandleTypeDef hadc1;
 
 SPI_HandleTypeDef hspi1;
-
 UART_HandleTypeDef huart2;
-
 TIM_HandleTypeDef htim14;
 
 /* Definitions for getBT */
@@ -75,6 +73,15 @@ const osThreadAttr_t sendUSB_attributes = {
 };
 
 /* USER CODE BEGIN PV */
+/* Definitions for sendUSB */
+
+/* Detect when controller is paired */
+osThreadId_t controllerConnectedHandle;
+const osThreadAttr_t controllerConnected_attributes = {
+  .name = "controllerConnected",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 
 /* USER CODE END PV */
 
@@ -87,7 +94,7 @@ static void MX_TIM14_Init(void);
 void StartGetBT(void *argument);
 void StartSendUSB(void *argument);
 /* USER CODE BEGIN PFP */
-
+void StartControllerConnected(void *argument);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -227,21 +234,23 @@ int main(void)
   MX_TIM14_Init();
   //MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
+
+  /* For the USB Host Shield Library*/
   SPI_Handle = hspi1;
   UART_Handle = huart2;
 
-
-
+  /* The Primary Timer, since using freeRTOS, not using systick */
   HAL_TIM_Base_Start_IT(&htim14);
-//  uint8_t L2_val;
-//  uint8_t R2_val;
+
+  /* Verify our CPU Frequency
+   * We should get a 500ms delay here */
   Serial.print(F("\r\nCPU Frequency is: "));
   cpu_freq = HAL_RCC_GetHCLKFreq()/1000000;
   Serial.print((int)cpu_freq);
   Serial.print("MHz");
   Serial.print("\r\nStart");
   timer_val = __HAL_TIM_GET_COUNTER(&htim14);
-  HAL_Delay(500); //500ms
+  HAL_Delay(500);
   timer_val2 = __HAL_TIM_GET_COUNTER(&htim14) - timer_val;
   Serial.print("\r\nTime Elapsed is: ");
   Serial.print((int)timer_val2/10);
@@ -282,6 +291,8 @@ int main(void)
   sendUSBHandle = osThreadNew(StartSendUSB, NULL, &sendUSB_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
+  /* Used to determine if a controller just connected */
+  controllerConnectedHandle = osThreadNew(StartControllerConnected, NULL, &controllerConnected_attributes);
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
@@ -475,27 +486,26 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
-
 }
 
 /* USER CODE BEGIN 4 */
-//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-//
-//	if(htim == &htim14) {
-//		//Serial.print("\r\nTesting");
-//		if(!rumble_once && ps4_connected) {
-//			Serial.print("\r\nPS4 Controller Connected");
-//			PS4.setRumbleOn(RumbleLow);
-//			rumble_once = 2;
-//		}
-//
-//		else if(rumble_once == 2) {
-//			PS4.setRumbleOff();
-//			rumble_once = 1;
-//		}
-//	}
-//}
-
+void StartControllerConnected(void *argument)
+{
+  /* USER CODE BEGIN StartSendUSB */
+  
+  /* Infinite loop */
+  for(;;)
+  {
+    if(PS4.connected() && !rumble_once) {
+      PS4.setRumbleOn(RumbleLow);
+      osDelay(500);
+      PS4.setRumbleOff();
+      rumble_once = 1;
+    }
+    osDelay(1);
+  }
+  /* USER CODE END StartControllerConnected */
+}
 /* USER CODE END 4 */
 void StartGetBT(void *argument)
 {
@@ -604,9 +614,13 @@ void StartGetBT(void *argument)
 			//Serial.print(gameHID.Joy_LT);
 
 			if (PS4.getButtonClick(PS)) {
-				gameHID.ps4ButtonsTag.button_ps = 1;
+				PS4.disconnect();
+        rumble_once = 0;
+        //gameHID.ps4ButtonsTag.button_ps = 1;
+        
 			} else {
-				gameHID.ps4ButtonsTag.button_ps = 0;
+				//gameHID.ps4ButtonsTag.button_ps = 0;
+				//PS4.disconnect();
 			}
 
 			if (PS4.getButtonPress(TRIANGLE)) {
@@ -676,11 +690,11 @@ void StartGetBT(void *argument)
 
 			if (PS4.getButtonPress(L1)) {
 				gameHID.ps4ButtonsTag.button_left_trigger = 1;
-				xboxHID.BLACK = 0xFF;
+				xboxHID.WHITE = 0xFF;
 
 			} else {
 				gameHID.ps4ButtonsTag.button_left_trigger = 0;
-				xboxHID.BLACK = 0;
+				xboxHID.WHITE = 0;
 			}
 
 			if (PS4.getButtonPress(L3)) {
@@ -693,10 +707,10 @@ void StartGetBT(void *argument)
 
 			if (PS4.getButtonPress(R1)) {
 				gameHID.ps4ButtonsTag.button_right_trigger = 1;
-				xboxHID.WHITE = 0xFF;
+				xboxHID.BLACK = 0xFF;
 			} else {
 				gameHID.ps4ButtonsTag.button_right_trigger = 0;
-				xboxHID.WHITE = 0;
+				xboxHID.BLACK = 0;
 			}
 
 			if (PS4.getButtonPress(R3)) {
