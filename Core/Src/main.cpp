@@ -59,17 +59,17 @@ TIM_HandleTypeDef htim14;
 
 /* Definitions for getBT */
 osThreadId_t getBTHandle;
-const osThreadAttr_t getBT_attributes = {
+const osThreadAttr_t getBT_attributes = { // @suppress("Invalid arguments")
   .name = "getBT",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for sendUSB */
 osThreadId_t sendUSBHandle;
-const osThreadAttr_t sendUSB_attributes = {
+const osThreadAttr_t sendUSB_attributes = { // @suppress("Invalid arguments")
   .name = "sendUSB",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityBelowNormal,
 };
 
 /* USER CODE BEGIN PV */
@@ -77,7 +77,7 @@ const osThreadAttr_t sendUSB_attributes = {
 
 /* Detect when controller is paired */
 osThreadId_t controllerConnectedHandle;
-const osThreadAttr_t controllerConnected_attributes = {
+const osThreadAttr_t controllerConnected_attributes = { // @suppress("Invalid arguments")
   .name = "controllerConnected",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
@@ -110,7 +110,7 @@ SerialClass Serial(&huart2);
 
 USB Usb;
 BTD Btd(&Usb);
-PS4BT PS4(&Btd);
+PS4BT PS4(&Btd,PAIR);
 //PS4BT PS4(&Btd, PAIR);
 static bool printAngle, printTouch;
 static uint8_t oldL2Value, oldR2Value;
@@ -489,6 +489,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+/*Rumble when connected */
 void StartControllerConnected(void *argument)
 {
   /* USER CODE BEGIN StartSendUSB */

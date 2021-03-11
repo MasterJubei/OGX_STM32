@@ -46,6 +46,8 @@ EndBSPDependencies */
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_hid.h"
 #include "usbd_ctlreq.h"
+extern USBD_HandleTypeDef hUsbDeviceFS;
+//#include "stm32f4xx_hal.h"
 
 
 /** @addtogroup STM32_USB_DEVICE_LIBRARY
@@ -91,7 +93,7 @@ static uint8_t USBD_HID_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx);
 static uint8_t USBD_HID_DeInit(USBD_HandleTypeDef *pdev, uint8_t cfgidx);
 static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
 static uint8_t USBD_HID_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum);
-
+static uint8_t USBD_HID_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum);
 static uint8_t *USBD_HID_GetFSCfgDesc(uint16_t *length);
 static uint8_t *USBD_HID_GetHSCfgDesc(uint16_t *length);
 
@@ -117,7 +119,7 @@ USBD_ClassTypeDef USBD_HID =
   NULL,              /* EP0_TxSent */
   NULL,              /* EP0_RxReady */
   USBD_HID_DataIn,   /* DataIn */
-  NULL,              /* DataOut */
+  USBD_HID_DataOut,              /* DataOut To get Rumble Data */
   NULL,              /* SOF */
   NULL,
   NULL,
@@ -514,6 +516,7 @@ __ALIGN_BEGIN static uint8_t DUKE_HID_CAPABILITIES_OUT[6] = {
   * @param  cfgidx: Configuration index
   * @retval status
   */
+static uint8_t rx_buf[6];
 static uint8_t USBD_HID_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
 {
   UNUSED(cfgidx);
@@ -544,6 +547,9 @@ static uint8_t USBD_HID_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
   (void)USBD_LL_OpenEP(pdev, HID_EPIN_ADDR, USBD_EP_TYPE_INTR, HID_EPIN_SIZE);
   pdev->ep_in[HID_EPIN_ADDR & 0xFU].is_used = 1U;
 
+  /* Open EP OUT, This is to get out rumble data */
+  USBD_LL_OpenEP(pdev, HID_EPOUT_ADDR, USBD_EP_TYPE_INTR, HID_EPOUT_SIZE);
+  USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, rx_buf, 1);
   hhid->state = HID_IDLE;
 
   return (uint8_t)USBD_OK;
@@ -695,8 +701,8 @@ static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
           break;
       }
       break;
-
-    case (0xC1 & USB_REQ_TYPE_MASK):			//this is for the og xbox, this is the custom vendor request
+    /*This is for the og xbox, this is the custom vendor request */
+    case (0xC1 & USB_REQ_TYPE_MASK):
     	 hid_setup_ran++;
     	if(req->bRequest == 0x06 && req->wValue == 0x4200) {
     		len = 16;
@@ -842,6 +848,12 @@ static uint8_t USBD_HID_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum)
   ((USBD_HID_HandleTypeDef *)pdev->pClassData)->state = HID_IDLE;
 
   return (uint8_t)USBD_OK;
+}
+
+static uint8_t USBD_HID_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
+{
+    HAL_PCD_EP_Receive(&hUsbDeviceFS.pData, HID_EPOUT_ADDR, rx_buf, 6);
+	return USBD_OK;
 }
 
 

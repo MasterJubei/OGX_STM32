@@ -29,16 +29,16 @@ main.cpp:372:13:void MX_TIM14_Init()	8	static
 main.cpp:403:13:void MX_SPI1_Init()	8	static
 main.cpp:441:13:void MX_USART2_UART_Init()	8	static
 main.cpp:474:13:void MX_GPIO_Init()	48	static
-main.cpp:492:6:void StartControllerConnected(void*)	16	static
-main.cpp:510:6:void StartGetBT(void*)	16	static
-main.cpp:760:6:void StartSendUSB(void*)	16	static
-main.cpp:786:6:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)	16	static
-main.cpp:802:6:void Error_Handler()	8	static,ignoring_inline_asm
+main.cpp:493:6:void StartControllerConnected(void*)	16	static
+main.cpp:511:6:void StartGetBT(void*)	16	static
+main.cpp:761:6:void StartSendUSB(void*)	16	static
+main.cpp:787:6:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)	16	static
+main.cpp:803:6:void Error_Handler()	8	static,ignoring_inline_asm
 usbhost.h:422:8:int8_t MAX3421e<SPI_SS, INTR>::Init() [with SPI_SS = P10; INTR = P9]	16	static
 usbhost.h:57:21:static void SPi<SPI_CLK, SPI_MOSI, SPI_MISO, SPI_SS>::init() [with SPI_CLK = P13; SPI_MOSI = P11; SPI_MISO = P12; SPI_SS = P10]	4	static
 usbhost.h:177:6:void MAX3421e<SPI_SS, INTR>::regWr(uint8_t, uint8_t) [with SPI_SS = P10; INTR = P9]	24	static
 usbhost.h:408:10:uint16_t MAX3421e<SPI_SS, INTR>::reset() [with SPI_SS = P10; INTR = P9]	24	static
 usbhost.h:278:9:uint8_t MAX3421e<SPI_SS, INTR>::regRd(uint8_t) [with SPI_SS = P10; INTR = P9]	24	static
 usbhost.h:503:6:void MAX3421e<SPI_SS, INTR>::busprobe() [with SPI_SS = P10; INTR = P9]	24	static
-main.cpp:812:1:void __static_initialization_and_destruction_0(int, int)	16	static
-main.cpp:812:1:cpp)	8	static
+main.cpp:813:1:void __static_initialization_and_destruction_0(int, int)	16	static
+main.cpp:813:1:cpp)	8	static
