@@ -34,6 +34,7 @@ Arduino_libs \
 Arduino_libs/avr \
 Core/Src \
 Core/Startup \
+Drivers/SSD1306 \
 Drivers/STM32F4xx_HAL_Driver/Src \
 Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src \
 Middlewares/ST/STM32_USB_Device_Library/Core/Src \

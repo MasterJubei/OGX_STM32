@@ -26,6 +26,10 @@
 #include <PS4BT.h>	//usb host shield library
 #include <usbhub.h>	//usb host shield library
 #include "usbd_hid.h" //st library
+#include "ssd1306.h"
+#include "ssd1306_tests.h"
+#include <stdbool.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,36 +56,49 @@
 
 /* Private variables ---------------------------------------------------------*/
 //ADC_HandleTypeDef hadc1;
-
+I2C_HandleTypeDef hi2c1;
 SPI_HandleTypeDef hspi1;
 UART_HandleTypeDef huart2;
 TIM_HandleTypeDef htim14;
 
 /* Definitions for getBT */
 osThreadId_t getBTHandle;
-const osThreadAttr_t getBT_attributes = { // @suppress("Invalid arguments")
+const osThreadAttr_t getBT_attributes = {
   .name = "getBT",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for sendUSB */
 osThreadId_t sendUSBHandle;
-const osThreadAttr_t sendUSB_attributes = { // @suppress("Invalid arguments")
+const osThreadAttr_t sendUSB_attributes = {
   .name = "sendUSB",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityBelowNormal,
-};
-
-/* USER CODE BEGIN PV */
-/* Definitions for sendUSB */
-
-/* Detect when controller is paired */
-osThreadId_t controllerConnectedHandle;
-const osThreadAttr_t controllerConnected_attributes = { // @suppress("Invalid arguments")
-  .name = "controllerConnected",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for controllerJoin */
+osThreadId_t controllerJoinHandle;
+const osThreadAttr_t controllerJoin_attributes = {
+  .name = "controllerJoin",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for buttonPress */
+osThreadId_t buttonPressHandle;
+const osThreadAttr_t buttonPress_attributes = {
+  .name = "buttonPress",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow4,
+};
+/* Definitions for updateLCD */
+osThreadId_t updateLCDHandle;
+const osThreadAttr_t updateLCD_attributes = {
+  .name = "updateLCD",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+
+/* USER CODE BEGIN PV */
+
 
 /* USER CODE END PV */
 
@@ -91,10 +108,14 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_TIM14_Init(void);
+static void MX_I2C1_Init(void);
 void StartGetBT(void *argument);
 void StartSendUSB(void *argument);
+void StartControllerJoin(void *argument);
+void StartButtonPress(void *argument);
+void StartUpdateLCD(void *argument);
 /* USER CODE BEGIN PFP */
-void StartControllerConnected(void *argument);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -110,7 +131,7 @@ SerialClass Serial(&huart2);
 
 USB Usb;
 BTD Btd(&Usb);
-PS4BT PS4(&Btd,PAIR);
+PS4BT PS4(&Btd);
 //PS4BT PS4(&Btd, PAIR);
 static bool printAngle, printTouch;
 static uint8_t oldL2Value, oldR2Value;
@@ -157,15 +178,21 @@ struct gameHID_t {
       	// Button, one byte, button is bit #0
 };
 
+/*Used temporarily for adjusting contorller offsets*/
 uint8_t LeftHatX_val;
 uint8_t LeftHatY_val;
 uint8_t RightHatX_val;
 uint8_t RightHatY_val;
 
+/* Used for verifying CPU HCLK and Timer Functionality */
 uint32_t cpu_freq = 0;
 uint16_t timer_val = 0 ;
 uint16_t timer_val2 = 0 ;
 uint32_t hal_gettick = 0;
+
+/* Display Controls */
+uint8_t display_no = 0;
+uint8_t pairing = 0;
 
 struct xboxHID_t
 {
@@ -232,6 +259,8 @@ int main(void)
   MX_SPI1_Init();
   MX_USB_DEVICE_Init();
   MX_TIM14_Init();
+  MX_I2C1_Init();
+
   //MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 
@@ -290,9 +319,17 @@ int main(void)
   /* creation of sendUSB */
   sendUSBHandle = osThreadNew(StartSendUSB, NULL, &sendUSB_attributes);
 
+  /* creation of controllerJoin */
+  controllerJoinHandle = osThreadNew(StartControllerJoin, NULL, &controllerJoin_attributes);
+
+  /* creation of buttonPress */
+  buttonPressHandle = osThreadNew(StartButtonPress, NULL, &buttonPress_attributes);
+
+  /* creation of updateLCD */
+  updateLCDHandle = osThreadNew(StartUpdateLCD, NULL, &updateLCD_attributes);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* Used to determine if a controller just connected */
-  controllerConnectedHandle = osThreadNew(StartControllerConnected, NULL, &controllerConnected_attributes);
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
@@ -394,6 +431,39 @@ static void MX_TIM14_Init(void)
   /* USER CODE END TIM14_Init 2 */
 
 }
+/**
+  * @brief I2C1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2C1_Init(void)
+{
+
+  /* USER CODE BEGIN I2C1_Init 0 */
+
+  /* USER CODE END I2C1_Init 0 */
+
+  /* USER CODE BEGIN I2C1_Init 1 */
+
+  /* USER CODE END I2C1_Init 1 */
+  hi2c1.Instance = I2C1;
+  hi2c1.Init.ClockSpeed = 400000;
+  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN I2C1_Init 2 */
+
+  /* USER CODE END I2C1_Init 2 */
+
+}
 
 /**
   * @brief SPI1 Initialization Function
@@ -486,28 +556,24 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB10 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PA8 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
 }
 
 /* USER CODE BEGIN 4 */
-/*Rumble when connected */
-void StartControllerConnected(void *argument)
-{
-  /* USER CODE BEGIN StartSendUSB */
-  
-  /* Infinite loop */
-  for(;;)
-  {
-    if(PS4.connected() && !rumble_once) {
-      PS4.setRumbleOn(RumbleLow);
-      osDelay(500);
-      PS4.setRumbleOff();
-      rumble_once = 1;
-    }
-    osDelay(1);
-  }
-  /* USER CODE END StartControllerConnected */
-}
 /* USER CODE END 4 */
+
 void StartGetBT(void *argument)
 {
   /* init code for USB_DEVICE */
@@ -545,7 +611,7 @@ void StartGetBT(void *argument)
   xboxHID.leftStickY = 0;
   xboxHID.rightStickX = 0;
   xboxHID.rightStickY = 0;
-
+  ssd1306_TestAll();
   /* Infinite loop */
   for(;;)
   {
@@ -570,6 +636,7 @@ void StartGetBT(void *argument)
 
 		Usb.Task();
 		if (PS4.connected()) {
+			pairing = 0;
 			ps4_connected = 1;
 			LeftHatX_val = PS4.getAnalogHat(LeftHatX);
 			LeftHatY_val = PS4.getAnalogHat(LeftHatY);
@@ -742,6 +809,7 @@ void StartGetBT(void *argument)
 			if (!buttonPressed) {
 				Serial.print(F("\r\nButton Pressed"));
 				PS4.pair(); // Start paring routine if user button was just pressed
+				pairing = 1;
 			}
 			buttonPressed = true;
 		} else
@@ -782,6 +850,66 @@ void StartSendUSB(void *argument)
     osDelay(1);
   }
   /* USER CODE END StartSendUSB */
+}
+
+/* USER CODE BEGIN Header_StartControllerJoin */
+/**
+* @brief Function implementing the controllerJoin thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartControllerJoin */
+void StartControllerJoin(void *argument)
+{
+  /* USER CODE BEGIN StartControllerJoin */
+  /* Infinite loop */
+  for(;;)
+  {
+	if(PS4.connected() && !rumble_once) {
+	  PS4.setRumbleOn(RumbleLow);
+	  osDelay(500);
+	  PS4.setRumbleOff();
+	  rumble_once = 1;
+	}
+	osDelay(1);
+  }
+  /* USER CODE END StartControllerJoin */
+}
+
+/* USER CODE BEGIN Header_StartButtonPress */
+/**
+* @brief Function implementing the buttonPress thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartButtonPress */
+void StartButtonPress(void *argument)
+{
+  /* USER CODE BEGIN StartButtonPress */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartButtonPress */
+}
+
+/* USER CODE BEGIN Header_StartUpdateLCD */
+/**
+* @brief Function implementing the updateLCD thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartUpdateLCD */
+void StartUpdateLCD(void *argument)
+{
+  /* USER CODE BEGIN StartUpdateLCD */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartUpdateLCD */
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
