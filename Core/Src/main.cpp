@@ -210,6 +210,7 @@ uint8_t pairing = 0;
 uint8_t keyCode = NO_BUTTON_PRESSED;
 uint8_t buttonDebounced = false;
 uint8_t buttonProcessed = false;
+uint8_t display_force_update = false;
 
 /* Display Settings */
 uint8_t display_run_once = 0;
@@ -620,6 +621,7 @@ void ProcessKeyCodeInContext(uint8_t keyCode) {
   Serial.print("\r\nDisplay no is: ");
   Serial.print(display_no);
   display_run_once = 0;
+  display_force_update = 1;
 }
 /* USER CODE END 4 */
 
@@ -977,43 +979,79 @@ void StartUpdateLCD(void *argument)
   ssd1306_UpdateScreen();
   for(;;)
   {
-    if(display_run_once == 0) {
-      ssd1306_Fill(Black_);
-      ssd1306_UpdateScreen();
-      if(display_no == 0) {
-        ssd1306_SetCursor(25,0);
-        ssd1306_WriteString("Status:", Font_11x18, White_);
-        if(PS4.connected() == 0) {
-          ssd1306_SetCursor(2, 26);
-          ssd1306_WriteString("Not Paired", Font_11x18, White_);
-        } else if (PS4.connected()) {
-          ssd1306_SetCursor(2, 26);
-          ssd1306_WriteString("Paired to DS4", Font_11x18, White_);
-        }
-        ssd1306_UpdateScreen();
-      } else if (display_no == 1) {
-        ssd1306_SetCursor(25,0);
-        ssd1306_WriteString("Pair?", Font_11x18, White_);
-        ssd1306_UpdateScreen();
-      } else if(display_no == 7) {
-	    ssd1306_Fill(Black_);
-	  	ssd1306_UpdateScreen();
-    	ssd1306_SetCursor(25,0);
-        ssd1306_WriteString("Pairing...", Font_11x18, White_);
-        ssd1306_UpdateScreen();
-        PS4.pair();
-        while(PS4.connected() == 0) {
-          osDelay(10);
-        }
-        ssd1306_SetCursor(2,26);
-        ssd1306_WriteString("Paired!", Font_11x18, White_);
-        ssd1306_UpdateScreen();
-      }
-      display_run_once = 1;
-    }
+	if(display_run_once == 0) {
+		  ssd1306_Fill(Black_);
+		  ssd1306_UpdateScreen();
+		switch(display_no)
+		{
+			case 0 :
+			{
+				uint8_t alternate_print = 1;
+				if(!PS4.connected()) {
+				  ssd1306_SetCursor(47,0);
+				  ssd1306_WriteString("Not", Font_11x18, White_);
+				  display_force_update = 0;
+				  ssd1306_SetCursor(14, 26);
+				  ssd1306_WriteString("Connected", Font_11x18, White_);
+				  alternate_print = 1;
+				} else if (PS4.connected()) {
+				  ssd1306_SetCursor(14, 26);
+				  ssd1306_WriteString("Connected", Font_11x18, White_);
+				  alternate_print = 0;
+				  display_run_once = 1;
+				  display_force_update = 0;
+				}
+				ssd1306_UpdateScreen();
 
+				while(!PS4.connected() && display_force_update == 0) {
+					osDelay(100);
+				}
+				if(display_force_update == 1) {
+					display_force_update = 0;
+					display_run_once = 0;
+					break;
+				}
+				if(PS4.connected() && alternate_print) {
+				    ssd1306_Fill(Black_);
+				    ssd1306_UpdateScreen();
+				    ssd1306_SetCursor(25,0);
+				    ssd1306_WriteString("Status:", Font_11x18, White_);
+					ssd1306_SetCursor(2, 26);
+					ssd1306_WriteString("  Connected!", Font_11x18, White_);
+				    ssd1306_UpdateScreen();
+				    display_run_once = 1;
+				}
+				break;
+			}
 
-    osDelay(1);
+			case 1 :
+				display_run_once = 1;
+				display_force_update = 0;
+				ssd1306_Fill(Black_);
+				ssd1306_SetCursor(25,0);
+				ssd1306_WriteString("Pair?", Font_11x18, White_);
+				ssd1306_UpdateScreen();
+				break;
+
+			case 7 :
+				display_run_once = 1;
+				display_force_update = 0;
+				ssd1306_Fill(Black_);
+				ssd1306_UpdateScreen();
+				ssd1306_SetCursor(25,0);
+				ssd1306_WriteString("Pairing...", Font_11x18, White_);
+				ssd1306_UpdateScreen();
+				PS4.pair();
+				while(PS4.connected() == 0) {
+				  osDelay(100);
+				}
+				ssd1306_SetCursor(2,26);
+				ssd1306_WriteString("Paired!", Font_11x18, White_);
+				ssd1306_UpdateScreen();
+				break;
+		}
+	}
+    osDelay(100);
   }
   /* USER CODE END StartUpdateLCD */
 }

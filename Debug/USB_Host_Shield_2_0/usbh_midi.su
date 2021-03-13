@@ -1,21 +1,29 @@
-UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	0	static
-UsbCore.h:149:25:virtual uint8_t USBDeviceConfig::Poll()	0	static
-UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	0	static
-UsbCore.h:161:22:virtual bool USBDeviceConfig::VIDPIDOK(uint16_t, uint16_t)	0	static
-UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	0	static
-UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	0	static
-usbh_midi.h:90:25:virtual uint8_t USBH_MIDI::GetAddress()	0	static
-usbh_midi.cpp:341:9:virtual uint8_t USBH_MIDI::Release()	8	static
+UsbCore.h:137:25:virtual uint8_t USBDeviceConfig::Init(uint8_t, uint8_t, bool)	16	static
+UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
+UsbCore.h:145:25:virtual uint8_t USBDeviceConfig::Release()	16	static
+UsbCore.h:149:25:virtual uint8_t USBDeviceConfig::Poll()	16	static
+UsbCore.h:153:25:virtual uint8_t USBDeviceConfig::GetAddress()	16	static
+UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
+UsbCore.h:161:22:virtual bool USBDeviceConfig::VIDPIDOK(uint16_t, uint16_t)	16	static
+UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
+UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
+UsbCore.h:226:22:AddressPool& USB::GetAddressPool()	16	static
+UsbCore.h:230:17:uint8_t USB::RegisterDeviceClass(USBDeviceConfig*)	24	static
+usbh_midi.h:90:25:virtual uint8_t USBH_MIDI::GetAddress()	16	static
+UsbCore.h:134:7:constexpr USBDeviceConfig::USBDeviceConfig()	16	static
 usbh_midi.cpp:87:1:USBH_MIDI::USBH_MIDI(USB*)	24	static
-usbh_midi.cpp:260:9:uint8_t USBH_MIDI::parseConfigDescr(uint8_t, uint8_t)	296	static
-usbh_midi.cpp:352:6:void USBH_MIDI::setupDeviceSpecific()	0	static
 usbh_midi.cpp:108:9:virtual uint8_t USBH_MIDI::Init(uint8_t, uint8_t, bool)	72	static
-usbh_midi.cpp:374:9:uint8_t USBH_MIDI::RecvData(uint16_t*, uint8_t*)	24	static
-usbh_midi.cpp:498:9:uint8_t USBH_MIDI::lookupMsgSize(uint8_t, uint8_t)	0	static
-usbh_midi.cpp:387:9:uint8_t USBH_MIDI::RecvData(uint8_t*, bool)	24	static
-usbh_midi.cpp:428:9:uint8_t USBH_MIDI::RecvRawData(uint8_t*)	8	static
-usbh_midi.cpp:549:10:uint16_t USBH_MIDI::countSysExDataSize(uint8_t*)	0	static
-usbh_midi.cpp:573:9:uint8_t USBH_MIDI::SendSysEx(uint8_t*, uint16_t, uint8_t)	128	static
+usbh_midi.cpp:260:9:uint8_t USBH_MIDI::parseConfigDescr(uint8_t, uint8_t)	296	static
+usbh_midi.cpp:341:9:virtual uint8_t USBH_MIDI::Release()	16	static
+usbh_midi.cpp:352:6:void USBH_MIDI::setupDeviceSpecific()	16	static
+usbh_midi.cpp:374:9:uint8_t USBH_MIDI::RecvData(uint16_t*, uint8_t*)	40	static
+usbh_midi.cpp:387:9:uint8_t USBH_MIDI::RecvData(uint8_t*, bool)	32	static
+usbh_midi.cpp:428:9:uint8_t USBH_MIDI::RecvRawData(uint8_t*)	16	static
 usbh_midi.cpp:434:9:uint8_t USBH_MIDI::SendData(uint8_t*, uint8_t)	40	static
-usbh_midi.cpp:631:9:uint8_t USBH_MIDI::SendRawData(uint16_t, uint8_t*)	16	static
-usbh_midi.cpp:637:9:uint8_t USBH_MIDI::extractSysExData(uint8_t*, uint8_t*)	0	static
+usbh_midi.cpp:498:9:uint8_t USBH_MIDI::lookupMsgSize(uint8_t, uint8_t)	24	static
+usbh_midi.cpp:549:10:uint16_t USBH_MIDI::countSysExDataSize(uint8_t*)	24	static
+usbh_midi.cpp:573:9:uint8_t USBH_MIDI::SendSysEx(uint8_t*, uint16_t, uint8_t)	112	static
+usbh_midi.cpp:631:9:uint8_t USBH_MIDI::SendRawData(uint16_t, uint8_t*)	40	static
+usbh_midi.cpp:637:9:uint8_t USBH_MIDI::extractSysExData(uint8_t*, uint8_t*)	32	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = short unsigned int]	16	static

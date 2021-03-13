@@ -1,23 +1,31 @@
-UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	0	static
-UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	0	static
-UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	0	static
-UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	0	static
-XBOXUSB.h:85:25:virtual uint8_t XBOXUSB::GetAddress()	0	static
-XBOXUSB.h:93:22:virtual bool XBOXUSB::isReady()	0	static
-XBOXUSB.h:103:22:virtual bool XBOXUSB::VIDPIDOK(uint16_t, uint16_t)	0	static
-XBOXUSB.cpp:224:9:virtual uint8_t XBOXUSB::Release()	16	static
+UsbCore.h:137:25:virtual uint8_t USBDeviceConfig::Init(uint8_t, uint8_t, bool)	16	static
+UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
+UsbCore.h:145:25:virtual uint8_t USBDeviceConfig::Release()	16	static
+UsbCore.h:149:25:virtual uint8_t USBDeviceConfig::Poll()	16	static
+UsbCore.h:153:25:virtual uint8_t USBDeviceConfig::GetAddress()	16	static
+UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
+UsbCore.h:161:22:virtual bool USBDeviceConfig::VIDPIDOK(uint16_t, uint16_t)	16	static
+UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
+UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
+UsbCore.h:226:22:AddressPool& USB::GetAddressPool()	16	static
+UsbCore.h:230:17:uint8_t USB::RegisterDeviceClass(USBDeviceConfig*)	24	static
+UsbCore.h:134:7:constexpr USBDeviceConfig::USBDeviceConfig()	16	static
+XBOXUSB.h:85:25:virtual uint8_t XBOXUSB::GetAddress()	16	static
+XBOXUSB.h:93:22:virtual bool XBOXUSB::isReady()	16	static
+XBOXUSB.h:103:22:virtual bool XBOXUSB::VIDPIDOK(uint16_t, uint16_t)	16	static
 XBOXUSB.cpp:23:1:XBOXUSB::XBOXUSB(USB*)	24	static
-XBOXUSB.cpp:244:6:void XBOXUSB::readReport()	0	static
-XBOXUSB.cpp:232:9:virtual uint8_t XBOXUSB::Poll()	24	static
-XBOXUSB.cpp:271:6:void XBOXUSB::printReport()	0	static
-XBOXUSB.cpp:283:9:uint8_t XBOXUSB::getButtonPress(ButtonEnum)	0	static
-XBOXUSB.cpp:291:6:bool XBOXUSB::getButtonClick(ButtonEnum)	0	static
-XBOXUSB.cpp:311:9:int16_t XBOXUSB::getAnalogHat(AnalogHatEnum)	0	static
-XBOXUSB.cpp:316:6:void XBOXUSB::XboxCommand(uint8_t*, uint16_t)	40	static
-XBOXUSB.cpp:321:6:void XBOXUSB::setLedRaw(uint8_t)	8	static
-XBOXUSB.cpp:329:6:void XBOXUSB::setLedOn(LEDEnum)	8	static
-XBOXUSB.cpp:336:6:void XBOXUSB::setLedBlink(LEDEnum)	8	static
-XBOXUSB.cpp:340:6:void XBOXUSB::setLedMode(LEDModeEnum)	8	static
+XBOXUSB.cpp:39:9:virtual uint8_t XBOXUSB::Init(uint8_t, uint8_t, bool)	80	static
+XBOXUSB.cpp:224:9:virtual uint8_t XBOXUSB::Release()	16	static
+XBOXUSB.cpp:232:9:virtual uint8_t XBOXUSB::Poll()	40	static
+XBOXUSB.cpp:244:6:void XBOXUSB::readReport()	16	static
+XBOXUSB.cpp:271:6:void XBOXUSB::printReport()	16	static
+XBOXUSB.cpp:283:9:uint8_t XBOXUSB::getButtonPress(ButtonEnum)	16	static
+XBOXUSB.cpp:291:6:bool XBOXUSB::getButtonClick(ButtonEnum)	24	static
+XBOXUSB.cpp:311:9:int16_t XBOXUSB::getAnalogHat(AnalogHatEnum)	16	static
+XBOXUSB.cpp:316:6:void XBOXUSB::XboxCommand(uint8_t*, uint16_t)	56	static
+XBOXUSB.cpp:321:6:void XBOXUSB::setLedRaw(uint8_t)	16	static
+XBOXUSB.cpp:329:6:void XBOXUSB::setLedOn(LEDEnum)	16	static
+XBOXUSB.cpp:336:6:void XBOXUSB::setLedBlink(LEDEnum)	16	static
+XBOXUSB.cpp:340:6:void XBOXUSB::setLedMode(LEDModeEnum)	16	static
 XBOXUSB.cpp:344:6:void XBOXUSB::setRumbleOn(uint8_t, uint8_t)	16	static
-XBOXUSB.cpp:357:6:void XBOXUSB::onInit()	8	static
-XBOXUSB.cpp:39:9:virtual uint8_t XBOXUSB::Init(uint8_t, uint8_t, bool)	72	static
+XBOXUSB.cpp:357:6:void XBOXUSB::onInit()	16	static
