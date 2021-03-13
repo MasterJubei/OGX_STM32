@@ -1,18 +1,17 @@
-UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
-UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
-UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
-UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
-hidcomposite.h:95:25:virtual uint8_t HIDComposite::GetAddress()	16	static
-hidcomposite.h:99:22:virtual bool HIDComposite::isReady()	16	static
-hiduniversal.h:25:14:virtual bool HIDUniversal::SelectInterface(uint8_t, uint8_t)	16	static
-hiduniversal.h:32:14:virtual void HIDUniversal::ParseHIDData(USBHID*, uint8_t, bool, uint8_t, uint8_t*)	40	static
-hiduniversal.h:50:14:virtual void HIDUniversal::EndpointXtract(uint8_t, uint8_t, uint8_t, uint8_t, const USB_ENDPOINT_DESCRIPTOR*)	32	static
-PSBuzz.h:114:14:void PSBuzz::setLedOnAll()	24	static
-PSBuzz.h:157:14:void PSBuzz::Reset()	24	static
-PSBuzz.h:172:22:virtual bool PSBuzz::VIDPIDOK(uint16_t, uint16_t)	16	static
-PSBuzz.cpp:23:6:virtual void PSBuzz::ParseHIDData(USBHID*, bool, uint8_t, uint8_t*)	24	static
-PSBuzz.cpp:41:9:virtual uint8_t PSBuzz::OnInitSuccessful()	16	static
-PSBuzz.cpp:52:6:bool PSBuzz::getButtonPress(ButtonEnum, uint8_t)	16	static
-PSBuzz.cpp:56:6:bool PSBuzz::getButtonClick(ButtonEnum, uint8_t)	24	static
-PSBuzz.cpp:64:6:void PSBuzz::setLedRaw(bool, uint8_t)	24	static
-PSBuzz.cpp:79:6:void PSBuzz::PSBuzz_Command(uint8_t*, uint16_t)	56	static
+UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	0	static
+UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	0	static
+UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	0	static
+UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	0	static
+hidcomposite.h:95:25:virtual uint8_t HIDComposite::GetAddress()	0	static
+hidcomposite.h:99:22:virtual bool HIDComposite::isReady()	0	static
+hiduniversal.h:25:14:virtual bool HIDUniversal::SelectInterface(uint8_t, uint8_t)	0	static
+hiduniversal.h:32:14:virtual void HIDUniversal::ParseHIDData(USBHID*, uint8_t, bool, uint8_t, uint8_t*)	16	static
+PSBuzz.h:172:22:virtual bool PSBuzz::VIDPIDOK(uint16_t, uint16_t)	0	static
+PSBuzz.cpp:23:6:virtual void PSBuzz::ParseHIDData(USBHID*, bool, uint8_t, uint8_t*)	8	static
+PSBuzz.cpp:52:6:bool PSBuzz::getButtonPress(ButtonEnum, uint8_t)	0	static
+PSBuzz.cpp:56:6:bool PSBuzz::getButtonClick(ButtonEnum, uint8_t)	4	static
+PSBuzz.cpp:79:6:void PSBuzz::PSBuzz_Command(uint8_t*, uint16_t)	40	static
+PSBuzz.cpp:64:6:void PSBuzz::setLedRaw(bool, uint8_t)	16	static
+PSBuzz.cpp:41:9:virtual uint8_t PSBuzz::OnInitSuccessful()	8	static
+hiduniversal.h:50:14:virtual void HIDUniversal::EndpointXtract(uint8_t, uint8_t, uint8_t, uint8_t, const USB_ENDPOINT_DESCRIPTOR*)	16	static
+hiduniversal.h:50:14:virtual void HIDUniversal::_ZThn4_N12HIDUniversal14EndpointXtractEhhhhPK23USB_ENDPOINT_DESCRIPTOR(uint8_t, uint8_t, uint8_t, uint8_t, const USB_ENDPOINT_DESCRIPTOR*)	16	static

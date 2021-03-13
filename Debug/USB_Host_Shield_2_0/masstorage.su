@@ -1,75 +1,43 @@
-UsbCore.h:137:25:virtual uint8_t USBDeviceConfig::Init(uint8_t, uint8_t, bool)	16	static
-UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
-UsbCore.h:145:25:virtual uint8_t USBDeviceConfig::Release()	16	static
-UsbCore.h:149:25:virtual uint8_t USBDeviceConfig::Poll()	16	static
-UsbCore.h:153:25:virtual uint8_t USBDeviceConfig::GetAddress()	16	static
-UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
-UsbCore.h:161:22:virtual bool USBDeviceConfig::VIDPIDOK(uint16_t, uint16_t)	16	static
-UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
-UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
-UsbCore.h:226:22:AddressPool& USB::GetAddressPool()	16	static
-UsbCore.h:230:17:uint8_t USB::RegisterDeviceClass(USBDeviceConfig*)	24	static
-parsetools.h:36:9:MultiValueBuffer::MultiValueBuffer()	16	static
-parsetools.h:47:9:MultiByteValueParser::MultiByteValueParser()	16	static
-parsetools.h:54:14:void MultiByteValueParser::Initialize(MultiValueBuffer*)	16	static
-parsetools.h:69:9:ByteSkipper::ByteSkipper()	16	static
-parsetools.h:72:14:void ByteSkipper::Initialize(MultiValueBuffer*)	16	static
-parsetools.h:77:14:bool ByteSkipper::Skip(uint8_t**, uint16_t*, uint16_t)	24	static
-confdescparser.h:35:22:virtual void UsbConfigXtracter::EndpointXtract(uint8_t, uint8_t, uint8_t, uint8_t, const USB_ENDPOINT_DESCRIPTOR*)	16	static
-masstorage.h:216:9:CDB6::CDB6(uint8_t, uint8_t, uint32_t, uint8_t, uint8_t)	24	static
-masstorage.h:221:9:CDB6::CDB6(uint8_t, uint8_t, uint8_t, uint8_t)	16	static
-masstorage.h:248:9:CDB10::CDB10(uint8_t, uint8_t)	16	static
-masstorage.h:254:9:CDB10::CDB10(uint8_t, uint8_t, uint16_t, uint32_t)	16	static
-masstorage.h:387:9:CommandBlockWrapperBase::CommandBlockWrapperBase(uint32_t, uint32_t, uint8_t)	24	static
-masstorage.h:429:9:CommandBlockWrapper::CommandBlockWrapper(uint32_t, uint32_t, CDB6_t*, uint8_t)	24	static
-masstorage.h:436:9:CommandBlockWrapper::CommandBlockWrapper(uint32_t, uint32_t, CDB10_t*, uint8_t)	24	static
-masstorage.h:499:25:virtual uint8_t BulkOnly::OnInit()	16	static
-masstorage.h:535:25:virtual uint8_t BulkOnly::GetAddress()	16	static
-masstorage.h:542:22:virtual bool BulkOnly::DEVCLASSOK(uint8_t)	16	static
-masstorage.cpp:43:10:uint32_t BulkOnly::GetCapacity(uint8_t)	16	static
-masstorage.cpp:55:10:uint16_t BulkOnly::GetSectorSize(uint8_t)	16	static
-masstorage.cpp:67:6:bool BulkOnly::LUNIsGood(uint8_t)	16	static
-masstorage.cpp:77:6:bool BulkOnly::WriteProtected(uint8_t)	16	static
-masstorage.cpp:90:9:uint8_t BulkOnly::SCSITransaction6(CDB6_t*, uint16_t, void*, uint8_t)	64	static
-masstorage.cpp:106:9:uint8_t BulkOnly::SCSITransaction10(CDB10_t*, uint16_t, void*, uint8_t)	64	static
-masstorage.cpp:121:9:uint8_t BulkOnly::LockMedia(uint8_t, uint8_t)	32	static
-masstorage.cpp:137:9:uint8_t BulkOnly::MediaCTL(uint8_t, uint8_t)	32	static
-masstorage.cpp:161:9:uint8_t BulkOnly::Read(uint8_t, uint32_t, uint16_t, uint8_t, uint8_t*)	48	static
-masstorage.cpp:195:9:uint8_t BulkOnly::Write(uint8_t, uint32_t, uint16_t, uint8_t, const uint8_t*)	48	static
-UsbCore.h:134:7:constexpr USBDeviceConfig::USBDeviceConfig()	16	static
-confdescparser.h:30:7:constexpr UsbConfigXtracter::UsbConfigXtracter()	16	static
+UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	0	static
+UsbCore.h:161:22:virtual bool USBDeviceConfig::VIDPIDOK(uint16_t, uint16_t)	0	static
+UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	0	static
+masstorage.h:499:25:virtual uint8_t BulkOnly::OnInit()	0	static
+masstorage.h:535:25:virtual uint8_t BulkOnly::GetAddress()	0	static
+masstorage.h:542:22:virtual bool BulkOnly::DEVCLASSOK(uint8_t)	0	static
+masstorage.cpp:550:6:virtual void BulkOnly::EndpointXtract(uint8_t, uint8_t, uint8_t, uint8_t, const USB_ENDPOINT_DESCRIPTOR*)	4	static
+confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 8; unsigned char SUBCLASS_ID = 6; unsigned char PROTOCOL_ID = 80; unsigned char MASK = 7]	40	static
+masstorage.cpp:43:10:uint32_t BulkOnly::GetCapacity(uint8_t)	0	static
+masstorage.cpp:55:10:uint16_t BulkOnly::GetSectorSize(uint8_t)	0	static
+masstorage.cpp:67:6:bool BulkOnly::LUNIsGood(uint8_t)	0	static
+masstorage.cpp:77:6:bool BulkOnly::WriteProtected(uint8_t)	0	static
+masstorage.cpp:704:9:uint8_t BulkOnly::GetMaxLUN(uint8_t*)	40	static
+masstorage.cpp:845:9:uint8_t BulkOnly::ClearEpHalt(uint8_t)	48	static
+masstorage.cpp:868:6:void BulkOnly::Reset()	56	static
+masstorage.cpp:877:9:uint8_t BulkOnly::ResetRecovery()	8	static
+masstorage.cpp:896:6:void BulkOnly::ClearAllEP()	16	static
 masstorage.cpp:229:1:BulkOnly::BulkOnly(USB*)	16	static
-masstorage.cpp:258:9:virtual uint8_t BulkOnly::ConfigureDevice(uint8_t, uint8_t, bool)	72	static
-masstorage.cpp:333:9:virtual uint8_t BulkOnly::Init(uint8_t, uint8_t, bool)	112	static
-masstorage.cpp:550:6:virtual void BulkOnly::EndpointXtract(uint8_t, uint8_t, uint8_t, uint8_t, const USB_ENDPOINT_DESCRIPTOR*)	24	static
-masstorage.cpp:598:9:virtual uint8_t BulkOnly::Release()	16	static
-masstorage.cpp:610:6:bool BulkOnly::CheckLUN(uint8_t)	32	static
-masstorage.cpp:650:6:void BulkOnly::CheckMedia()	32	static
-masstorage.cpp:676:9:virtual uint8_t BulkOnly::Poll()	16	static
-masstorage.cpp:704:9:uint8_t BulkOnly::GetMaxLUN(uint8_t*)	56	static
-masstorage.cpp:721:9:uint8_t BulkOnly::Inquiry(uint8_t, uint16_t, uint8_t*)	40	static
-masstorage.cpp:737:9:uint8_t BulkOnly::TestUnitReady(uint8_t)	32	static
-masstorage.cpp:761:9:uint8_t BulkOnly::ModeSense6(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t*)	32	static
-masstorage.cpp:777:9:uint8_t BulkOnly::ReadCapacity10(uint8_t, uint8_t*)	48	static
-masstorage.cpp:793:9:uint8_t BulkOnly::Page3F(uint8_t)	240	static
-masstorage.cpp:820:9:uint8_t BulkOnly::RequestSense(uint8_t, uint16_t, uint8_t*)	80	static
-masstorage.cpp:845:9:uint8_t BulkOnly::ClearEpHalt(uint8_t)	64	static
-masstorage.cpp:868:6:void BulkOnly::Reset()	48	static
-masstorage.cpp:877:9:uint8_t BulkOnly::ResetRecovery()	16	static
-masstorage.cpp:896:6:void BulkOnly::ClearAllEP()	24	static
-masstorage.cpp:929:6:bool BulkOnly::IsValidCSW(CommandStatusWrapper*, CommandBlockWrapperBase*)	24	static
+masstorage.cpp:258:9:virtual uint8_t BulkOnly::ConfigureDevice(uint8_t, uint8_t, bool)	64	static
+masstorage.cpp:598:9:virtual uint8_t BulkOnly::Release()	8	static
+masstorage.cpp:929:6:bool BulkOnly::IsValidCSW(CommandStatusWrapper*, CommandBlockWrapperBase*)	0	static
 masstorage.cpp:948:9:uint8_t BulkOnly::HandleUsbError(uint8_t, uint8_t)	24	static
-masstorage.cpp:1019:9:uint8_t BulkOnly::Transaction(CommandBlockWrapper*, uint16_t, void*)	72	static
-masstorage.cpp:1123:9:uint8_t BulkOnly::SetCurLUN(uint8_t)	16	static
-masstorage.cpp:1136:9:uint8_t BulkOnly::HandleSCSIError(uint8_t)	40	static
-masstorage.cpp:1220:6:void BulkOnly::PrintEndpointDescriptor(const USB_ENDPOINT_DESCRIPTOR*)	16	static
-masstorage.cpp:1247:9:uint8_t BulkOnly::Read(uint8_t, uint32_t, uint16_t, uint8_t, USBReadParser*)	24	static
-printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
-printhex.h:76:25:void D_PrintHex(T, int) [with T = long unsigned int]	16	static
-printhex.h:76:25:void D_PrintHex(T, int) [with T = short unsigned int]	16	static
-UsbCore.h:205:7:constexpr USBReadParser::USBReadParser()	16	static
-confdescparser.h:79:1:ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ConfigDescParser(UsbConfigXtracter*) [with unsigned char CLASS_ID = 8; unsigned char SUBCLASS_ID = 6; unsigned char PROTOCOL_ID = 80; unsigned char MASK = 7]	16	static
-message.h:76:6:void ErrorMessage(const char*, ERROR_TYPE) [with ERROR_TYPE = unsigned char]	16	static
-message.h:76:6:void ErrorMessage(const char*, ERROR_TYPE) [with ERROR_TYPE = long unsigned int]	16	static
-confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 8; unsigned char SUBCLASS_ID = 6; unsigned char PROTOCOL_ID = 80; unsigned char MASK = 7]	32	static
-confdescparser.h:103:6:bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor(uint8_t**, uint16_t*) [with unsigned char CLASS_ID = 8; unsigned char SUBCLASS_ID = 6; unsigned char PROTOCOL_ID = 80; unsigned char MASK = 7]	56	static
+masstorage.cpp:1019:9:uint8_t BulkOnly::Transaction(CommandBlockWrapper*, uint16_t, void*)	56	static
+masstorage.cpp:820:9:uint8_t BulkOnly::RequestSense(uint8_t, uint16_t, uint8_t*)	48	static
+masstorage.cpp:1123:9:uint8_t BulkOnly::SetCurLUN(uint8_t)	0	static
+masstorage.cpp:1136:9:uint8_t BulkOnly::HandleSCSIError(uint8_t)	32	static
+masstorage.cpp:90:9:uint8_t BulkOnly::SCSITransaction6(CDB6_t*, uint16_t, void*, uint8_t)	48	static
+masstorage.cpp:121:9:uint8_t BulkOnly::LockMedia(uint8_t, uint8_t)	24	static
+masstorage.cpp:137:9:uint8_t BulkOnly::MediaCTL(uint8_t, uint8_t)	24	static
+masstorage.cpp:721:9:uint8_t BulkOnly::Inquiry(uint8_t, uint16_t, uint8_t*)	24	static
+masstorage.cpp:737:9:uint8_t BulkOnly::TestUnitReady(uint8_t)	24	static
+masstorage.cpp:761:9:uint8_t BulkOnly::ModeSense6(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t*)	32	static
+masstorage.cpp:793:9:uint8_t BulkOnly::Page3F(uint8_t)	224	static
+masstorage.cpp:106:9:uint8_t BulkOnly::SCSITransaction10(CDB10_t*, uint16_t, void*, uint8_t)	48	static
+masstorage.cpp:161:9:uint8_t BulkOnly::Read(uint8_t, uint32_t, uint16_t, uint8_t, uint8_t*)	56	static
+masstorage.cpp:195:9:uint8_t BulkOnly::Write(uint8_t, uint32_t, uint16_t, uint8_t, const uint8_t*)	56	static
+masstorage.cpp:777:9:uint8_t BulkOnly::ReadCapacity10(uint8_t, uint8_t*)	32	static
+masstorage.cpp:610:6:bool BulkOnly::CheckLUN(uint8_t)	24	static
+masstorage.cpp:650:6:void BulkOnly::CheckMedia()	24	static
+masstorage.cpp:676:9:virtual uint8_t BulkOnly::Poll()	8	static
+masstorage.cpp:333:9:virtual uint8_t BulkOnly::Init(uint8_t, uint8_t, bool)	104	static
+masstorage.cpp:1220:6:void BulkOnly::PrintEndpointDescriptor(const USB_ENDPOINT_DESCRIPTOR*)	0	static
+masstorage.cpp:1247:9:uint8_t BulkOnly::Read(uint8_t, uint32_t, uint16_t, uint8_t, USBReadParser*)	0	static

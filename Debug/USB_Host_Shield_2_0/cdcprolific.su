@@ -1,32 +1,18 @@
-UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
-UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
-UsbCore.h:161:22:virtual bool USBDeviceConfig::VIDPIDOK(uint16_t, uint16_t)	16	static
-UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
-UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
-UsbCore.h:226:22:AddressPool& USB::GetAddressPool()	16	static
-parsetools.h:36:9:MultiValueBuffer::MultiValueBuffer()	16	static
-parsetools.h:47:9:MultiByteValueParser::MultiByteValueParser()	16	static
-parsetools.h:54:14:void MultiByteValueParser::Initialize(MultiValueBuffer*)	16	static
-parsetools.h:69:9:ByteSkipper::ByteSkipper()	16	static
-parsetools.h:72:14:void ByteSkipper::Initialize(MultiValueBuffer*)	16	static
-parsetools.h:77:14:bool ByteSkipper::Skip(uint8_t**, uint16_t*, uint16_t)	24	static
-cdcacm.h:209:25:virtual uint8_t ACM::GetAddress()	16	static
-cdcacm.h:213:22:virtual bool ACM::isReady()	16	static
-cdcacm.h:217:30:virtual tty_features ACM::enhanced_status()	16	static
-cdcacm.h:221:30:virtual tty_features ACM::enhanced_features()	24	static
-cdcacm.h:232:22:virtual void ACM::autoflowRTS(bool)	16	static
-cdcacm.h:235:22:virtual void ACM::autoflowDSR(bool)	16	static
-cdcacm.h:238:22:virtual void ACM::autoflowXON(bool)	16	static
-cdcacm.h:241:22:virtual void ACM::half_duplex(bool)	16	static
-cdcacm.h:244:22:virtual void ACM::wide(bool)	16	static
-cdcprolific.cpp:19:1:PL2303::PL2303(USB*, CDCAsyncOper*)	24	static
-cdcprolific.cpp:24:9:virtual uint8_t PL2303::Init(uint8_t, uint8_t, bool)	144	static
-printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
-UsbCore.h:205:7:constexpr USBReadParser::USBReadParser()	16	static
-hexdump.h:39:9:HexDumper<BASE_CLASS, LEN_TYPE, OFFSET_TYPE>::HexDumper() [with BASE_CLASS = USBReadParser; LEN_TYPE = short unsigned int; OFFSET_TYPE = short unsigned int]	16	static
-confdescparser.h:79:1:ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ConfigDescParser(UsbConfigXtracter*) [with unsigned char CLASS_ID = 255; unsigned char SUBCLASS_ID = 0; unsigned char PROTOCOL_ID = 0; unsigned char MASK = 1]	16	static
-confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 255; unsigned char SUBCLASS_ID = 0; unsigned char PROTOCOL_ID = 0; unsigned char MASK = 1]	32	static
-hexdump.h:51:6:void HexDumper<BASE_CLASS, LEN_TYPE, OFFSET_TYPE>::Parse(LEN_TYPE, const uint8_t*, const OFFSET_TYPE&) [with BASE_CLASS = USBReadParser; LEN_TYPE = short unsigned int; OFFSET_TYPE = short unsigned int]	32	static
-confdescparser.h:103:6:bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor(uint8_t**, uint16_t*) [with unsigned char CLASS_ID = 255; unsigned char SUBCLASS_ID = 0; unsigned char PROTOCOL_ID = 0; unsigned char MASK = 1]	56	static
-printhex.h:33:6:void PrintHex(T, int) [with T = short unsigned int]	24	static
-printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static
+UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	0	static
+UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	0	static
+UsbCore.h:161:22:virtual bool USBDeviceConfig::VIDPIDOK(uint16_t, uint16_t)	0	static
+UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	0	static
+UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	0	static
+cdcacm.h:209:25:virtual uint8_t ACM::GetAddress()	0	static
+cdcacm.h:213:22:virtual bool ACM::isReady()	0	static
+cdcacm.h:217:30:virtual tty_features ACM::enhanced_status()	0	static
+cdcacm.h:221:30:virtual tty_features ACM::enhanced_features()	0	static
+cdcacm.h:232:22:virtual void ACM::autoflowRTS(bool)	0	static
+cdcacm.h:235:22:virtual void ACM::autoflowDSR(bool)	0	static
+cdcacm.h:238:22:virtual void ACM::autoflowXON(bool)	0	static
+cdcacm.h:241:22:virtual void ACM::half_duplex(bool)	0	static
+cdcacm.h:244:22:virtual void ACM::wide(bool)	0	static
+cdcprolific.cpp:24:9:virtual uint8_t PL2303::Init(uint8_t, uint8_t, bool)	136	static
+hexdump.h:51:6:void HexDumper<BASE_CLASS, LEN_TYPE, OFFSET_TYPE>::Parse(LEN_TYPE, const uint8_t*, const OFFSET_TYPE&) [with BASE_CLASS = USBReadParser; LEN_TYPE = short unsigned int; OFFSET_TYPE = short unsigned int]	40	static
+confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 255; unsigned char SUBCLASS_ID = 0; unsigned char PROTOCOL_ID = 0; unsigned char MASK = 1]	40	static
+cdcprolific.cpp:19:1:PL2303::PL2303(USB*, CDCAsyncOper*)	8	static

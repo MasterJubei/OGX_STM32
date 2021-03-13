@@ -1,45 +1,22 @@
-UsbCore.h:137:25:virtual uint8_t USBDeviceConfig::Init(uint8_t, uint8_t, bool)	16	static
-UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
-UsbCore.h:145:25:virtual uint8_t USBDeviceConfig::Release()	16	static
-UsbCore.h:149:25:virtual uint8_t USBDeviceConfig::Poll()	16	static
-UsbCore.h:153:25:virtual uint8_t USBDeviceConfig::GetAddress()	16	static
-UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
-UsbCore.h:161:22:virtual bool USBDeviceConfig::VIDPIDOK(uint16_t, uint16_t)	16	static
-UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
-UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
-UsbCore.h:226:22:AddressPool& USB::GetAddressPool()	16	static
-UsbCore.h:230:17:uint8_t USB::RegisterDeviceClass(USBDeviceConfig*)	24	static
-parsetools.h:36:9:MultiValueBuffer::MultiValueBuffer()	16	static
-parsetools.h:47:9:MultiByteValueParser::MultiByteValueParser()	16	static
-parsetools.h:54:14:void MultiByteValueParser::Initialize(MultiValueBuffer*)	16	static
-parsetools.h:69:9:ByteSkipper::ByteSkipper()	16	static
-parsetools.h:72:14:void ByteSkipper::Initialize(MultiValueBuffer*)	16	static
-parsetools.h:77:14:bool ByteSkipper::Skip(uint8_t**, uint16_t*, uint16_t)	24	static
-confdescparser.h:35:22:virtual void UsbConfigXtracter::EndpointXtract(uint8_t, uint8_t, uint8_t, uint8_t, const USB_ENDPOINT_DESCRIPTOR*)	16	static
-cdcftdi.h:138:25:virtual uint8_t FTDI::GetAddress()	16	static
-cdcftdi.h:145:22:virtual bool FTDI::VIDPIDOK(uint16_t, uint16_t)	16	static
-cdcftdi.h:148:22:virtual bool FTDI::isReady()	16	static
-UsbCore.h:134:7:constexpr USBDeviceConfig::USBDeviceConfig()	16	static
-confdescparser.h:30:7:constexpr UsbConfigXtracter::UsbConfigXtracter()	16	static
-cdcftdi.cpp:23:1:FTDI::FTDI(USB*, FTDIAsyncOper*, uint16_t)	32	static
-cdcftdi.cpp:41:9:virtual uint8_t FTDI::Init(uint8_t, uint8_t, bool)	136	static
-cdcftdi.cpp:237:6:virtual void FTDI::EndpointXtract(uint8_t, uint8_t, uint8_t, uint8_t, const USB_ENDPOINT_DESCRIPTOR*)	24	static
-cdcftdi.cpp:267:9:virtual uint8_t FTDI::Release()	16	static
-cdcftdi.cpp:278:9:virtual uint8_t FTDI::Poll()	24	static
-cdcftdi.cpp:293:9:uint8_t FTDI::SetBaudRate(uint32_t)	72	static
-cdcftdi.cpp:335:9:uint8_t FTDI::SetLatency(uint8_t)	56	static
-cdcftdi.cpp:345:9:uint8_t FTDI::GetLatency(uint8_t*)	56	static
-cdcftdi.cpp:353:9:uint8_t FTDI::SetModemControl(uint16_t)	64	static
-cdcftdi.cpp:361:9:uint8_t FTDI::SetFlowControl(uint8_t, uint8_t, uint8_t)	56	static
-cdcftdi.cpp:369:9:uint8_t FTDI::SetData(uint16_t)	64	static
-cdcftdi.cpp:377:9:uint8_t FTDI::RcvData(uint16_t*, uint8_t*)	40	static
-cdcftdi.cpp:385:9:uint8_t FTDI::SndData(uint16_t, uint8_t*)	48	static
-cdcftdi.cpp:393:6:void FTDI::PrintEndpointDescriptor(const USB_ENDPOINT_DESCRIPTOR*)	16	static
-printhex.h:76:25:void D_PrintHex(T, int) [with T = int]	16	static
-printhex.h:76:25:void D_PrintHex(T, int) [with T = short unsigned int]	16	static
-printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
-UsbCore.h:205:7:constexpr USBReadParser::USBReadParser()	16	static
-confdescparser.h:79:1:ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ConfigDescParser(UsbConfigXtracter*) [with unsigned char CLASS_ID = 255; unsigned char SUBCLASS_ID = 255; unsigned char PROTOCOL_ID = 255; unsigned char MASK = 7]	16	static
-message.h:76:6:void ErrorMessage(const char*, ERROR_TYPE) [with ERROR_TYPE = unsigned char]	16	static
-confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 255; unsigned char SUBCLASS_ID = 255; unsigned char PROTOCOL_ID = 255; unsigned char MASK = 7]	32	static
-confdescparser.h:103:6:bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor(uint8_t**, uint16_t*) [with unsigned char CLASS_ID = 255; unsigned char SUBCLASS_ID = 255; unsigned char PROTOCOL_ID = 255; unsigned char MASK = 7]	56	static
+UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	0	static
+UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	0	static
+UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	0	static
+UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	0	static
+cdcftdi.h:138:25:virtual uint8_t FTDI::GetAddress()	0	static
+cdcftdi.h:145:22:virtual bool FTDI::VIDPIDOK(uint16_t, uint16_t)	0	static
+cdcftdi.h:148:22:virtual bool FTDI::isReady()	0	static
+cdcftdi.cpp:237:6:virtual void FTDI::EndpointXtract(uint8_t, uint8_t, uint8_t, uint8_t, const USB_ENDPOINT_DESCRIPTOR*)	4	static
+cdcftdi.cpp:267:9:virtual uint8_t FTDI::Release()	8	static
+cdcftdi.cpp:278:9:virtual uint8_t FTDI::Poll()	0	static
+confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 255; unsigned char SUBCLASS_ID = 255; unsigned char PROTOCOL_ID = 255; unsigned char MASK = 7]	40	static
+cdcftdi.cpp:23:1:FTDI::FTDI(USB*, FTDIAsyncOper*, uint16_t)	28	static
+cdcftdi.cpp:293:9:uint8_t FTDI::SetBaudRate(uint32_t)	48	static
+cdcftdi.cpp:335:9:uint8_t FTDI::SetLatency(uint8_t)	48	static
+cdcftdi.cpp:41:9:virtual uint8_t FTDI::Init(uint8_t, uint8_t, bool)	128	static
+cdcftdi.cpp:345:9:uint8_t FTDI::GetLatency(uint8_t*)	48	static
+cdcftdi.cpp:353:9:uint8_t FTDI::SetModemControl(uint16_t)	48	static
+cdcftdi.cpp:361:9:uint8_t FTDI::SetFlowControl(uint8_t, uint8_t, uint8_t)	48	static
+cdcftdi.cpp:369:9:uint8_t FTDI::SetData(uint16_t)	48	static
+cdcftdi.cpp:377:9:uint8_t FTDI::RcvData(uint16_t*, uint8_t*)	24	static
+cdcftdi.cpp:385:9:uint8_t FTDI::SndData(uint16_t, uint8_t*)	24	static
+cdcftdi.cpp:393:6:void FTDI::PrintEndpointDescriptor(const USB_ENDPOINT_DESCRIPTOR*)	0	static

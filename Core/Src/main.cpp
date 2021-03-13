@@ -115,7 +115,7 @@ void StartControllerJoin(void *argument);
 void StartButtonPress(void *argument);
 void StartUpdateLCD(void *argument);
 /* USER CODE BEGIN PFP */
-
+void ProcessKeyCodeInContext(uint8_t keyCode);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -193,6 +193,26 @@ uint32_t hal_gettick = 0;
 /* Display Controls */
 uint8_t display_no = 0;
 uint8_t pairing = 0;
+
+/* Buttons
+ * PA8 = BACK (keyCode value of 3)
+ * PB10 = SELECT (keyCode value of 5)
+ * PB4 = FORWARD (keyCode value of 6) */
+#define NO_BUTTON_PRESSED 0x07
+#define BUTTON_PRESSED keyCode != NO_BUTTON_PRESSED
+#define BACK_BTN_GPIO GPIOA, GPIO_PIN_8
+#define SELECT_BTN_GPIO GPIOB, GPIO_PIN_10
+#define FORWARD_BTN_GPIO GPIOB, GPIO_PIN_4
+#define BACK_BTN 3
+#define SELECT_BTN 5
+#define FORWARD_BTN 6
+
+uint8_t keyCode = NO_BUTTON_PRESSED;
+uint8_t buttonDebounced = false;
+uint8_t buttonProcessed = false;
+
+/* Display Settings */
+uint8_t display_run_once = 0;
 
 struct xboxHID_t
 {
@@ -557,21 +577,50 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PB10 */
-  GPIO_InitStruct.Pin = GPIO_PIN_10;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
   /*Configure GPIO pin : PA8 */
   GPIO_InitStruct.Pin = GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : PB4 */
+  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB10 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
 
 /* USER CODE BEGIN 4 */
+void ProcessKeyCodeInContext(uint8_t keyCode) {
+/*Updates the display_no
+* We could also just call display funcitons directly here, but since we have extra processing speed
+* Let's play with freeRTOS */
+  if(display_no == 0) { /* This is the status screen, show if controller or not connected */
+    if(keyCode == BACK_BTN)
+      display_no = 1;
+    else if(keyCode == FORWARD_BTN)
+      display_no = 1;
+  } else if (display_no == 1) { /* Pair Controller Screen */
+    if(keyCode == BACK_BTN)
+      display_no = 0;
+    else if(keyCode == FORWARD_BTN)
+      display_no = 0;
+    else if(keyCode == SELECT_BTN) {
+      display_no = 7;  /* Only get to the pair status screen from here */
+    }
+  } else if (display_no == 2) {
+
+  }
+  Serial.print("\r\nDisplay no is: ");
+  Serial.print(display_no);
+  display_run_once = 0;
+}
 /* USER CODE END 4 */
 
 void StartGetBT(void *argument)
@@ -611,7 +660,7 @@ void StartGetBT(void *argument)
   xboxHID.leftStickY = 0;
   xboxHID.rightStickX = 0;
   xboxHID.rightStickY = 0;
-  ssd1306_TestAll();
+  //ssd1306_TestAll();
   /* Infinite loop */
   for(;;)
   {
@@ -683,7 +732,7 @@ void StartGetBT(void *argument)
 
 			if (PS4.getButtonClick(PS)) {
 				PS4.disconnect();
-        rumble_once = 0;
+				rumble_once = 0;
         //gameHID.ps4ButtonsTag.button_ps = 1;
         
 			} else {
@@ -836,8 +885,8 @@ void StartSendUSB(void *argument)
 	/*We are defined as a USB Fullspeed device.
 	Polling rate is determined in usbd_hid.h as HID_FS_BINTERVAL, set to 0x04U
 	Most settings are defined in usbd_conf.h
-	So even though we are updating the report often, we still only send at 250hz.
-	Host determines when to read with the usb protocol*/
+	So even though we are updating the report ~1000hz, we still only send at 250hz.
+	Host determines when to read with USB, not the slave, we are writing to a buffer */
 #if(PC_SETUP)
 	USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 #endif
@@ -889,7 +938,26 @@ void StartButtonPress(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+  keyCode = (HAL_GPIO_ReadPin(BACK_BTN_GPIO) << 2) |
+			(HAL_GPIO_ReadPin(SELECT_BTN_GPIO) << 1) |
+			(HAL_GPIO_ReadPin(FORWARD_BTN_GPIO) << 0);
+
+  if (BUTTON_PRESSED) {
+	  if(buttonDebounced == true) {  // you only get here if the same button combination has been pressed for 100mS
+		  if (buttonProcessed == false) { // here's where we do the real work on the keyboard, and ensure we only do it once/keypress
+			  buttonProcessed = true;
+			  ProcessKeyCodeInContext(keyCode);
+		  }
+	  } else {
+		  buttonDebounced = true;
+	  }
+  } else {
+	  buttonDebounced = false;
+	  buttonProcessed = false;
+  }
+//  	Serial.print("\r\n");
+//  	Serial.print(keyCode);
+    osDelay(100);
   }
   /* USER CODE END StartButtonPress */
 }
@@ -905,8 +973,46 @@ void StartUpdateLCD(void *argument)
 {
   /* USER CODE BEGIN StartUpdateLCD */
   /* Infinite loop */
+  ssd1306_Fill(Black_);
+  ssd1306_UpdateScreen();
   for(;;)
   {
+    if(display_run_once == 0) {
+      ssd1306_Fill(Black_);
+      ssd1306_UpdateScreen();
+      if(display_no == 0) {
+        ssd1306_SetCursor(25,0);
+        ssd1306_WriteString("Status:", Font_11x18, White_);
+        if(PS4.connected() == 0) {
+          ssd1306_SetCursor(2, 26);
+          ssd1306_WriteString("Not Paired", Font_11x18, White_);
+        } else if (PS4.connected()) {
+          ssd1306_SetCursor(2, 26);
+          ssd1306_WriteString("Paired to DS4", Font_11x18, White_);
+        }
+        ssd1306_UpdateScreen();
+      } else if (display_no == 1) {
+        ssd1306_SetCursor(25,0);
+        ssd1306_WriteString("Pair?", Font_11x18, White_);
+        ssd1306_UpdateScreen();
+      } else if(display_no == 7) {
+	    ssd1306_Fill(Black_);
+	  	ssd1306_UpdateScreen();
+    	ssd1306_SetCursor(25,0);
+        ssd1306_WriteString("Pairing...", Font_11x18, White_);
+        ssd1306_UpdateScreen();
+        PS4.pair();
+        while(PS4.connected() == 0) {
+          osDelay(10);
+        }
+        ssd1306_SetCursor(2,26);
+        ssd1306_WriteString("Paired!", Font_11x18, White_);
+        ssd1306_UpdateScreen();
+      }
+      display_run_once = 1;
+    }
+
+
     osDelay(1);
   }
   /* USER CODE END StartUpdateLCD */
