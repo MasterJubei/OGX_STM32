@@ -1,6 +1,0 @@
-SerialClass.cpp:3:8:virtual size_t SerialClass::write(uint8_t)	16	static
-SerialClass.cpp:7:8:virtual size_t SerialClass::write(const uint8_t*, size_t)	32	static
-SerialClass.cpp:13:5:virtual int SerialClass::read()	24	static
-SerialClass.cpp:19:5:virtual int SerialClass::available()	16	static
-SerialClass.cpp:23:5:virtual int SerialClass::peek()	16	static
-SerialClass.cpp:27:6:virtual void SerialClass::flush()	16	static

@@ -549,7 +549,7 @@ static uint8_t USBD_HID_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
 
   /* Open EP OUT, This is to get out rumble data */
   USBD_LL_OpenEP(pdev, HID_EPOUT_ADDR, USBD_EP_TYPE_INTR, HID_EPOUT_SIZE);
-  USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, rx_buf, 1);
+  USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, rx_buf, 6);
   hhid->state = HID_IDLE;
 
   return (uint8_t)USBD_OK;
