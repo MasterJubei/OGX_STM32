@@ -107,8 +107,12 @@ static uint8_t *USBD_HID_GetDeviceQualifierDesc(uint16_t *length);
 /** @defgroup USBD_HID_Private_Variables
   * @{
   */
+
 uint8_t hid_setup_ran = 0;
+uint8_t dataout_ran = 0;
 uint8_t usb_failed = 0;
+uint8_t rumble_brequest_sent = 0;
+
 char caller_str[100];
 
 USBD_ClassTypeDef USBD_HID =
@@ -516,7 +520,7 @@ __ALIGN_BEGIN static uint8_t DUKE_HID_CAPABILITIES_OUT[6] = {
   * @param  cfgidx: Configuration index
   * @retval status
   */
-static uint8_t rx_buf[6];
+
 static uint8_t USBD_HID_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
 {
   UNUSED(cfgidx);
@@ -527,7 +531,7 @@ static uint8_t USBD_HID_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
 
   if (hhid == NULL)
   {
-	  usb_failed = 1;
+	  //usb_failed = 1;
     pdev->pClassData = NULL;
     return (uint8_t)USBD_EMEM;
   }
@@ -548,9 +552,25 @@ static uint8_t USBD_HID_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
   pdev->ep_in[HID_EPIN_ADDR & 0xFU].is_used = 1U;
 
   /* Open EP OUT, This is to get out rumble data */
-  USBD_LL_OpenEP(pdev, HID_EPOUT_ADDR, USBD_EP_TYPE_INTR, HID_EPOUT_SIZE);
-  USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, rx_buf, 6);
+//  pdev->ep_out[HID_EPOUT_ADDR & 0xFU].bInterval = HID_FS_BINTERVAL;
+//  (void)USBD_LL_OpenEP(pdev, HID_EPOUT_ADDR, USBD_EP_TYPE_INTR, HID_EPOUT_SIZE);
+//  pdev->ep_out[HID_EPOUT_ADDR & 0xFU].is_used = 1U;
+//  USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, rx_buf, 6);
+
+
+  /* Open EP OUT */
+  (void)USBD_LL_OpenEP(pdev, HID_EPOUT_ADDR, USBD_EP_TYPE_INTR, HID_EPOUT_SIZE);
+  pdev->ep_out[HID_EPOUT_ADDR & 0xFU].is_used = 1U;
+  (void)USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, rx_buf, 6);
+
   hhid->state = HID_IDLE;
+
+  //((USBD_CUSTOM_HID_ItfTypeDef *)pdev->pUserData)->Init();
+
+  /* Prepare Out endpoint to receive 1st packet */
+
+
+
 
   return (uint8_t)USBD_OK;
 }
@@ -715,6 +735,7 @@ static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
     		(void)USBD_CtlSendData(pdev, pbuf, len);
     	}
     	else if (req->bRequest == 0x01 && req->wValue == 0x0200) {
+    		rumble_brequest_sent = 1;
     		len = 6;
     		pbuf = DUKE_HID_CAPABILITIES_OUT;
     		(void)USBD_CtlSendData(pdev, pbuf, len);
@@ -852,7 +873,10 @@ static uint8_t USBD_HID_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum)
 
 static uint8_t USBD_HID_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
 {
+	dataout_ran = 1;
+	rx_buf[3]=5;
     HAL_PCD_EP_Receive(&hUsbDeviceFS.pData, HID_EPOUT_ADDR, rx_buf, 6);
+
 	return USBD_OK;
 }
 

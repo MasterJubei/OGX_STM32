@@ -134,29 +134,9 @@ USBD_StatusTypeDef USBD_StdDevReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef
 {
   USBD_StatusTypeDef ret = USBD_OK;
 
-
-  if(req->bmRequest == 0xC1) {
-	  uint16_t len = 0;
-	  uint8_t *pbuf = NULL;
-  	if(req->bRequest == 0x06 && req->wValue == 0x4200) {
-  		len = 16;
-  		pbuf = USBD_HID_Desc;
-  		(void)USBD_CtlSendData(pdev, pbuf, len);
-  	}
-  	else if(req->bRequest == 0x01 && req->wValue == 0x0100) {
-  		len = 20;
-  		pbuf = DUKE_HID_CAPABILITIES_IN;
-  		(void)USBD_CtlSendData(pdev, pbuf, len);
-  	}
-  	else if (req->bRequest == 0x01 && req->wValue == 0x0200) {
-  		len = 6;
-  		pbuf = DUKE_HID_CAPABILITIES_OUT;
-  		(void)USBD_CtlSendData(pdev, pbuf, len);
-  	}
 	  ret = (USBD_StatusTypeDef)pdev->pClass->Setup(pdev, req);
 
 
-  } else {
 	  switch (req->bmRequest & USB_REQ_TYPE_MASK)
 	  {
 		case USB_REQ_TYPE_CLASS:
@@ -206,7 +186,7 @@ USBD_StatusTypeDef USBD_StdDevReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef
 		  USBD_CtlError(pdev, req);
 		  break;
 	  }
-	}
+
   return ret;
 }
 

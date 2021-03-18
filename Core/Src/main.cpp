@@ -257,7 +257,9 @@ extern uint8_t usb_failed;
 extern uint8_t usb_failed2;
 extern uint8_t unknown_bmrequest;
 extern uint8_t entered_xid_req;
-extern uint8_t rx_buf[6];
+extern uint8_t dataout_ran;
+extern uint8_t rumble_brequest_sent;
+//extern uint8_t rx_buf[6];
 /* USER CODE END 0 */
 
 /**
@@ -671,9 +673,15 @@ void StartGetLatencies(void *argument)
 #endif
 #endif
 	Serial.print("\r\nRumble Data: ");
+	Serial.print(rx_buf[0]);
+	Serial.print(" ");
 	Serial.print(rx_buf[3]);
 	Serial.print(" ");
 	Serial.print(rx_buf[5]);
+	Serial.print(" ");
+	Serial.print(dataout_ran);
+	Serial.print(" ");
+	Serial.print(rumble_brequest_sent);
 	osDelay(1000);
   }
   /* USER CODE END StartGetLatencies */

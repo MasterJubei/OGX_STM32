@@ -123,7 +123,7 @@ typedef struct
 /** @defgroup USBD_CORE_Exported_Variables
   * @{
   */
-
+static uint8_t rx_buf[6];
 extern USBD_ClassTypeDef USBD_HID;
 #define USBD_HID_CLASS &USBD_HID
 /**
