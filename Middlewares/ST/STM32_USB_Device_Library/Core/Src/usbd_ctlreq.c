@@ -136,7 +136,6 @@ USBD_StatusTypeDef USBD_StdDevReq(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef
 
 	  ret = (USBD_StatusTypeDef)pdev->pClass->Setup(pdev, req);
 
-
 	  switch (req->bmRequest & USB_REQ_TYPE_MASK)
 	  {
 		case USB_REQ_TYPE_CLASS:

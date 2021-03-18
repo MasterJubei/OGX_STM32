@@ -541,36 +541,28 @@ static uint8_t USBD_HID_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
   if (pdev->dev_speed == USBD_SPEED_HIGH)
   {
     pdev->ep_in[HID_EPIN_ADDR & 0xFU].bInterval = HID_HS_BINTERVAL;
+    pdev->ep_out[HID_EPOUT_ADDR & 0xFU].bInterval = HID_HS_BINTERVAL;
   }
   else   /* LOW and FULL-speed endpoints */
   {
     pdev->ep_in[HID_EPIN_ADDR & 0xFU].bInterval = HID_FS_BINTERVAL;
+    pdev->ep_out[HID_EPOUT_ADDR & 0xFU].bInterval = HID_FS_BINTERVAL;
   }
 
   /* Open EP IN */
   (void)USBD_LL_OpenEP(pdev, HID_EPIN_ADDR, USBD_EP_TYPE_INTR, HID_EPIN_SIZE);
   pdev->ep_in[HID_EPIN_ADDR & 0xFU].is_used = 1U;
 
-  /* Open EP OUT, This is to get out rumble data */
-//  pdev->ep_out[HID_EPOUT_ADDR & 0xFU].bInterval = HID_FS_BINTERVAL;
-//  (void)USBD_LL_OpenEP(pdev, HID_EPOUT_ADDR, USBD_EP_TYPE_INTR, HID_EPOUT_SIZE);
-//  pdev->ep_out[HID_EPOUT_ADDR & 0xFU].is_used = 1U;
-//  USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, rx_buf, 6);
-
-
   /* Open EP OUT */
   (void)USBD_LL_OpenEP(pdev, HID_EPOUT_ADDR, USBD_EP_TYPE_INTR, HID_EPOUT_SIZE);
   pdev->ep_out[HID_EPOUT_ADDR & 0xFU].is_used = 1U;
-  (void)USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, rx_buf, 6);
+  (void)USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR,(uint8_t*)rx_buf, HID_EPOUT_SIZE);
 
   hhid->state = HID_IDLE;
 
   //((USBD_CUSTOM_HID_ItfTypeDef *)pdev->pUserData)->Init();
 
   /* Prepare Out endpoint to receive 1st packet */
-
-
-
 
   return (uint8_t)USBD_OK;
 }
@@ -590,6 +582,11 @@ static uint8_t USBD_HID_DeInit(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
   (void)USBD_LL_CloseEP(pdev, HID_EPIN_ADDR);
   pdev->ep_in[HID_EPIN_ADDR & 0xFU].is_used = 0U;
   pdev->ep_in[HID_EPIN_ADDR & 0xFU].bInterval = 0U;
+
+  /* Close CUSTOM_HID EP OUT */
+  (void)USBD_LL_CloseEP(pdev, HID_EPOUT_ADDR);
+  pdev->ep_out[HID_EPOUT_ADDR & 0xFU].is_used = 0U;
+  pdev->ep_out[HID_EPOUT_ADDR & 0xFU].bInterval = 0U;
 
   /* Free allocated memory */
   if (pdev->pClassData != NULL)
@@ -873,10 +870,10 @@ static uint8_t USBD_HID_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum)
 
 static uint8_t USBD_HID_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
 {
-	dataout_ran = 1;
-	rx_buf[3]=5;
-    HAL_PCD_EP_Receive(&hUsbDeviceFS.pData, HID_EPOUT_ADDR, rx_buf, 6);
-
+	dataout_ran++;
+	//rx_buf[3]=5;
+    //HAL_PCD_EP_Receive(&hUsbDeviceFS.pData, HID_EPOUT_ADDR, (uint8_t *)rx_buf, HID_EPOUT_SIZE);
+    USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, (uint8_t*)(rx_buf), HID_EPOUT_SIZE);
 	return USBD_OK;
 }
 

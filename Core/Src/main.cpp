@@ -259,7 +259,12 @@ extern uint8_t unknown_bmrequest;
 extern uint8_t entered_xid_req;
 extern uint8_t dataout_ran;
 extern uint8_t rumble_brequest_sent;
-//extern uint8_t rx_buf[6];
+
+uint8_t old_rumble_val_L = 0;
+uint8_t old_rumble_val_R = 0;
+uint8_t new_rumble_val_L = 0;
+uint8_t new_rumble_val_R = 0;
+
 /* USER CODE END 0 */
 
 /**
@@ -675,10 +680,16 @@ void StartGetLatencies(void *argument)
 	Serial.print("\r\nRumble Data: ");
 	Serial.print(rx_buf[0]);
 	Serial.print(" ");
+	Serial.print(rx_buf[1]);
+	Serial.print(" ");
+	Serial.print(rx_buf[2]);
+	Serial.print(" ");
 	Serial.print(rx_buf[3]);
 	Serial.print(" ");
-	Serial.print(rx_buf[5]);
+	Serial.print(rx_buf[4]);
 	Serial.print(" ");
+	Serial.print(rx_buf[5]);
+	Serial.print("   ");
 	Serial.print(dataout_ran);
 	Serial.print(" ");
 	Serial.print(rumble_brequest_sent);
@@ -928,6 +939,15 @@ void StartGetBT(void *argument)
 			} else {
 				gameHID.ps4ButtonsTag.button_start = 0;
 				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_START_BTN;
+			}
+
+			new_rumble_val_L = rx_buf[3];
+			new_rumble_val_R = rx_buf[5];
+
+			if(new_rumble_val_L != old_rumble_val_L || new_rumble_val_R != old_rumble_val_R) {
+				PS4.setRumbleOn(new_rumble_val_L, new_rumble_val_R);
+				old_rumble_val_L = new_rumble_val_L;
+				old_rumble_val_R = new_rumble_val_R;
 			}
 
 		} else if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
