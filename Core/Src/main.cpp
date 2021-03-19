@@ -265,6 +265,9 @@ uint8_t old_rumble_val_R = 0;
 uint8_t new_rumble_val_L = 0;
 uint8_t new_rumble_val_R = 0;
 
+uint32_t button_press_idle = 0;
+
+
 /* USER CODE END 0 */
 
 /**
@@ -677,23 +680,31 @@ void StartGetLatencies(void *argument)
 	  Serial.print(timer_val_LCD);
 #endif
 #endif
+#if rtos_delay_view
+	/* Only rx_buf[3] and rx[5] have the rumble data */
+	/* dataout ran should only run for THPS 2 or if used on XBCD on a PC */
 	Serial.print("\r\nRumble Data: ");
-	Serial.print(rx_buf[0]);
-	Serial.print(" ");
-	Serial.print(rx_buf[1]);
-	Serial.print(" ");
-	Serial.print(rx_buf[2]);
-	Serial.print(" ");
+//	Serial.print(rx_buf[0]);
+//	Serial.print(" ");
+//	Serial.print(rx_buf[1]);
+//	Serial.print(" ");
+//	Serial.print(rx_buf[2]);
+//	Serial.print(" ");
 	Serial.print(rx_buf[3]);
 	Serial.print(" ");
-	Serial.print(rx_buf[4]);
-	Serial.print(" ");
+//	Serial.print(rx_buf[4]);
+//	Serial.print(" ");
 	Serial.print(rx_buf[5]);
 	Serial.print("   ");
 	Serial.print(dataout_ran);
 	Serial.print(" ");
 	Serial.print(rumble_brequest_sent);
+	Serial.print(" ");
+	Serial.print(button_press_idle);
+#endif
 	osDelay(1000);
+
+
   }
   /* USER CODE END StartGetLatencies */
 }
@@ -830,6 +841,7 @@ void StartGetBT(void *argument)
 			if (PS4.getButtonPress(TRIANGLE)) {
 				gameHID.ps4ButtonsTag.button_triangle = 1;
 				xboxHID.Y = 0xFF;
+				button_press_idle = 0;
 			} else {
 				gameHID.ps4ButtonsTag.button_triangle = 0;
 				xboxHID.Y = 0;
@@ -838,6 +850,7 @@ void StartGetBT(void *argument)
 			if (PS4.getButtonPress(CIRCLE)) {
 				gameHID.ps4ButtonsTag.button_circle = 1;
 				xboxHID.B = 0xFF;
+				button_press_idle = 0;
 			} else {
 				gameHID.ps4ButtonsTag.button_circle = 0;
 				xboxHID.B = 0;
@@ -846,6 +859,7 @@ void StartGetBT(void *argument)
 			if (PS4.getButtonPress(CROSS)) {
 				gameHID.ps4ButtonsTag.button_cross = 1;
 				xboxHID.A = 0xFF;
+				button_press_idle = 0;
 			} else {
 				gameHID.ps4ButtonsTag.button_cross = 0;
 				xboxHID.A = 0;
@@ -854,6 +868,7 @@ void StartGetBT(void *argument)
 			if (PS4.getButtonPress(SQUARE)) {
 				gameHID.ps4ButtonsTag.button_square = 1;
 				xboxHID.X = 0xFF;
+				button_press_idle = 0;
 			} else {
 				gameHID.ps4ButtonsTag.button_square = 0;
 				xboxHID.X = 0;
@@ -895,6 +910,7 @@ void StartGetBT(void *argument)
 			if (PS4.getButtonPress(L1)) {
 				gameHID.ps4ButtonsTag.button_left_trigger = 1;
 				xboxHID.WHITE = 0xFF;
+				button_press_idle = 0;
 
 			} else {
 				gameHID.ps4ButtonsTag.button_left_trigger = 0;
@@ -904,6 +920,7 @@ void StartGetBT(void *argument)
 			if (PS4.getButtonPress(L3)) {
 				gameHID.ps4ButtonsTag.button_left_thumb = 1;
 				xboxHID.dButtons |= XBOX_LS_BTN;
+				button_press_idle = 0;
 			} else {
 				gameHID.ps4ButtonsTag.button_left_thumb = 0;
 				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_LS_BTN;
@@ -912,6 +929,7 @@ void StartGetBT(void *argument)
 			if (PS4.getButtonPress(R1)) {
 				gameHID.ps4ButtonsTag.button_right_trigger = 1;
 				xboxHID.BLACK = 0xFF;
+				button_press_idle = 0;
 			} else {
 				gameHID.ps4ButtonsTag.button_right_trigger = 0;
 				xboxHID.BLACK = 0;
@@ -920,6 +938,7 @@ void StartGetBT(void *argument)
 			if (PS4.getButtonPress(R3)) {
 				gameHID.ps4ButtonsTag.button_right_thumb = 1;
 				xboxHID.dButtons |= XBOX_RS_BTN;
+				button_press_idle = 0;
 			} else {
 				gameHID.ps4ButtonsTag.button_right_thumb = 0;
 				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_RS_BTN;
@@ -928,6 +947,7 @@ void StartGetBT(void *argument)
 			if (PS4.getButtonPress(SHARE)) {
 				gameHID.ps4ButtonsTag.button_share = 1;
 				xboxHID.dButtons |= XBOX_BACK_BTN;
+				button_press_idle = 0;
 			} else {
 				gameHID.ps4ButtonsTag.button_share = 0;
 				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_BACK_BTN;
@@ -936,6 +956,7 @@ void StartGetBT(void *argument)
 			if (PS4.getButtonPress(OPTIONS)) {
 				gameHID.ps4ButtonsTag.button_start = 1;
 				xboxHID.dButtons |= XBOX_START_BTN;
+				button_press_idle = 0;
 			} else {
 				gameHID.ps4ButtonsTag.button_start = 0;
 				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_START_BTN;
@@ -949,6 +970,14 @@ void StartGetBT(void *argument)
 				old_rumble_val_L = new_rumble_val_L;
 				old_rumble_val_R = new_rumble_val_R;
 			}
+			/* After roughly 5+minutes of idle time, disconnect controller
+			 * Not the best solution since the rate the counter increases is based on BT Latency */
+			if(button_press_idle > 400000) {
+				PS4.disconnect();
+				rumble_once = 0;
+				button_press_idle = 0;
+			}
+			button_press_idle++;
 
 		} else if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
 			if (!buttonPressed) {
