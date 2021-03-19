@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  00030184  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00061f9c  00000000  00000000  000301b4  2**0
+ 12 .debug_info   00061f99  00000000  00000000  000301b4  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00008ddd  00000000  00000000  00092150  2**0
+ 13 .debug_abbrev 00008ddd  00000000  00000000  0009214d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  14 .debug_aranges 00002900  00000000  00000000  0009af30  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  15 .debug_ranges 00002738  00000000  00000000  0009d830  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  0002d1a0  00000000  00000000  0009ff68  2**0
+ 16 .debug_macro  0002d195  00000000  00000000  0009ff68  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   000317be  00000000  00000000  000cd108  2**0
+ 17 .debug_line   000317ab  00000000  00000000  000cd0fd  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000f887d  00000000  00000000  000fe8c6  2**0
+ 18 .debug_str    000f8869  00000000  00000000  000fe8a8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  001f7143  2**0
+ 19 .comment      00000053  00000000  00000000  001f7111  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  0000b31c  00000000  00000000  001f7198  2**2
+ 20 .debug_frame  0000b31c  00000000  00000000  001f7164  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1783,7 +1783,6 @@ int main(void)
  8000d62:	f7ff fc29 	bl	80005b8 <_ZN5Print5printEPKc>
 //  hal_gettick = HAL_GetTick();
 //  hal_gettick/1000;
-
   Serial.print((int)hal_gettick);
  8000d66:	4b2d      	ldr	r3, [pc, #180]	; (8000e1c <main+0x188>)
  8000d68:	681b      	ldr	r3, [r3, #0]
@@ -1791,8 +1790,6 @@ int main(void)
  8000d6c:	4619      	mov	r1, r3
  8000d6e:	4822      	ldr	r0, [pc, #136]	; (8000df8 <main+0x164>)
  8000d70:	f7ff fc54 	bl	800061c <_ZN5Print5printEii>
-
-
 
   /* USER CODE END 2 */
   /* Init scheduler */
@@ -1853,7 +1850,7 @@ int main(void)
  8000dc6:	6013      	str	r3, [r2, #0]
 
   /* USER CODE BEGIN RTOS_THREADS */
-  /* Used to Meaesure latencies of tasks*/
+  /* creation of getLatencies, Used to Meaesure latencies of tasks*/
   getLatencies = osThreadNew(StartGetLatencies, NULL, &getLatencies_attributes);
  8000dc8:	4a24      	ldr	r2, [pc, #144]	; (8000e5c <main+0x1c8>)
  8000dca:	2100      	movs	r1, #0
@@ -3895,7 +3892,7 @@ void StartButtonPress(void *argument)
  8001b5e:	4603      	mov	r3, r0
  8001b60:	009b      	lsls	r3, r3, #2
  8001b62:	b25c      	sxtb	r4, r3
-			(HAL_GPIO_ReadPin(SELECT_BTN_GPIO) << 1) |
+					(HAL_GPIO_ReadPin(SELECT_BTN_GPIO) << 1) |
  8001b64:	f44f 6180 	mov.w	r1, #1024	; 0x400
  8001b68:	481b      	ldr	r0, [pc, #108]	; (8001bd8 <_Z16StartButtonPressPv+0x8c>)
  8001b6a:	f001 f987 	bl	8002e7c <HAL_GPIO_ReadPin>
@@ -3905,13 +3902,13 @@ void StartButtonPress(void *argument)
  8001b72:	b25b      	sxtb	r3, r3
  8001b74:	4323      	orrs	r3, r4
  8001b76:	b25c      	sxtb	r4, r3
-			(HAL_GPIO_ReadPin(FORWARD_BTN_GPIO) << 0);
+					(HAL_GPIO_ReadPin(FORWARD_BTN_GPIO) << 0);
  8001b78:	2110      	movs	r1, #16
  8001b7a:	4817      	ldr	r0, [pc, #92]	; (8001bd8 <_Z16StartButtonPressPv+0x8c>)
  8001b7c:	f001 f97e 	bl	8002e7c <HAL_GPIO_ReadPin>
  8001b80:	4603      	mov	r3, r0
  8001b82:	b25b      	sxtb	r3, r3
-			(HAL_GPIO_ReadPin(SELECT_BTN_GPIO) << 1) |
+					(HAL_GPIO_ReadPin(SELECT_BTN_GPIO) << 1) |
  8001b84:	4323      	orrs	r3, r4
  8001b86:	b25b      	sxtb	r3, r3
  8001b88:	b2da      	uxtb	r2, r3
@@ -4004,17 +4001,17 @@ void StartUpdateLCD(void *argument) {
  8001c02:	4b7c      	ldr	r3, [pc, #496]	; (8001df4 <_Z14StartUpdateLCDPv+0x20c>)
  8001c04:	801a      	strh	r2, [r3, #0]
 #endif
-	if (display_run_once == 0) {
+		if (display_run_once == 0) {
  8001c06:	4b7c      	ldr	r3, [pc, #496]	; (8001df8 <_Z14StartUpdateLCDPv+0x210>)
  8001c08:	781b      	ldrb	r3, [r3, #0]
  8001c0a:	2b00      	cmp	r3, #0
  8001c0c:	f040 80e1 	bne.w	8001dd2 <_Z14StartUpdateLCDPv+0x1ea>
-		ssd1306_Fill(Black_);
+			ssd1306_Fill(Black_);
  8001c10:	2000      	movs	r0, #0
  8001c12:	f000 fce5 	bl	80025e0 <ssd1306_Fill>
-		ssd1306_UpdateScreen();
+			ssd1306_UpdateScreen();
  8001c16:	f000 fd07 	bl	8002628 <ssd1306_UpdateScreen>
-		switch (display_no) {
+			switch (display_no) {
  8001c1a:	4b78      	ldr	r3, [pc, #480]	; (8001dfc <_Z14StartUpdateLCDPv+0x214>)
  8001c1c:	781b      	ldrb	r3, [r3, #0]
  8001c1e:	2b07      	cmp	r3, #7
@@ -4026,11 +4023,11 @@ void StartUpdateLCD(void *argument) {
  8001c2e:	2b01      	cmp	r3, #1
  8001c30:	f000 8082 	beq.w	8001d38 <_Z14StartUpdateLCDPv+0x150>
  8001c34:	e0cd      	b.n	8001dd2 <_Z14StartUpdateLCDPv+0x1ea>
-		case 0: {
-			uint8_t alternate_print = 1;
+			case 0: {
+				uint8_t alternate_print = 1;
  8001c36:	2301      	movs	r3, #1
  8001c38:	73fb      	strb	r3, [r7, #15]
-			if (!PS4.connected()) {
+				if (!PS4.connected()) {
  8001c3a:	4871      	ldr	r0, [pc, #452]	; (8001e00 <_Z14StartUpdateLCDPv+0x218>)
  8001c3c:	f7fe ff7e 	bl	8000b3c <_ZN5PS4BT9connectedEv>
  8001c40:	4603      	mov	r3, r0
@@ -4038,63 +4035,63 @@ void StartUpdateLCD(void *argument) {
  8001c46:	b2db      	uxtb	r3, r3
  8001c48:	2b00      	cmp	r3, #0
  8001c4a:	d017      	beq.n	8001c7c <_Z14StartUpdateLCDPv+0x94>
-				ssd1306_SetCursor((128 - 11 * 3) / 2, 0);
+					ssd1306_SetCursor((128 - 11 * 3) / 2, 0);
  8001c4c:	2100      	movs	r1, #0
  8001c4e:	202f      	movs	r0, #47	; 0x2f
  8001c50:	f000 fe20 	bl	8002894 <ssd1306_SetCursor>
-				ssd1306_WriteString("Not", Font_11x18, White_);
+					ssd1306_WriteString("Not", Font_11x18, White_);
  8001c54:	4a6b      	ldr	r2, [pc, #428]	; (8001e04 <_Z14StartUpdateLCDPv+0x21c>)
  8001c56:	2301      	movs	r3, #1
  8001c58:	ca06      	ldmia	r2, {r1, r2}
  8001c5a:	486b      	ldr	r0, [pc, #428]	; (8001e08 <_Z14StartUpdateLCDPv+0x220>)
  8001c5c:	f000 fdf4 	bl	8002848 <ssd1306_WriteString>
-				display_force_update = 0;
+					display_force_update = 0;
  8001c60:	4b6a      	ldr	r3, [pc, #424]	; (8001e0c <_Z14StartUpdateLCDPv+0x224>)
  8001c62:	2200      	movs	r2, #0
  8001c64:	701a      	strb	r2, [r3, #0]
-				ssd1306_SetCursor((128 - 11 * 9) / 2, 26);
+					ssd1306_SetCursor((128 - 11 * 9) / 2, 26);
  8001c66:	211a      	movs	r1, #26
  8001c68:	200e      	movs	r0, #14
  8001c6a:	f000 fe13 	bl	8002894 <ssd1306_SetCursor>
-				ssd1306_WriteString("Connected", Font_11x18, White_);
+					ssd1306_WriteString("Connected", Font_11x18, White_);
  8001c6e:	4a65      	ldr	r2, [pc, #404]	; (8001e04 <_Z14StartUpdateLCDPv+0x21c>)
  8001c70:	2301      	movs	r3, #1
  8001c72:	ca06      	ldmia	r2, {r1, r2}
  8001c74:	4866      	ldr	r0, [pc, #408]	; (8001e10 <_Z14StartUpdateLCDPv+0x228>)
  8001c76:	f000 fde7 	bl	8002848 <ssd1306_WriteString>
  8001c7a:	e017      	b.n	8001cac <_Z14StartUpdateLCDPv+0xc4>
-			} else if (PS4.connected()) {
+				} else if (PS4.connected()) {
  8001c7c:	4860      	ldr	r0, [pc, #384]	; (8001e00 <_Z14StartUpdateLCDPv+0x218>)
  8001c7e:	f7fe ff5d 	bl	8000b3c <_ZN5PS4BT9connectedEv>
  8001c82:	4603      	mov	r3, r0
  8001c84:	2b00      	cmp	r3, #0
  8001c86:	d011      	beq.n	8001cac <_Z14StartUpdateLCDPv+0xc4>
-				ssd1306_SetCursor((128 - 11 * 9) / 2, 26);
+					ssd1306_SetCursor((128 - 11 * 9) / 2, 26);
  8001c88:	211a      	movs	r1, #26
  8001c8a:	200e      	movs	r0, #14
  8001c8c:	f000 fe02 	bl	8002894 <ssd1306_SetCursor>
-				ssd1306_WriteString("Connected", Font_11x18, White_);
+					ssd1306_WriteString("Connected", Font_11x18, White_);
  8001c90:	4a5c      	ldr	r2, [pc, #368]	; (8001e04 <_Z14StartUpdateLCDPv+0x21c>)
  8001c92:	2301      	movs	r3, #1
  8001c94:	ca06      	ldmia	r2, {r1, r2}
  8001c96:	485e      	ldr	r0, [pc, #376]	; (8001e10 <_Z14StartUpdateLCDPv+0x228>)
  8001c98:	f000 fdd6 	bl	8002848 <ssd1306_WriteString>
-				alternate_print = 0;
+					alternate_print = 0;
  8001c9c:	2300      	movs	r3, #0
  8001c9e:	73fb      	strb	r3, [r7, #15]
-				display_run_once = 1;
+					display_run_once = 1;
  8001ca0:	4b55      	ldr	r3, [pc, #340]	; (8001df8 <_Z14StartUpdateLCDPv+0x210>)
  8001ca2:	2201      	movs	r2, #1
  8001ca4:	701a      	strb	r2, [r3, #0]
-				display_force_update = 0;
+					display_force_update = 0;
  8001ca6:	4b59      	ldr	r3, [pc, #356]	; (8001e0c <_Z14StartUpdateLCDPv+0x224>)
  8001ca8:	2200      	movs	r2, #0
  8001caa:	701a      	strb	r2, [r3, #0]
-			}
-			ssd1306_UpdateScreen();
+				}
+				ssd1306_UpdateScreen();
  8001cac:	f000 fcbc 	bl	8002628 <ssd1306_UpdateScreen>
 
-			while (!PS4.connected() && display_force_update == 0) {
+				while (!PS4.connected() && display_force_update == 0) {
  8001cb0:	4853      	ldr	r0, [pc, #332]	; (8001e00 <_Z14StartUpdateLCDPv+0x218>)
  8001cb2:	f7fe ff43 	bl	8000b3c <_ZN5PS4BT9connectedEv>
  8001cb6:	4603      	mov	r3, r0
@@ -4111,32 +4108,32 @@ void StartUpdateLCD(void *argument) {
  8001cce:	2300      	movs	r3, #0
  8001cd0:	2b00      	cmp	r3, #0
  8001cd2:	d003      	beq.n	8001cdc <_Z14StartUpdateLCDPv+0xf4>
-				osDelay(100);
+					osDelay(100);
  8001cd4:	2064      	movs	r0, #100	; 0x64
  8001cd6:	f008 fc21 	bl	800a51c <osDelay>
-			while (!PS4.connected() && display_force_update == 0) {
+				while (!PS4.connected() && display_force_update == 0) {
  8001cda:	e7e9      	b.n	8001cb0 <_Z14StartUpdateLCDPv+0xc8>
-			}
-			/* If the user presses a Button, interrupt and show next screen */
-			if (display_force_update == 1) {
+				}
+				/* If the user presses a Button, interrupt and show next screen */
+				if (display_force_update == 1) {
  8001cdc:	4b4b      	ldr	r3, [pc, #300]	; (8001e0c <_Z14StartUpdateLCDPv+0x224>)
  8001cde:	781b      	ldrb	r3, [r3, #0]
  8001ce0:	2b01      	cmp	r3, #1
  8001ce2:	d106      	bne.n	8001cf2 <_Z14StartUpdateLCDPv+0x10a>
-				display_force_update = 0;
+					display_force_update = 0;
  8001ce4:	4b49      	ldr	r3, [pc, #292]	; (8001e0c <_Z14StartUpdateLCDPv+0x224>)
  8001ce6:	2200      	movs	r2, #0
  8001ce8:	701a      	strb	r2, [r3, #0]
-				display_run_once = 0;
+					display_run_once = 0;
  8001cea:	4b43      	ldr	r3, [pc, #268]	; (8001df8 <_Z14StartUpdateLCDPv+0x210>)
  8001cec:	2200      	movs	r2, #0
  8001cee:	701a      	strb	r2, [r3, #0]
-				break;
+					break;
  8001cf0:	e06f      	b.n	8001dd2 <_Z14StartUpdateLCDPv+0x1ea>
-			}
-			/*When the controller is finally paired update current screen
-			 * Only runs if the first PS4.connected() above does not run*/
-			if (PS4.connected() && alternate_print) {
+				}
+				/* When the controller is finally paired, update current screen
+				 * Only runs if the first PS4.connected() above does not run*/
+				if (PS4.connected() && alternate_print) {
  8001cf2:	4843      	ldr	r0, [pc, #268]	; (8001e00 <_Z14StartUpdateLCDPv+0x218>)
  8001cf4:	f7fe ff22 	bl	8000b3c <_ZN5PS4BT9connectedEv>
  8001cf8:	4603      	mov	r3, r0
@@ -4150,91 +4147,91 @@ void StartUpdateLCD(void *argument) {
  8001d08:	2300      	movs	r3, #0
  8001d0a:	2b00      	cmp	r3, #0
  8001d0c:	d060      	beq.n	8001dd0 <_Z14StartUpdateLCDPv+0x1e8>
-				ssd1306_Fill(Black_);
+					ssd1306_Fill(Black_);
  8001d0e:	2000      	movs	r0, #0
  8001d10:	f000 fc66 	bl	80025e0 <ssd1306_Fill>
-				ssd1306_UpdateScreen();
+					ssd1306_UpdateScreen();
  8001d14:	f000 fc88 	bl	8002628 <ssd1306_UpdateScreen>
-//				    ssd1306_SetCursor(25,0);
-//				    ssd1306_WriteString("Status:", Font_11x18, White_);
-				ssd1306_SetCursor((128 - 11 * 10) / 2, 26);
+	//				    ssd1306_SetCursor(25,0);
+	//				    ssd1306_WriteString("Status:", Font_11x18, White_);
+					ssd1306_SetCursor((128 - 11 * 10) / 2, 26);
  8001d18:	211a      	movs	r1, #26
  8001d1a:	2009      	movs	r0, #9
  8001d1c:	f000 fdba 	bl	8002894 <ssd1306_SetCursor>
-				ssd1306_WriteString("Connected!", Font_11x18, White_);
+					ssd1306_WriteString("Connected!", Font_11x18, White_);
  8001d20:	4a38      	ldr	r2, [pc, #224]	; (8001e04 <_Z14StartUpdateLCDPv+0x21c>)
  8001d22:	2301      	movs	r3, #1
  8001d24:	ca06      	ldmia	r2, {r1, r2}
  8001d26:	483b      	ldr	r0, [pc, #236]	; (8001e14 <_Z14StartUpdateLCDPv+0x22c>)
  8001d28:	f000 fd8e 	bl	8002848 <ssd1306_WriteString>
-				ssd1306_UpdateScreen();
+					ssd1306_UpdateScreen();
  8001d2c:	f000 fc7c 	bl	8002628 <ssd1306_UpdateScreen>
-				display_run_once = 1;
+					display_run_once = 1;
  8001d30:	4b31      	ldr	r3, [pc, #196]	; (8001df8 <_Z14StartUpdateLCDPv+0x210>)
  8001d32:	2201      	movs	r2, #1
  8001d34:	701a      	strb	r2, [r3, #0]
-			}
-			break;
+				}
+				break;
  8001d36:	e04b      	b.n	8001dd0 <_Z14StartUpdateLCDPv+0x1e8>
-		}
+			}
 
-		case 1:
-			display_run_once = 1;
+			case 1:
+				display_run_once = 1;
  8001d38:	4b2f      	ldr	r3, [pc, #188]	; (8001df8 <_Z14StartUpdateLCDPv+0x210>)
  8001d3a:	2201      	movs	r2, #1
  8001d3c:	701a      	strb	r2, [r3, #0]
-			display_force_update = 0;
+				display_force_update = 0;
  8001d3e:	4b33      	ldr	r3, [pc, #204]	; (8001e0c <_Z14StartUpdateLCDPv+0x224>)
  8001d40:	2200      	movs	r2, #0
  8001d42:	701a      	strb	r2, [r3, #0]
-			ssd1306_Fill(Black_);
+				ssd1306_Fill(Black_);
  8001d44:	2000      	movs	r0, #0
  8001d46:	f000 fc4b 	bl	80025e0 <ssd1306_Fill>
-			ssd1306_SetCursor((128 - 11 * 5) / 2, 0);
+				ssd1306_SetCursor((128 - 11 * 5) / 2, 0);
  8001d4a:	2100      	movs	r1, #0
  8001d4c:	2024      	movs	r0, #36	; 0x24
  8001d4e:	f000 fda1 	bl	8002894 <ssd1306_SetCursor>
-			ssd1306_WriteString("Pair?", Font_11x18, White_);
+				ssd1306_WriteString("Pair?", Font_11x18, White_);
  8001d52:	4a2c      	ldr	r2, [pc, #176]	; (8001e04 <_Z14StartUpdateLCDPv+0x21c>)
  8001d54:	2301      	movs	r3, #1
  8001d56:	ca06      	ldmia	r2, {r1, r2}
  8001d58:	482f      	ldr	r0, [pc, #188]	; (8001e18 <_Z14StartUpdateLCDPv+0x230>)
  8001d5a:	f000 fd75 	bl	8002848 <ssd1306_WriteString>
-			ssd1306_UpdateScreen();
+				ssd1306_UpdateScreen();
  8001d5e:	f000 fc63 	bl	8002628 <ssd1306_UpdateScreen>
-			break;
+				break;
  8001d62:	e036      	b.n	8001dd2 <_Z14StartUpdateLCDPv+0x1ea>
 
-		case 7:
-			display_run_once = 1;
+			case 7:
+				display_run_once = 1;
  8001d64:	4b24      	ldr	r3, [pc, #144]	; (8001df8 <_Z14StartUpdateLCDPv+0x210>)
  8001d66:	2201      	movs	r2, #1
  8001d68:	701a      	strb	r2, [r3, #0]
-			display_force_update = 0;
+				display_force_update = 0;
  8001d6a:	4b28      	ldr	r3, [pc, #160]	; (8001e0c <_Z14StartUpdateLCDPv+0x224>)
  8001d6c:	2200      	movs	r2, #0
  8001d6e:	701a      	strb	r2, [r3, #0]
-			ssd1306_Fill(Black_);
+				ssd1306_Fill(Black_);
  8001d70:	2000      	movs	r0, #0
  8001d72:	f000 fc35 	bl	80025e0 <ssd1306_Fill>
-			ssd1306_UpdateScreen();
+				ssd1306_UpdateScreen();
  8001d76:	f000 fc57 	bl	8002628 <ssd1306_UpdateScreen>
-			ssd1306_SetCursor((128 - 11 * 10) / 2, 0);
+				ssd1306_SetCursor((128 - 11 * 10) / 2, 0);
  8001d7a:	2100      	movs	r1, #0
  8001d7c:	2009      	movs	r0, #9
  8001d7e:	f000 fd89 	bl	8002894 <ssd1306_SetCursor>
-			ssd1306_WriteString("Pairing...", Font_11x18, White_);
+				ssd1306_WriteString("Pairing...", Font_11x18, White_);
  8001d82:	4a20      	ldr	r2, [pc, #128]	; (8001e04 <_Z14StartUpdateLCDPv+0x21c>)
  8001d84:	2301      	movs	r3, #1
  8001d86:	ca06      	ldmia	r2, {r1, r2}
  8001d88:	4824      	ldr	r0, [pc, #144]	; (8001e1c <_Z14StartUpdateLCDPv+0x234>)
  8001d8a:	f000 fd5d 	bl	8002848 <ssd1306_WriteString>
-			ssd1306_UpdateScreen();
+				ssd1306_UpdateScreen();
  8001d8e:	f000 fc4b 	bl	8002628 <ssd1306_UpdateScreen>
-			PS4.pair();
+				PS4.pair();
  8001d92:	481b      	ldr	r0, [pc, #108]	; (8001e00 <_Z14StartUpdateLCDPv+0x218>)
  8001d94:	f7fe fdef 	bl	8000976 <_ZN5BTHID4pairEv>
-			while (PS4.connected() == 0) {
+				while (PS4.connected() == 0) {
  8001d98:	4819      	ldr	r0, [pc, #100]	; (8001e00 <_Z14StartUpdateLCDPv+0x218>)
  8001d9a:	f7fe fecf 	bl	8000b3c <_ZN5PS4BT9connectedEv>
  8001d9e:	4603      	mov	r3, r0
@@ -4245,30 +4242,30 @@ void StartUpdateLCD(void *argument) {
  8001da8:	b2db      	uxtb	r3, r3
  8001daa:	2b00      	cmp	r3, #0
  8001dac:	d003      	beq.n	8001db6 <_Z14StartUpdateLCDPv+0x1ce>
-				osDelay(100);
+					osDelay(100);
  8001dae:	2064      	movs	r0, #100	; 0x64
  8001db0:	f008 fbb4 	bl	800a51c <osDelay>
-			while (PS4.connected() == 0) {
+				while (PS4.connected() == 0) {
  8001db4:	e7f0      	b.n	8001d98 <_Z14StartUpdateLCDPv+0x1b0>
-			}
-			ssd1306_SetCursor((128 - 11 * 10) / 2, 26);
+				}
+				ssd1306_SetCursor((128 - 11 * 10) / 2, 26);
  8001db6:	211a      	movs	r1, #26
  8001db8:	2009      	movs	r0, #9
  8001dba:	f000 fd6b 	bl	8002894 <ssd1306_SetCursor>
-			ssd1306_WriteString("Paired!", Font_11x18, White_);
+				ssd1306_WriteString("Paired!", Font_11x18, White_);
  8001dbe:	4a11      	ldr	r2, [pc, #68]	; (8001e04 <_Z14StartUpdateLCDPv+0x21c>)
  8001dc0:	2301      	movs	r3, #1
  8001dc2:	ca06      	ldmia	r2, {r1, r2}
  8001dc4:	4816      	ldr	r0, [pc, #88]	; (8001e20 <_Z14StartUpdateLCDPv+0x238>)
  8001dc6:	f000 fd3f 	bl	8002848 <ssd1306_WriteString>
-			ssd1306_UpdateScreen();
+				ssd1306_UpdateScreen();
  8001dca:	f000 fc2d 	bl	8002628 <ssd1306_UpdateScreen>
-			break;
+				break;
  8001dce:	e000      	b.n	8001dd2 <_Z14StartUpdateLCDPv+0x1ea>
-			break;
+				break;
  8001dd0:	bf00      	nop
+			}
 		}
-	}
 #if rtos_delay_view
 		timer_val_LCD = __HAL_TIM_GET_COUNTER(&htim14) - timer_val_LCD;
  8001dd2:	4b07      	ldr	r3, [pc, #28]	; (8001df0 <_Z14StartUpdateLCDPv+0x208>)
@@ -23133,7 +23130,7 @@ static uint8_t USBD_HID_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum)
  8008f1e:	4770      	bx	lr
 
 08008f20 <USBD_HID_DataOut>:
-
+/* DataOut will only run for THPS 2 or activating rumble in XBCD on a PC */
 static uint8_t USBD_HID_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
 {
  8008f20:	b580      	push	{r7, lr}
@@ -23149,8 +23146,6 @@ static uint8_t USBD_HID_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
  8008f32:	b2da      	uxtb	r2, r3
  8008f34:	4b06      	ldr	r3, [pc, #24]	; (8008f50 <USBD_HID_DataOut+0x30>)
  8008f36:	701a      	strb	r2, [r3, #0]
-	//rx_buf[3]=5;
-	//HAL_PCD_EP_Receive(&hUsbDeviceFS.pData, HID_EPOUT_ADDR, (uint8_t *)rx_buf, HID_EPOUT_SIZE);
 	USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, (uint8_t*) (rx_buf), HID_EPOUT_SIZE);
  8008f38:	2306      	movs	r3, #6
  8008f3a:	4a06      	ldr	r2, [pc, #24]	; (8008f54 <USBD_HID_DataOut+0x34>)

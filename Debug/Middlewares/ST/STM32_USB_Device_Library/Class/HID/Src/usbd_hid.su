@@ -8,6 +8,6 @@ usbd_hid.c:858:17:USBD_HID_GetHSCfgDesc	16	static
 usbd_hid.c:875:17:USBD_HID_GetOtherSpeedCfgDesc	16	static
 usbd_hid.c:889:16:USBD_HID_DataIn	16	static
 usbd_hid.c:899:16:USBD_HID_DataOut	16	static
-usbd_hid.c:916:16:USBD_HID_EP0_RxReady	24	static
-usbd_hid.c:935:16:USBD_HID_EP0_TxSent	16	static
-usbd_hid.c:956:17:USBD_HID_GetDeviceQualifierDesc	16	static
+usbd_hid.c:914:16:USBD_HID_EP0_RxReady	24	static
+usbd_hid.c:933:16:USBD_HID_EP0_TxSent	16	static
+usbd_hid.c:954:17:USBD_HID_GetDeviceQualifierDesc	16	static

@@ -201,42 +201,42 @@ __ALIGN_BEGIN static uint8_t USBD_HID_CfgFSDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN
 /* From OGX360 Project + My Duke Controller, data is slightly different than OGX360 Project*/
 __ALIGN_BEGIN static uint8_t USBD_HID_CfgFSDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN_END =
 {
-	    //Configuration Descriptor//
-	    0x09,       //bLength of config descriptor
-	    0x02,       //bDescriptorType, 2=Configuration Descriptor
-	    0x20, 0x00, //wTotalLength 2-bytes, total length (including interface and endpoint descriptors)
-	    0x01,       //bNumInterfaces, just 1
-	    0x01,       //bConfigurationValue
-	    0x00,       //iConfiguration - index to string descriptors. we dont use them
-	    0x80,       //bmAttributes - 0x80 = USB Bus Powered
-	    0x32,       //bMaxPower - maximum power in 2mA units. 0xFA=500mA. Genuine OG controller is normally 100mA (0x32)
+	//Configuration Descriptor//
+	0x09,       //bLength of config descriptor
+	0x02,       //bDescriptorType, 2=Configuration Descriptor
+	0x20, 0x00, //wTotalLength 2-bytes, total length (including interface and endpoint descriptors)
+	0x01,       //bNumInterfaces, just 1
+	0x01,       //bConfigurationValue
+	0x00,       //iConfiguration - index to string descriptors. we dont use them
+	0x80,       //bmAttributes - 0x80 = USB Bus Powered
+	0x32,       //bMaxPower - maximum power in 2mA units. 0xFA=500mA. Genuine OG controller is normally 100mA (0x32)
 
-	    //Interface Descriptor//
-	    0x09, //bLength of interface descriptor
-	    0x04, //bDescriptorType, 4=Interface  Descriptor
-	    0x00, //bInterfaceNumber
-	    0x00, //bAlternateSetting
-	    0x02, //bNumEndpoints - we have two endpoints (IN for button presses, and OUT for rumble values)
-	    0x58, //bInterfaceClass - From OG Xbox controller
-	    0x42, //bInterfaceSubClass - From OG Xbox controller
-	    0x00, //bInterfaceProtocol
-	    0x00, //iInterface - index to string descriptors. we dont use them
+	//Interface Descriptor//
+	0x09, //bLength of interface descriptor
+	0x04, //bDescriptorType, 4=Interface  Descriptor
+	0x00, //bInterfaceNumber
+	0x00, //bAlternateSetting
+	0x02, //bNumEndpoints - we have two endpoints (IN for button presses, and OUT for rumble values)
+	0x58, //bInterfaceClass - From OG Xbox controller
+	0x42, //bInterfaceSubClass - From OG Xbox controller
+	0x00, //bInterfaceProtocol
+	0x00, //iInterface - index to string descriptors. we dont use them
 
-	    //Endpoint Descriptor (IN)//
-	    0x07,       //bLength of endpoint descriptor
-	    0x05,       //bDescriptorType, 5=Endpoint Descriptor
-	    0x81,       //bEndpointAddress, Address=1, Direction IN
-	    0x03,       //bmAttributes, 3=Interrupt Endpoint
-	    0x20, 0x00, //wMaxPacketSize
-	    0x04,       //bInterval, Interval for polling the interrupt endpoint. 4ms
+	//Endpoint Descriptor (IN)//
+	0x07,       //bLength of endpoint descriptor
+	0x05,       //bDescriptorType, 5=Endpoint Descriptor
+	0x81,       //bEndpointAddress, Address=1, Direction IN
+	0x03,       //bmAttributes, 3=Interrupt Endpoint
+	0x20, 0x00, //wMaxPacketSize
+	0x04,       //bInterval, Interval for polling the interrupt endpoint. 4ms
 
-	    //Endpoint Descriptor (OUT)//
-	    0x07,       //bLength of endpoint descriptor
-	    0x05,       //bDescriptorType, 5=Endpoint Descriptor
-	    0x02,       //bEndpointAddress, Address=2, Direction OUT
-	    0x03,       //bmAttributes, 3=Interrupt Endpoint
-	    0x20, 0x00, //wMaxPacketSize
-	    0x04        //bInterval, Interval for polling the interrupt endpoint. 4ms
+	//Endpoint Descriptor (OUT)//
+	0x07,       //bLength of endpoint descriptor
+	0x05,       //bDescriptorType, 5=Endpoint Descriptor
+	0x02,       //bEndpointAddress, Address=2, Direction OUT
+	0x03,       //bmAttributes, 3=Interrupt Endpoint
+	0x20, 0x00, //wMaxPacketSize
+	0x04        //bInterval, Interval for polling the interrupt endpoint. 4ms
 };
 #endif
 
@@ -353,42 +353,42 @@ __ALIGN_BEGIN static uint8_t USBD_HID_OtherSpeedCfgDesc[USB_HID_CONFIG_DESC_SIZ]
 /* USB HID device Other Speed Configuration Descriptor */
 __ALIGN_BEGIN static uint8_t USBD_HID_OtherSpeedCfgDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN_END =
 {
-	    //Configuration Descriptor//
-	    0x09,       //bLength of config descriptor
-	    0x02,       //bDescriptorType, 2=Configuration Descriptor
-	    0x20, 0x00, //wTotalLength 2-bytes, total length (including interface and endpoint descriptors)
-	    0x01,       //bNumInterfaces, just 1
-	    0x01,       //bConfigurationValue
-	    0x00,       //iConfiguration - index to string descriptors. we dont use them
-	    0x80,       //bmAttributes - 0x80 = USB Bus Powered
-	    0x32,       //bMaxPower - maximum power in 2mA units. 0xFA=500mA. Genuine OG controller is normally 100mA (0x32)
+	//Configuration Descriptor//
+	0x09,       //bLength of config descriptor
+	0x02,       //bDescriptorType, 2=Configuration Descriptor
+	0x20, 0x00, //wTotalLength 2-bytes, total length (including interface and endpoint descriptors)
+	0x01,       //bNumInterfaces, just 1
+	0x01,       //bConfigurationValue
+	0x00,       //iConfiguration - index to string descriptors. we dont use them
+	0x80,       //bmAttributes - 0x80 = USB Bus Powered
+	0x32,       //bMaxPower - maximum power in 2mA units. 0xFA=500mA. Genuine OG controller is normally 100mA (0x32)
 
-	    //Interface Descriptor//
-	    0x09, //bLength of interface descriptor
-	    0x04, //bDescriptorType, 4=Interface  Descriptor
-	    0x00, //bInterfaceNumber
-	    0x00, //bAlternateSetting
-	    0x02, //bNumEndpoints - we have two endpoints (IN for button presses, and OUT for rumble values)
-	    0x58, //bInterfaceClass - From OG Xbox controller
-	    0x42, //bInterfaceSubClass - From OG Xbox controller
-	    0x00, //bInterfaceProtocol
-	    0x00, //iInterface - index to string descriptors. we dont use them
+	//Interface Descriptor//
+	0x09, //bLength of interface descriptor
+	0x04, //bDescriptorType, 4=Interface  Descriptor
+	0x00, //bInterfaceNumber
+	0x00, //bAlternateSetting
+	0x02, //bNumEndpoints - we have two endpoints (IN for button presses, and OUT for rumble values)
+	0x58, //bInterfaceClass - From OG Xbox controller
+	0x42, //bInterfaceSubClass - From OG Xbox controller
+	0x00, //bInterfaceProtocol
+	0x00, //iInterface - index to string descriptors. we dont use them
 
-	    //Endpoint Descriptor (IN)//
-	    0x07,       //bLength of endpoint descriptor
-	    0x05,       //bDescriptorType, 5=Endpoint Descriptor
-	    0x81,       //bEndpointAddress, Address=1, Direction IN
-	    0x03,       //bmAttributes, 3=Interrupt Endpoint
-	    0x20, 0x00, //wMaxPacketSize
-	    0x04,       //bInterval, Interval for polling the interrupt endpoint. 4ms
+	//Endpoint Descriptor (IN)//
+	0x07,       //bLength of endpoint descriptor
+	0x05,       //bDescriptorType, 5=Endpoint Descriptor
+	0x81,       //bEndpointAddress, Address=1, Direction IN
+	0x03,       //bmAttributes, 3=Interrupt Endpoint
+	0x20, 0x00, //wMaxPacketSize
+	0x04,       //bInterval, Interval for polling the interrupt endpoint. 4ms
 
-	    //Endpoint Descriptor (OUT)//
-	    0x07,       //bLength of endpoint descriptor
-	    0x05,       //bDescriptorType, 5=Endpoint Descriptor
-	    0x02,       //bEndpointAddress, Address=2, Direction OUT
-	    0x03,       //bmAttributes, 3=Interrupt Endpoint
-	    0x20, 0x00, //wMaxPacketSize
-	    0x04        //bInterval, Interval for polling the interrupt endpoint. 4ms
+	//Endpoint Descriptor (OUT)//
+	0x07,       //bLength of endpoint descriptor
+	0x05,       //bDescriptorType, 5=Endpoint Descriptor
+	0x02,       //bEndpointAddress, Address=2, Direction OUT
+	0x03,       //bmAttributes, 3=Interrupt Endpoint
+	0x20, 0x00, //wMaxPacketSize
+	0x04        //bInterval, Interval for polling the interrupt endpoint. 4ms
 };
 #endif
 
@@ -444,44 +444,44 @@ __ALIGN_BEGIN static uint8_t USBD_HID_DeviceQualifierDesc[USB_LEN_DEV_QUALIFIER_
 #if PC_SETUP
 /* HID Report Descriptor */
 __ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __ALIGN_END = {
-	    0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
-	    0x09, 0x05,                    // USAGE (Game Pad)
-	    0xa1, 0x01,                    // COLLECTION (Application)
-	    0x05, 0x02,                    //   USAGE_PAGE (Simulation Controls)
-	    0x09, 0xbb,                    //   USAGE (Throttle)
-	    0x15, 0x80,                    //   LOGICAL_MINIMUM (-128)
-	    0x25, 0x7f,                    //   LOGICAL_MAXIMUM (127)
-	    0x75, 0x08,                    //   REPORT_SIZE (8)
-	    0x95, 0x01,                    //   REPORT_COUNT (1)
-	    0x81, 0x02,                    //   INPUT (Data,Var,Abs)
-	    0x05, 0x02,                    //   USAGE_PAGE (Simulation Controls)
-	    0x09, 0xbb,                    //   USAGE (Throttle)
-	    0x15, 0x80,                    //   LOGICAL_MINIMUM (-128)
-	    0x25, 0x7f,                    //   LOGICAL_MAXIMUM (127)
-	    0x75, 0x08,                    //   REPORT_SIZE (8)
-	    0x95, 0x01,                    //   REPORT_COUNT (1)
-	    0x81, 0x02,                    //   INPUT (Data,Var,Abs)
-	    0x05, 0x01,                    //   USAGE_PAGE (Generic Desktop)
-	    0xa1, 0x00,                    //   COLLECTION (Physical)
-	    0x09, 0x30,                    //     USAGE (X)
-	    0x09, 0x31,                    //     USAGE (Y)
-	    0x09, 0x32,                    //     USAGE (Z)
-	    0x09, 0x33,                    //     USAGE (Rx)
-	    0x15, 0x80,                    //     LOGICAL_MINIMUM (-128)
-	    0x25, 0x7f,                    //     LOGICAL_MAXIMUM (127)
-	    0x75, 0x08,                    //     REPORT_SIZE (8)
-	    0x95, 0x04,                    //     REPORT_COUNT (4)
-	    0x81, 0x02,                    //     INPUT (Data,Var,Abs)
-	    0x05, 0x09,                    //     USAGE_PAGE (Button)
-	    0x19, 0x01,                    //     USAGE_MINIMUM (Button 1)
-	    0x29, 0x10,                    //     USAGE_MAXIMUM (Button 16)
-	    0x15, 0x00,                    //     LOGICAL_MINIMUM (0)
-	    0x25, 0x01,                    //     LOGICAL_MAXIMUM (1)
-	    0x75, 0x01,                    //     REPORT_SIZE (1)
-	    0x95, 0x10,                    //     REPORT_COUNT (16)
-	    0x81, 0x02,                    //     INPUT (Data,Var,Abs)
-	    0xc0,                          //     END_COLLECTION
-	    0xc0                           // END_COLLECTION
+	0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
+	0x09, 0x05,                    // USAGE (Game Pad)
+	0xa1, 0x01,                    // COLLECTION (Application)
+	0x05, 0x02,                    //   USAGE_PAGE (Simulation Controls)
+	0x09, 0xbb,                    //   USAGE (Throttle)
+	0x15, 0x80,                    //   LOGICAL_MINIMUM (-128)
+	0x25, 0x7f,                    //   LOGICAL_MAXIMUM (127)
+	0x75, 0x08,                    //   REPORT_SIZE (8)
+	0x95, 0x01,                    //   REPORT_COUNT (1)
+	0x81, 0x02,                    //   INPUT (Data,Var,Abs)
+	0x05, 0x02,                    //   USAGE_PAGE (Simulation Controls)
+	0x09, 0xbb,                    //   USAGE (Throttle)
+	0x15, 0x80,                    //   LOGICAL_MINIMUM (-128)
+	0x25, 0x7f,                    //   LOGICAL_MAXIMUM (127)
+	0x75, 0x08,                    //   REPORT_SIZE (8)
+	0x95, 0x01,                    //   REPORT_COUNT (1)
+	0x81, 0x02,                    //   INPUT (Data,Var,Abs)
+	0x05, 0x01,                    //   USAGE_PAGE (Generic Desktop)
+	0xa1, 0x00,                    //   COLLECTION (Physical)
+	0x09, 0x30,                    //     USAGE (X)
+	0x09, 0x31,                    //     USAGE (Y)
+	0x09, 0x32,                    //     USAGE (Z)
+	0x09, 0x33,                    //     USAGE (Rx)
+	0x15, 0x80,                    //     LOGICAL_MINIMUM (-128)
+	0x25, 0x7f,                    //     LOGICAL_MAXIMUM (127)
+	0x75, 0x08,                    //     REPORT_SIZE (8)
+	0x95, 0x04,                    //     REPORT_COUNT (4)
+	0x81, 0x02,                    //     INPUT (Data,Var,Abs)
+	0x05, 0x09,                    //     USAGE_PAGE (Button)
+	0x19, 0x01,                    //     USAGE_MINIMUM (Button 1)
+	0x29, 0x10,                    //     USAGE_MAXIMUM (Button 16)
+	0x15, 0x00,                    //     LOGICAL_MINIMUM (0)
+	0x25, 0x01,                    //     LOGICAL_MAXIMUM (1)
+	0x75, 0x01,                    //     REPORT_SIZE (1)
+	0x95, 0x10,                    //     REPORT_COUNT (16)
+	0x81, 0x02,                    //     INPUT (Data,Var,Abs)
+	0xc0,                          //     END_COLLECTION
+	0xc0                           // END_COLLECTION
 };
 #endif
 
@@ -895,12 +895,10 @@ static uint8_t USBD_HID_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum)
 
   return (uint8_t)USBD_OK;
 }
-
+/* DataOut will only run for THPS 2 or activating rumble in XBCD on a PC */
 static uint8_t USBD_HID_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
 {
 	dataout_ran++;
-	//rx_buf[3]=5;
-	//HAL_PCD_EP_Receive(&hUsbDeviceFS.pData, HID_EPOUT_ADDR, (uint8_t *)rx_buf, HID_EPOUT_SIZE);
 	USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, (uint8_t*) (rx_buf), HID_EPOUT_SIZE);
 	return USBD_OK;
 }
