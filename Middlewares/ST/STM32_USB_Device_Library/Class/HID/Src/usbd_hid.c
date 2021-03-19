@@ -94,6 +94,8 @@ static uint8_t USBD_HID_DeInit(USBD_HandleTypeDef *pdev, uint8_t cfgidx);
 static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
 static uint8_t USBD_HID_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum);
 static uint8_t USBD_HID_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum);
+static uint8_t USBD_HID_EP0_RxReady(USBD_HandleTypeDef  *pdev);
+static uint8_t USBD_HID_EP0_TxSent(USBD_HandleTypeDef  *pdev);
 static uint8_t *USBD_HID_GetFSCfgDesc(uint16_t *length);
 static uint8_t *USBD_HID_GetHSCfgDesc(uint16_t *length);
 
@@ -113,6 +115,11 @@ uint8_t dataout_ran = 0;
 uint8_t usb_failed = 0;
 uint8_t rumble_brequest_sent = 0;
 
+uint8_t USBD_HID_Report_ID = 0;
+uint8_t USBD_HID_Report_LENGTH = 0;
+uint8_t Report_buf[8] = {0};
+uint8_t flag = 0;
+
 char caller_str[100];
 
 USBD_ClassTypeDef USBD_HID =
@@ -120,8 +127,8 @@ USBD_ClassTypeDef USBD_HID =
   USBD_HID_Init,
   USBD_HID_DeInit,
   USBD_HID_Setup,
-  NULL,              /* EP0_TxSent */
-  NULL,              /* EP0_RxReady */
+  USBD_HID_EP0_TxSent,              /* EP0_TxSent */
+  USBD_HID_EP0_RxReady,              /* EP0_RxReady */
   USBD_HID_DataIn,   /* DataIn */
   USBD_HID_DataOut,              /* DataOut To get Rumble Data */
   NULL,              /* SOF */
@@ -642,6 +649,28 @@ static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
           (void)USBD_CtlSendData(pdev, (uint8_t *)&hhid->IdleState, 1U);
           break;
 
+        case HID_REQ_SET_REPORT:
+          flag = 1;
+          USBD_HID_Report_ID = (uint8_t)(req->wValue);
+          USBD_HID_Report_LENGTH = (uint8_t)(req->wLength);
+          USBD_CtlPrepareRx (pdev, rx_buf, 6);
+          break;
+
+//        case HID_REQ_GET_REPORT:
+//          flag = 1;
+//          Report_buf[0] = 0x11;
+//          Report_buf[1] = 0x22;
+//          Report_buf[2] = 0x33;
+//          Report_buf[3] = 0x44;
+//          Report_buf[4] = 0x55;
+//          Report_buf[5] = 0x66;
+//          Report_buf[6] = 0x77;
+//          Report_buf[7] = 0x88;
+//          USBD_CtlSendData (pdev,
+//                            (uint8_t *)&Report_buf,
+//                            8);
+//          break;
+
         default:
           USBD_CtlError(pdev, req);
           ret = USBD_FAIL;
@@ -649,6 +678,7 @@ static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
       }
       break;
     case USB_REQ_TYPE_STANDARD:
+
       switch (req->bRequest)
       {
         case USB_REQ_GET_STATUS:
@@ -736,6 +766,8 @@ static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
     		len = 6;
     		pbuf = DUKE_HID_CAPABILITIES_OUT;
     		(void)USBD_CtlSendData(pdev, pbuf, len);
+    	    //USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, (uint8_t*)(rx_buf), HID_EPOUT_SIZE);
+
     	}
     break;
 
@@ -877,6 +909,48 @@ static uint8_t USBD_HID_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
 	return USBD_OK;
 }
 
+/**
+  * @brief  USBD_CUSTOM_HID_EP0_RxReady
+  *         Handles control request data.
+  * @param  pdev: device instance
+  * @retval status
+  */
+static uint8_t USBD_HID_EP0_RxReady(USBD_HandleTypeDef *pdev)
+{
+	//USBD_CtlPrepareRx (pdev, rx_buf, 6);
+//  USBD_CUSTOM_HID_HandleTypeDef *hhid = (USBD_CUSTOM_HID_HandleTypeDef *)pdev->pClassData;
+//
+//  if (hhid->IsReportAvailable == 1U)
+//  {
+//    ((USBD_CUSTOM_HID_ItfTypeDef *)pdev->pUserData)->OutEvent(hhid->Report_buf[0],
+//                                                              hhid->Report_buf[1]);
+//    hhid->IsReportAvailable = 0U;
+//  }
+
+  return (uint8_t)USBD_OK;
+}
+
+
+/**
+  * @brief  USBD_CUSTOM_HID_EP0_RxReady
+  *         Handles control request data.
+  * @param  pdev: device instance
+  * @retval status
+  */
+static uint8_t USBD_HID_EP0_TxSent(USBD_HandleTypeDef *pdev)
+{
+	//USBD_CtlPrepareRx (pdev, rx_buf, 6);
+//  USBD_CUSTOM_HID_HandleTypeDef *hhid = (USBD_CUSTOM_HID_HandleTypeDef *)pdev->pClassData;
+//
+//  if (hhid->IsReportAvailable == 1U)
+//  {
+//    ((USBD_CUSTOM_HID_ItfTypeDef *)pdev->pUserData)->OutEvent(hhid->Report_buf[0],
+//                                                              hhid->Report_buf[1]);
+//    hhid->IsReportAvailable = 0U;
+//  }
+
+  return (uint8_t)USBD_OK;
+}
 
 /**
   * @brief  DeviceQualifierDescriptor
