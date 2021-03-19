@@ -117,8 +117,8 @@ uint8_t rumble_brequest_sent = 0;
 
 uint8_t USBD_HID_Report_ID = 0;
 uint8_t USBD_HID_Report_LENGTH = 0;
-uint8_t Report_buf[8] = {0};
-uint8_t flag = 0;
+uint8_t ctl_report_buf[6] = {0};
+uint8_t rumble_flag = 0;
 
 char caller_str[100];
 
@@ -649,11 +649,12 @@ static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
           (void)USBD_CtlSendData(pdev, (uint8_t *)&hhid->IdleState, 1U);
           break;
 
+        /*We need to get Control request data for the rumble data from the XBOX, we have to add this ourselves */
         case HID_REQ_SET_REPORT:
-          flag = 1;
+          rumble_flag = 1;
           USBD_HID_Report_ID = (uint8_t)(req->wValue);
           USBD_HID_Report_LENGTH = (uint8_t)(req->wLength);
-          USBD_CtlPrepareRx (pdev, rx_buf, 6);
+          USBD_CtlPrepareRx (pdev, ctl_report_buf, HID_EPOUT_SIZE);
           break;
 
 //        case HID_REQ_GET_REPORT:
@@ -917,15 +918,14 @@ static uint8_t USBD_HID_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
   */
 static uint8_t USBD_HID_EP0_RxReady(USBD_HandleTypeDef *pdev)
 {
-	//USBD_CtlPrepareRx (pdev, rx_buf, 6);
-//  USBD_CUSTOM_HID_HandleTypeDef *hhid = (USBD_CUSTOM_HID_HandleTypeDef *)pdev->pClassData;
-//
-//  if (hhid->IsReportAvailable == 1U)
-//  {
-//    ((USBD_CUSTOM_HID_ItfTypeDef *)pdev->pUserData)->OutEvent(hhid->Report_buf[0],
-//                                                              hhid->Report_buf[1]);
-//    hhid->IsReportAvailable = 0U;
-//  }
+	if(rumble_flag) {
+		rumble_flag = 0;
+		if(USBD_HID_Report_LENGTH == HID_EPOUT_SIZE) {
+			for(uint8_t i = 0; i < HID_EPOUT_SIZE; i++) {
+				rx_buf[i] = ctl_report_buf[i];
+			}
+		}
+	}
 
   return (uint8_t)USBD_OK;
 }

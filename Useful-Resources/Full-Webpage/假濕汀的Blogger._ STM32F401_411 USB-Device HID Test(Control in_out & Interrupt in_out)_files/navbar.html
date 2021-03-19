@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!-- saved from url=(0760)https://draft.blogger.com/navbar.g?targetBlogID=7336399083185371033&blogName=%E5%81%87%E6%BF%95%E6%B1%80%E7%9A%84Blogger.&publishMode=PUBLISH_MODE_BLOGSPOT&navbarType=LIGHT&layoutType=LAYOUTS&searchRoot=https://iamjustinwang.blogspot.com/search&blogLocale=zh_TW&v=2&homepageUrl=https://iamjustinwang.blogspot.com/&targetPostID=339593741843434217&blogPostOrPageUrl=https://iamjustinwang.blogspot.com/2016/07/stm32f401411-usb-device-hid-testcontrol.html&vt=-3198338020353601368&usegapi=1&jsh=m%3B%2F_%2Fscs%2Fapps-static%2F_%2Fjs%2Fk%3Doz.gapi.en.RrjSsKk8Szw.O%2Fam%3DAQ%2Fd%3D1%2Fct%3Dzgms%2Frs%3DAGLTcCPwd_oodKkRT_hYRO1I-9xRcQV4oQ%2Fm%3D__features__#id=navbar-iframe&_gfid=navbar-iframe&parent=https%3A%2F%2Fiamjustinwang.blogspot.com&pfname=&rpctoken=23417920 -->
+<html dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style class="darkreader darkreader--fallback" media="screen"></style><style class="darkreader darkreader--text" media="screen"></style><style class="darkreader darkreader--invert" media="screen">.jfk-bubble.gtx-bubble, .captcheck_answer_label > input + img, span#closed_text > img[src^="https://www.gstatic.com/images/branding/googlelogo"], span[data-href^="https://www.hcaptcha.com/"] > #icon, .gb_ua, .feedflare {
+    filter: invert(100%) hue-rotate(180deg) contrast(90%) !important;
+}</style><style class="darkreader darkreader--inline" media="screen">[data-darkreader-inline-bgcolor] {
+  background-color: var(--darkreader-inline-bgcolor) !important;
+}
+[data-darkreader-inline-bgimage] {
+  background-image: var(--darkreader-inline-bgimage) !important;
+}
+[data-darkreader-inline-border] {
+  border-color: var(--darkreader-inline-border) !important;
+}
+[data-darkreader-inline-border-bottom] {
+  border-bottom-color: var(--darkreader-inline-border-bottom) !important;
+}
+[data-darkreader-inline-border-left] {
+  border-left-color: var(--darkreader-inline-border-left) !important;
+}
+[data-darkreader-inline-border-right] {
+  border-right-color: var(--darkreader-inline-border-right) !important;
+}
+[data-darkreader-inline-border-top] {
+  border-top-color: var(--darkreader-inline-border-top) !important;
+}
+[data-darkreader-inline-boxshadow] {
+  box-shadow: var(--darkreader-inline-boxshadow) !important;
+}
+[data-darkreader-inline-color] {
+  color: var(--darkreader-inline-color) !important;
+}
+[data-darkreader-inline-fill] {
+  fill: var(--darkreader-inline-fill) !important;
+}
+[data-darkreader-inline-stroke] {
+  stroke: var(--darkreader-inline-stroke) !important;
+}
+[data-darkreader-inline-outline] {
+  outline-color: var(--darkreader-inline-outline) !important;
+}
+[data-darkreader-inline-stopcolor] {
+  stop-color: var(--darkreader-inline-stopcolor) !important;
+}</style><style class="darkreader darkreader--variables" media="screen">:root {
+   --darkreader-neutral-background: #131516;
+   --darkreader-neutral-text: #d8d4cf;
+   --darkreader-selection-background: #004daa;
+   --darkreader-selection-text: #e8e6e3;
+}</style><script src="./cb=gapi.loaded_0" async=""></script><script class="darkreader darkreader--proxy">(function injectProxy() {
+        document.dispatchEvent(
+            new CustomEvent("__darkreader__inlineScriptsAllowed")
+        );
+        const addRuleDescriptor = Object.getOwnPropertyDescriptor(
+            CSSStyleSheet.prototype,
+            "addRule"
+        );
+        const insertRuleDescriptor = Object.getOwnPropertyDescriptor(
+            CSSStyleSheet.prototype,
+            "insertRule"
+        );
+        const deleteRuleDescriptor = Object.getOwnPropertyDescriptor(
+            CSSStyleSheet.prototype,
+            "deleteRule"
+        );
+        const removeRuleDescriptor = Object.getOwnPropertyDescriptor(
+            CSSStyleSheet.prototype,
+            "removeRule"
+        );
+        const cleanUp = () => {
+            Object.defineProperty(
+                CSSStyleSheet.prototype,
+                "addRule",
+                addRuleDescriptor
+            );
+            Object.defineProperty(
+                CSSStyleSheet.prototype,
+                "insertRule",
+                insertRuleDescriptor
+            );
+            Object.defineProperty(
+                CSSStyleSheet.prototype,
+                "deleteRule",
+                deleteRuleDescriptor
+            );
+            Object.defineProperty(
+                CSSStyleSheet.prototype,
+                "removeRule",
+                removeRuleDescriptor
+            );
+            document.removeEventListener("__darkreader__cleanUp", cleanUp);
+            document.removeEventListener(
+                "__darkreader__addUndefinedResolver",
+                addUndefinedResolver
+            );
+        };
+        const addUndefinedResolver = (e) => {
+            customElements.whenDefined(e.detail.tag).then(() => {
+                document.dispatchEvent(
+                    new CustomEvent("__darkreader__isDefined", {
+                        detail: {tag: e.detail.tag}
+                    })
+                );
+            });
+        };
+        document.addEventListener("__darkreader__cleanUp", cleanUp);
+        document.addEventListener(
+            "__darkreader__addUndefinedResolver",
+            addUndefinedResolver
+        );
+        const updateSheetEvent = new Event("__darkreader__updateSheet");
+        function proxyAddRule(selector, style, index) {
+            addRuleDescriptor.value.call(this, selector, style, index);
+            if (
+                this.ownerNode &&
+                !this.ownerNode.classList.contains("darkreader")
+            ) {
+                this.ownerNode.dispatchEvent(updateSheetEvent);
+            }
+            return -1;
+        }
+        function proxyInsertRule(rule, index) {
+            const returnValue = insertRuleDescriptor.value.call(
+                this,
+                rule,
+                index
+            );
+            if (
+                this.ownerNode &&
+                !this.ownerNode.classList.contains("darkreader")
+            ) {
+                this.ownerNode.dispatchEvent(updateSheetEvent);
+            }
+            return returnValue;
+        }
+        function proxyDeleteRule(index) {
+            deleteRuleDescriptor.value.call(this, index);
+            if (
+                this.ownerNode &&
+                !this.ownerNode.classList.contains("darkreader")
+            ) {
+                this.ownerNode.dispatchEvent(updateSheetEvent);
+            }
+        }
+        function proxyRemoveRule(index) {
+            removeRuleDescriptor.value.call(this, index);
+            if (
+                this.ownerNode &&
+                !this.ownerNode.classList.contains("darkreader")
+            ) {
+                this.ownerNode.dispatchEvent(updateSheetEvent);
+            }
+        }
+        Object.defineProperty(
+            CSSStyleSheet.prototype,
+            "addRule",
+            Object.assign({}, addRuleDescriptor, {value: proxyAddRule})
+        );
+        Object.defineProperty(
+            CSSStyleSheet.prototype,
+            "insertRule",
+            Object.assign({}, insertRuleDescriptor, {value: proxyInsertRule})
+        );
+        Object.defineProperty(
+            CSSStyleSheet.prototype,
+            "deleteRule",
+            Object.assign({}, deleteRuleDescriptor, {value: proxyDeleteRule})
+        );
+        Object.defineProperty(
+            CSSStyleSheet.prototype,
+            "removeRule",
+            Object.assign({}, removeRuleDescriptor, {value: proxyRemoveRule})
+        );
+    })()</script><style class="darkreader darkreader--user-agent" media="screen">input, textarea, select, button {
+    background-color: #181a1b;
+}
+html, body, input, textarea, select, button {
+    border-color: #736b5e;
+    color: #e8e6e3;
+}
+a {
+    color: #3391ff;
+}
+table {
+    border-color: #545b5e;
+}
+::placeholder {
+    color: #b2aba1;
+}
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    background-color: #555b00 !important;
+    color: #e8e6e3 !important;
+}
+::-webkit-scrollbar {
+    background-color: #202324;
+    color: #aba499;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #454a4d;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #575e62;
+}
+::-webkit-scrollbar-thumb:active {
+    background-color: #484e51;
+}
+::-webkit-scrollbar-corner {
+    background-color: #181a1b;
+}
+::selection {
+    background-color: #004daa !important;
+    color: #e8e6e3 !important;
+}
+::-moz-selection {
+    background-color: #004daa !important;
+    color: #e8e6e3 !important;
+}</style><style type="text/css">
+        
+        body {
+          padding:0;
+          margin:0;
+        }
+
+        .gplus div {
+          vertical-align: middle !important;
+          /* and for IE7 */
+          zoom: 1 !important;
+          *display: inline !important;
+        }
+
+        
+
+        #b-navbar{white-space:nowrap;color:#444;height:29px;border-bottom:1px solid #888;background:transparent;font-size:13px;font-family:Arial,Sans-serif;position:relative}#b-navbar #b-navbar-bg{position:absolute;left:0;top:0;width:100%;height:30px;z-index:-1;background-color:#fff;opacity:0.4;filter:alpha(opacity=40)}#b-navbar-user{width:500px;height:30px}#b-navbar .navbar-right{text-align:right;padding-right:5px}#b-navbar-controls{margin-left:.2em;height:29px}#b-navbar #b-navbar-logo{display:block;margin-right:8px;margin-left:8px;width:20px;height:20px;background:url('//resources.blogblog.com/img/navbar/icons_peach.png') no-repeat -26px 0;cursor:pointer;cursor:hand}#b-navbar #b-query-box{background-color:#fff;margin:0 .5em 0 0;border:1px solid #aaa;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;padding:0 .3em}#b-navbar #b-query-icon{display:block;width:13px;height:13px;cursor:pointer;cursor:hand;background:url('//resources.blogblog.com/img/navbar/icons_peach.png') no-repeat 0 0}#b-navbar #b-query-icon:hover{background:url('//resources.blogblog.com/img/navbar/icons_peach.png') no-repeat -13px 0}#b-navbar #b-mobile-query-icon{display:block;width:24px;height:24px;cursor:pointer;background:#fff url('//www.gstatic.com/images/icons/material/system/1x/search_grey600_24dp.png') no-repeat 0 0;border-radius:3px;margin-right:.5em}#b-navbar #b-query{font-size:13px;color:#000;background-color:transparent;border:none;width:10em;margin:0}#b-navbar .b-link,#b-navbar #b-user{display:inline-block;font-size:13px;vertical-align:middle;padding:2px .4em}#b-navbar .b-link{color:#333;text-decoration:none;white-space:nowrap;cursor:pointer;cursor:hand}#b-navbar .b-link:hover{color:#55e;text-decoration:underline}#b-navbar #b-more span.arrow{background:url('//resources.blogblog.com/img/navbar/arrows-light.png') no-repeat -12px center;display:inline-block;width:7px;height:10px}#b-navbar #b-more:hover span.arrow{background:url('//resources.blogblog.com/img/navbar/arrows-light.png') no-repeat 0 center}#bt-unflag-body{display:none}#flagi,#unflagi{display:none;top:3px;color:#000;background-color:#ff9;border:1px solid #333;z-index:300;padding:4px;font-size:.7em;line-height:.8em}#flagi a,#unflagi a{color:#3366cc;text-decoration:underline}.b-mobile{display:none}#b-sms{margin:0 0 0 100px;padding:4px 7px;line-height:1em;font-size:100%;text-align:left}#b-sms a{margin-right:.5em;line-height:1em}#b-sms a:hover{text-decoration:underline}#blogger_cookie_notice{padding:4px 0 4px 12px;font-weight:bold;line-height:20px;padding-left:10px}#blogger_cookie_notice .logo{display:inline-block;margin-right:8px;width:20px;height:20px;background:url('//resources.blogblog.com/img/navbar/icons_peach.png') no-repeat -26px 0;cursor:pointer;position:absolute}#blogger_cookie_notice .cookie_message{margin-left:28px}#blogger_cookie_notice .cookie_button{color:#fff;font-size:11px;margin-left:11px;background-color:#444;padding:0 8px;height:18px;display:inline-block;line-height:18px;border:1px solid rgba(0,0,0,0.2);border-radius:2px;cursor:default!important;text-decoration:none!important}@media handheld{body .b-mobile{display:block}body #b-navbar-fg,body #flagi,body #unflagi{display:none}}
+      </style><style class="darkreader darkreader--sync" media="screen"></style>
+<!--<base target="_top">--><base href="." target="_top"><meta name="darkreader" content="dee46d2bfa97f7c6206cc064a331b1e4"><style class="darkreader darkreader--override" media="screen">.vimvixen-hint {
+    background-color: #7b5300 !important;
+    border-color: #d8b013 !important;
+    color: #f3e8c8 !important;
+}
+::placeholder {
+    opacity: 0.5 !important;
+}
+a[href="https://coinmarketcap.com/"] > svg[width="94"][height="16"] > path {
+    fill: var(--darkreader-neutral-text) !important;
+}</style></head>
+<body class="lang_en rb" marginwidth="0" marginheight="0">
+
+<div id="b-navbar"><div id="b-navbar-bg" style="z-index:-1"></div>
+<div id="b-navbar-fg">
+<table id="b-navbar-controls" cellpadding="0" cellspacing="0" border="0" width="100%"><tbody><tr style="height:20px"><td valign="middle" width="24px"><a href="https://draft.blogger.com/" id="b-navbar-logo" tabindex="1" title="Go to Blogger.com"></a>
+<div id="b-sms" class="b-mobile"><a href="sms:?body=Hi,+check+out+%E5%81%87%E6%BF%95%E6%B1%80%E7%9A%84Blogger.+at+https://iamjustinwang.blogspot.com/%3Fspref%3Dsms" tabindex="2">Send As SMS</a></div></td>
+<td valign="middle" width="150px"><form id="searchthis" action="https://iamjustinwang.blogspot.com/search" method="get" style="display:inline;"><div id="b-query-box"><table cellpadding="0" cellspacing="0"><tbody><tr><td valign="middle"><input type="text" id="b-query" name="q" tabindex="3" style="width: 120px" title="Search"></td>
+<td valign="middle" style="width:15px"><a id="b-query-icon" onclick="document.getElementById(&quot;searchthis&quot;).submit();" title="Search this blog"></a></td></tr></tbody></table></div>
+</form></td>
+<td valign="middle" nowrap="" class="gplus">
+
+
+<a id="b-more" class="b-link" tabindex="4" onclick="var anchor = this; if (anchor.__m) { anchor.__m.restyle({show: true}); } else if (!this.__mi) { this.__mi = true; gapi.load(&quot;gapi.iframes:gapi.iframes.style.bubble&quot;, function() { gapi.iframes.getContext().open( { url: &quot;navbar-more.g?data\x3dAPq4FmC_aKtSwvyfKxoKzA4OcUBIoSFIJnMej1037P47tRx656LsqxUK4FsRNcGXBHAQGkPRUBiHte5cbHLj7BXzYRqXqKH3F5p07TbCMW5VVJH87xkt_LzSUJZ4Fu_FHpiQIJBOzcot6pLCv8_I1MblMhwC5cXlvpIRSjJCbDKtCFqjK-p2pY3xk35eIy3dR-K6WtmrtcDCXfe71LTobGOl7b8-MRbpsduYA7TDNdu2Cu3kp78yjOvzxqreBca9ORiCYAMCuNmr1vhOxIQ7-ryw8264Udy1qZA1Y-aOdslVSk1Bb6xBUaA_iOaLSXE3EJE94sS9sUkDKcNcYHGwz8FIGYW0jNQ2tw&quot;, id: &#39;more-iframe&#39;, style: &#39;bubble&#39;, bubbletype: &#39;pls-default&#39;, arrowPosition: &#39;center&#39;, anchorPosition: &#39;center&#39;, anchor: &#39;b-more&#39;, height: 122, width: 250, closeClickDetection: true, hideClickDetection: true, relayOpen: -1 }, function(iframe) { anchor.__m = iframe; } ); }); } return false;">More
+<span class="arrow"></span></a></td>
+<td class="navbar-right" align="right" nowrap="" valign="middle">
+<a class="b-link" href="https://draft.blogger.com/home#create" id="b-getorpost" tabindex="8">Create Blog</a>
+<a class="b-link" href="https://draft.blogger.com/" tabindex="9">Sign In</a></td></tr></tbody></table></div></div>
+<script type="text/javascript" async="" src="./platform_gapi.iframes.style.common.js.download" gapi_processed="true"></script><script type="text/javascript">
+        function closePopup(wnd) {
+          
+          setTimeout(function() {
+              wnd.open('', '_self', '');
+              wnd.close();
+          }, 100);
+        }
+      </script>
+<script type="text/javascript">
+          window.___gcfg = {
+            lang: "en_US",
+            parsetags: 'onload'
+          };
+          (function() {
+            var po = document.createElement('script');
+            po.type = 'text/javascript';
+            po.async = true;
+            po.src = "https://apis.google.com/js/platform:gapi.iframes.style.common.js";
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(po, s);
+          })();
+        </script></body></html>
