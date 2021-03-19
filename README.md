@@ -22,7 +22,7 @@ Most important files outlined below:
        Middlewares\ST\STM32_USB_Device_Library\Class\HID\ (HID setup, most work done here)
        Middlewares\ST\STM32_USB_Device_Library\Class\HID\usbd_hid.c (OG XBOX USB HID descriptor here, callbacks)
 
-USB_DEVICE\App\usb_desc.c (USB descriptor here (not HID), this identifies device as an XBOX controller) 
+       USB_DEVICE\App\usb_desc.c (USB descriptor here (not HID), this identifies device as an XBOX controller) 
 
        USB_Host_Shield_2_0\ (USB Host Shield libraries, exclude example folder from build, examples are for Arduino)
        Arduino_libs\Arduino.h (We have to change the millis, micros, delayMicroseconds with STM32 HAL)
