@@ -621,30 +621,31 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void ProcessKeyCodeInContext(uint8_t keyCode) {
-/*Updates the display_no
-* We could also just call display funcitons directly here, but since we have extra processing speed
-* Let's play with freeRTOS */
-  if(display_no == 0) { /* This is the status screen, show if controller or not connected */
-    if(keyCode == BACK_BTN)
-      display_no = 1;
-    else if(keyCode == FORWARD_BTN)
-      display_no = 1;
-  } else if (display_no == 1) { /* Pair Controller Screen */
-    if(keyCode == BACK_BTN)
-      display_no = 0;
-    else if(keyCode == FORWARD_BTN)
-      display_no = 0;
-    else if(keyCode == SELECT_BTN) {
-      display_no = 7;  /* Only get to the pair status screen from here */
-    }
-  } else if (display_no == 2) {
+void ProcessKeyCodeInContext(uint8_t keyCode)
+{
+	/*Updates the display_no
+	 * We could also just call display funcitons directly here, but since we have extra processing speed
+	 * Let's play with freeRTOS */
+	if (display_no == 0) { /* This is the status screen, show if controller or not connected */
+		if (keyCode == BACK_BTN)
+			display_no = 1;
+		else if (keyCode == FORWARD_BTN)
+			display_no = 1;
+	} else if (display_no == 1) { /* Pair Controller Screen */
+		if (keyCode == BACK_BTN)
+			display_no = 0;
+		else if (keyCode == FORWARD_BTN)
+			display_no = 0;
+		else if (keyCode == SELECT_BTN) {
+			display_no = 7; /* Only get to the pair status screen from here */
+		}
+	} else if (display_no == 2) {
 
-  }
+	}
 //  Serial.print("\r\nDisplay no is: ");
 //  Serial.print(display_no);
-  display_run_once = 0;
-  display_force_update = 1;
+	display_run_once = 0;
+	display_force_update = 1;
 }
 
 /* USER CODE BEGIN Header_StartControllerJoin */
@@ -680,7 +681,9 @@ void StartGetLatencies(void *argument)
 	  Serial.print(timer_val_LCD);
 #endif
 #endif
+
 #if rtos_delay_view
+	/*This does not have to do with RTOS, but good place for 1 second status updates */
 	/* Only rx_buf[3] and rx[5] have the rumble data */
 	/* dataout ran should only run for THPS 2 or if used on XBCD on a PC */
 	Serial.print("\r\nRumble Data: ");
@@ -699,12 +702,10 @@ void StartGetLatencies(void *argument)
 	Serial.print(dataout_ran);
 	Serial.print(" ");
 	Serial.print(rumble_brequest_sent);
-	Serial.print(" ");
+	Serial.print("\r\nController Idle Time: ");
 	Serial.print(button_press_idle);
 #endif
 	osDelay(1000);
-
-
   }
   /* USER CODE END StartGetLatencies */
 }
@@ -730,7 +731,6 @@ void StartGetBT(void *argument)
   gameHID.Joy_RT = 0;
   gameHID.ps4ButtonsTag.dummy = 0;
 
-
   /* Initalize our Xbox Controller data that we will send in our hid reports */
   xboxHID.startByte = 0x00;
   xboxHID.bLength = 20;
@@ -751,7 +751,6 @@ void StartGetBT(void *argument)
   /* Infinite loop */
   for(;;)
   {
-
 	    /* USER CODE END WHILE */
 
 	    /* USER CODE BEGIN 3 */
@@ -816,7 +815,7 @@ void StartGetBT(void *argument)
 			xboxHID.leftStickX = gameHID.JoyX << 8;	//only getting 8 bit value from bt
 			xboxHID.leftStickY = gameHID.JoyY << 8;	//xbox uses 16 bit signed
 			/* The Y axis by default is inverted on the Xbox */
-			xboxHID.leftStickY = -xboxHID.leftStickY-128;
+			xboxHID.leftStickY = -xboxHID.leftStickY - 128;
 
 			gameHID.Joy2X = PS4.getAnalogHat(RightHatX) - 128;
 			gameHID.Joy2Y = PS4.getAnalogHat(RightHatY) - 128;
@@ -962,6 +961,8 @@ void StartGetBT(void *argument)
 				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_START_BTN;
 			}
 
+			/*We don't want to spam the PS4 controller with rumble updates
+			 * If we do not do this, latency increases greatly */
 			new_rumble_val_L = rx_buf[3];
 			new_rumble_val_R = rx_buf[5];
 
@@ -1100,98 +1101,94 @@ void StartButtonPress(void *argument)
 * @retval None
 */
 /* USER CODE END Header_StartUpdateLCD */
-void StartUpdateLCD(void *argument)
-{
-  /* USER CODE BEGIN StartUpdateLCD */
-  /* Infinite loop */
+void StartUpdateLCD(void *argument) {
+	/* USER CODE BEGIN StartUpdateLCD */
+	/* Infinite loop */
 
-  ssd1306_Fill(Black_);
-  ssd1306_UpdateScreen();
-  for(;;)
-  {
+	ssd1306_Fill(Black_);
+	ssd1306_UpdateScreen();
+	for (;;) {
 #if rtos_delay_view
-	  	timer_val_LCD = __HAL_TIM_GET_COUNTER(&htim14);
+		timer_val_LCD = __HAL_TIM_GET_COUNTER(&htim14);
 #endif
-	if(display_run_once == 0) {
+	if (display_run_once == 0) {
 		ssd1306_Fill(Black_);
 		ssd1306_UpdateScreen();
-		switch(display_no)
-		{
-			case 0 :
-			{
-				uint8_t alternate_print = 1;
-				if(!PS4.connected()) {
-				  ssd1306_SetCursor((128-11*3)/2,0);
-				  ssd1306_WriteString("Not", Font_11x18, White_);
-				  display_force_update = 0;
-				  ssd1306_SetCursor((128-11*9)/2, 26);
-				  ssd1306_WriteString("Connected", Font_11x18, White_);
-				} else if (PS4.connected()) {
-				  ssd1306_SetCursor((128-11*9)/2, 26);
-				  ssd1306_WriteString("Connected", Font_11x18, White_);
-				  alternate_print = 0;
-				  display_run_once = 1;
-				  display_force_update = 0;
-				}
-				ssd1306_UpdateScreen();
+		switch (display_no) {
+		case 0: {
+			uint8_t alternate_print = 1;
+			if (!PS4.connected()) {
+				ssd1306_SetCursor((128 - 11 * 3) / 2, 0);
+				ssd1306_WriteString("Not", Font_11x18, White_);
+				display_force_update = 0;
+				ssd1306_SetCursor((128 - 11 * 9) / 2, 26);
+				ssd1306_WriteString("Connected", Font_11x18, White_);
+			} else if (PS4.connected()) {
+				ssd1306_SetCursor((128 - 11 * 9) / 2, 26);
+				ssd1306_WriteString("Connected", Font_11x18, White_);
+				alternate_print = 0;
+				display_run_once = 1;
+				display_force_update = 0;
+			}
+			ssd1306_UpdateScreen();
 
-				while(!PS4.connected() && display_force_update == 0) {
-					osDelay(100);
-				}
-				/* If the user presses a Button, interrupt and show next screen */
-				if(display_force_update == 1) {
-					display_force_update = 0;
-					display_run_once = 0;
-					break;
-				}
-				/*When the controller is finally paired update current screen
-				 * Only runs if the first PS4.connected() above does not run*/
-				if(PS4.connected() && alternate_print) {
-				    ssd1306_Fill(Black_);
-				    ssd1306_UpdateScreen();
-//				    ssd1306_SetCursor(25,0);
-//				    ssd1306_WriteString("Status:", Font_11x18, White_);
-					ssd1306_SetCursor((128-11*10)/2, 26);
-					ssd1306_WriteString("Connected!", Font_11x18, White_);
-				    ssd1306_UpdateScreen();
-				    display_run_once = 1;
-				}
+			while (!PS4.connected() && display_force_update == 0) {
+				osDelay(100);
+			}
+			/* If the user presses a Button, interrupt and show next screen */
+			if (display_force_update == 1) {
+				display_force_update = 0;
+				display_run_once = 0;
 				break;
 			}
-
-			case 1 :
-				display_run_once = 1;
-				display_force_update = 0;
-				ssd1306_Fill(Black_);
-				ssd1306_SetCursor((128-11*5)/2,0);
-				ssd1306_WriteString("Pair?", Font_11x18, White_);
-				ssd1306_UpdateScreen();
-				break;
-
-			case 7 :
-				display_run_once = 1;
-				display_force_update = 0;
+			/*When the controller is finally paired update current screen
+			 * Only runs if the first PS4.connected() above does not run*/
+			if (PS4.connected() && alternate_print) {
 				ssd1306_Fill(Black_);
 				ssd1306_UpdateScreen();
-				ssd1306_SetCursor((128-11*10)/2,0);
-				ssd1306_WriteString("Pairing...", Font_11x18, White_);
+//				    ssd1306_SetCursor(25,0);
+//				    ssd1306_WriteString("Status:", Font_11x18, White_);
+				ssd1306_SetCursor((128 - 11 * 10) / 2, 26);
+				ssd1306_WriteString("Connected!", Font_11x18, White_);
 				ssd1306_UpdateScreen();
-				PS4.pair();
-				while(PS4.connected() == 0) {
-				  osDelay(100);
-				}
-				ssd1306_SetCursor((128-11*10)/2,26);
-				ssd1306_WriteString("Paired!", Font_11x18, White_);
-				ssd1306_UpdateScreen();
-				break;
+				display_run_once = 1;
+			}
+			break;
+		}
+
+		case 1:
+			display_run_once = 1;
+			display_force_update = 0;
+			ssd1306_Fill(Black_);
+			ssd1306_SetCursor((128 - 11 * 5) / 2, 0);
+			ssd1306_WriteString("Pair?", Font_11x18, White_);
+			ssd1306_UpdateScreen();
+			break;
+
+		case 7:
+			display_run_once = 1;
+			display_force_update = 0;
+			ssd1306_Fill(Black_);
+			ssd1306_UpdateScreen();
+			ssd1306_SetCursor((128 - 11 * 10) / 2, 0);
+			ssd1306_WriteString("Pairing...", Font_11x18, White_);
+			ssd1306_UpdateScreen();
+			PS4.pair();
+			while (PS4.connected() == 0) {
+				osDelay(100);
+			}
+			ssd1306_SetCursor((128 - 11 * 10) / 2, 26);
+			ssd1306_WriteString("Paired!", Font_11x18, White_);
+			ssd1306_UpdateScreen();
+			break;
 		}
 	}
 #if rtos_delay_view
 		timer_val_LCD = __HAL_TIM_GET_COUNTER(&htim14) - timer_val_LCD;
 #endif
-    osDelay(100);
-  }
-  /* USER CODE END StartUpdateLCD */
+		osDelay(100);
+	}
+	/* USER CODE END StartUpdateLCD */
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)

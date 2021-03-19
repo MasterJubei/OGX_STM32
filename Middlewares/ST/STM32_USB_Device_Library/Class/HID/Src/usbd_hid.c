@@ -198,7 +198,7 @@ __ALIGN_BEGIN static uint8_t USBD_HID_CfgFSDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN
 
 #if OG_XBOX_SETUP
 /* USB HID device FS Configuration Descriptor */
-/* From OGX360 Project*/
+/* From OGX360 Project + My Duke Controller, data is slightly different than OGX360 Project*/
 __ALIGN_BEGIN static uint8_t USBD_HID_CfgFSDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN_END =
 {
 	    //Configuration Descriptor//
@@ -348,6 +348,7 @@ __ALIGN_BEGIN static uint8_t USBD_HID_OtherSpeedCfgDesc[USB_HID_CONFIG_DESC_SIZ]
 };
 #endif
 
+/*This will not be used but filled anyway since the generated code created it*/
 #if OG_XBOX_SETUP
 /* USB HID device Other Speed Configuration Descriptor */
 __ALIGN_BEGIN static uint8_t USBD_HID_OtherSpeedCfgDesc[USB_HID_CONFIG_DESC_SIZ] __ALIGN_END =
@@ -484,14 +485,6 @@ __ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __
 };
 #endif
 
-
-//#if OG_XBOX_SETUP
-///* HID Descriptor */
-//__ALIGN_BEGIN static uint8_t HID_MOUSE_ReportDesc[HID_MOUSE_REPORT_DESC_SIZE] __ALIGN_END = {
-//
-//};
-//#endif
-
 __ALIGN_BEGIN static uint8_t DUKE_HID_CAPABILITIES_IN[20] __ALIGN_END = {
 	    0x00, //Always 0x00
 	    0x14, //bLength - length of packet in bytes
@@ -527,7 +520,8 @@ __ALIGN_BEGIN static uint8_t DUKE_HID_CAPABILITIES_OUT[6] = {
   * @param  cfgidx: Configuration index
   * @retval status
   */
-
+/* We have to add the dataout/ep_out function here to get USB pipe data out
+ * This is only used with XBCD or THPS 2, every other XBOX game sends rumble through control requests */
 static uint8_t USBD_HID_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
 {
   UNUSED(cfgidx);
@@ -657,6 +651,8 @@ static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
           USBD_CtlPrepareRx (pdev, ctl_report_buf, HID_EPOUT_SIZE);
           break;
 
+          /*Commented out below, this is if you wanted to send data through a USB control request
+           * This is not needed here, but is good reference if you ever wanted to do so */
 //        case HID_REQ_GET_REPORT:
 //          flag = 1;
 //          Report_buf[0] = 0x11;
@@ -749,7 +745,9 @@ static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
           break;
       }
       break;
-    /*This is for the og xbox, this is the custom vendor request */
+    /*This is for the og XBOX, this is the custom vendor request
+     * We intercept these and return either the controller's capabilities
+     * This is equivalent to the USB HID Descriptor which would normally be used for most devices */
     case (0xC1 & USB_REQ_TYPE_MASK):
     	 hid_setup_ran++;
     	if(req->bRequest == 0x06 && req->wValue == 0x4200) {
@@ -767,11 +765,8 @@ static uint8_t USBD_HID_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *re
     		len = 6;
     		pbuf = DUKE_HID_CAPABILITIES_OUT;
     		(void)USBD_CtlSendData(pdev, pbuf, len);
-    	    //USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, (uint8_t*)(rx_buf), HID_EPOUT_SIZE);
-
     	}
     break;
-
 
     default:
       USBD_CtlError(pdev, req);
@@ -905,8 +900,8 @@ static uint8_t USBD_HID_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
 {
 	dataout_ran++;
 	//rx_buf[3]=5;
-    //HAL_PCD_EP_Receive(&hUsbDeviceFS.pData, HID_EPOUT_ADDR, (uint8_t *)rx_buf, HID_EPOUT_SIZE);
-    USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, (uint8_t*)(rx_buf), HID_EPOUT_SIZE);
+	//HAL_PCD_EP_Receive(&hUsbDeviceFS.pData, HID_EPOUT_ADDR, (uint8_t *)rx_buf, HID_EPOUT_SIZE);
+	USBD_LL_PrepareReceive(pdev, HID_EPOUT_ADDR, (uint8_t*) (rx_buf), HID_EPOUT_SIZE);
 	return USBD_OK;
 }
 
@@ -916,20 +911,20 @@ static uint8_t USBD_HID_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
   * @param  pdev: device instance
   * @retval status
   */
+/*This is to put the rumble data from the USB control requests into rx_buf so we can read that in main
+ * This is the standard way XBOX sends rumble data, this different from a PC which would send data through USB Out Pipe */
 static uint8_t USBD_HID_EP0_RxReady(USBD_HandleTypeDef *pdev)
 {
-	if(rumble_flag) {
+	if (rumble_flag) {
 		rumble_flag = 0;
-		if(USBD_HID_Report_LENGTH == HID_EPOUT_SIZE) {
-			for(uint8_t i = 0; i < HID_EPOUT_SIZE; i++) {
+		if (USBD_HID_Report_LENGTH == HID_EPOUT_SIZE) {
+			for (uint8_t i = 0; i < HID_EPOUT_SIZE; i++) {
 				rx_buf[i] = ctl_report_buf[i];
 			}
 		}
 	}
-
-  return (uint8_t)USBD_OK;
+	return (uint8_t) USBD_OK;
 }
-
 
 /**
   * @brief  USBD_CUSTOM_HID_EP0_RxReady
