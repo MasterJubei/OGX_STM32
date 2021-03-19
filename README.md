@@ -3,7 +3,7 @@
 
 **Wireless Controller Adapter for the original XBOX (2001)**
 
-Tools: STM32CubeIDE, NUCLEO-F446RE, USB Host Shield 
+Tools: STM32CubeIDE, NUCLEO-F446RE, USB Host Shield, SSD1306 OLED Screen, Generic USB BT Dongle (e.g. 1Mii USB Bluetooth 4.0)
 
        1. Use wireless controllers (e.g wireless PS4 controller) on the original XBOX using STM32 + USB Host Shield.
        2. FreeRTOS for tasks (USB, Bluetooth, display, controls, etc.)
@@ -22,12 +22,11 @@ Most important files outlined below:
 
        Core\Src\main.cpp (main.c excluded from build, need C++ support).
 
-       Middlewares\ST\STM32_USB_Device_Library\Class\HID\ (HID setup, most work done under here)
        Middlewares\ST\STM32_USB_Device_Library\Class\HID\usbd_hid.c (descriptors, callbacks, this is the most important file)
 
        USB_DEVICE\App\usb_desc.c (USB descriptor here (not HID), this identifies device as an XBOX controller) 
 
-       USB_Host_Shield_2_0\ (USB Host Shield libraries, exclude example folder from build, examples are for Arduino)
+       USB_Host_Shield_2_0\ (USB Host Shield libraries, examples excluded from build as they are for Arduino)
        Arduino_libs\Arduino.h (We have to change the millis, micros, delayMicroseconds with STM32 HAL)
        
 Connecting the setup:
