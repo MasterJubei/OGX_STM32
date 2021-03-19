@@ -22,10 +22,54 @@ Most important files outlined below:
 
        Core\Src\main.cpp (main.c excluded from build, need C++ support).
 
-       Middlewares\ST\STM32_USB_Device_Library\Class\HID\ (HID setup, most work done here)
-       Middlewares\ST\STM32_USB_Device_Library\Class\HID\usbd_hid.c (OG XBOX USB HID descriptor here, callbacks)
+       Middlewares\ST\STM32_USB_Device_Library\Class\HID\ (HID setup, most work done under here)
+       Middlewares\ST\STM32_USB_Device_Library\Class\HID\usbd_hid.c (descriptors, callbacks, this is the most important file)
 
        USB_DEVICE\App\usb_desc.c (USB descriptor here (not HID), this identifies device as an XBOX controller) 
 
        USB_Host_Shield_2_0\ (USB Host Shield libraries, exclude example folder from build, examples are for Arduino)
        Arduino_libs\Arduino.h (We have to change the millis, micros, delayMicroseconds with STM32 HAL)
+       
+Connecting the setup:
+       OLED Screen is a SSD1306
+       The first image made in fritzing shows a V1 USB Host Shield Board, most will have a V2.
+       Second image shows a v2 board connected.
+       The USB Host Shield V2 uses the ICSP connector for SPI communication.
+       To connect the USB Host Shield V2 to the Nucleo board:
+       
+       
+Nucleo | USB_Host_shield
+-- | --
+D10 | SS
+D9 | INT
+  |  
+D11 | ICSP MOSI
+D12 | ICSP MISO
+D13 | ICSP SCK
+not connected | ICSP VCC
+3.3V | ICSP RST
+  |  
+5v | 5V input under reset button
+3.3V | 3.3V input under reset button
+
+Reference image of ICSP:
+
+![d593600bb7b1cd07e141c122db083c03](https://user-images.githubusercontent.com/8354691/108958528-f750c580-7627-11eb-8029-66873d097963.jpg)
+
+       
+Special Thanks to:
+
+USB Host Shield team, especially Lauszus and bobbatcomcastdotnet for helping with USB Host Shield Connections.
+
+OGX360 team 
+
+
+Useful Resources:
+
+USB Host Shield on STM32: https://github.com/Lauszus/Nucleo_F446RE_USBHost
+
+Getting started with USB HID on STM32: https://notes.iopush.net/blog/2016/stm32-custom-usb-hid-step-by-step-2/
+
+XBOX HID Custom Vendor Requests: https://github.com/Ryzee119/ogx360/blob/master/Firmware/src/xiddevice.c#L122-#L200
+
+Getting data from USB Control Requests: https://iamjustinwang.blogspot.com/2016/07/stm32f401411-usb-device-hid-testcontrol.html
