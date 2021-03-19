@@ -31,9 +31,13 @@ Most important files outlined below:
        
 Connecting the setup:
        OLED Screen is a SSD1306
+       
        The first image made in fritzing shows a V1 USB Host Shield Board, most will have a V2.
+       
        Second image shows a v2 board connected.
+       
        The USB Host Shield V2 uses the ICSP connector for SPI communication.
+       
        To connect the USB Host Shield V2 to the Nucleo board:
        
        
@@ -55,7 +59,14 @@ Reference image of ICSP:
 
 ![d593600bb7b1cd07e141c122db083c03](https://user-images.githubusercontent.com/8354691/108958528-f750c580-7627-11eb-8029-66873d097963.jpg)
 
+Building the Project:
+
+       Open the project with STM32CubeIDE.
        
+       Should be able to build right away.
+       
+
+
 Special Thanks to:
 
 USB Host Shield team, especially Lauszus and bobbatcomcastdotnet for helping with USB Host Shield Connections.
