@@ -11,6 +11,7 @@ Tools: STM32CubeIDE, NUCLEO-F446RE, USB Host Shield
 Primary Layout + Files: 
 1. This project uses two USB libraries.
 A. It uses the USB Host Shield for communicating via BT to the wireless controller.
+
 B. It uses the ST USB Middleware libraries to communicate with the XBOX. Unfortunately, the ST library is quite barebones, so we must implement a lot of the USB functionality ourselves. ST’s libraries are documented here. 
 
 Most important files outlined below:
