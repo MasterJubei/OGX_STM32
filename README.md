@@ -5,11 +5,12 @@
 
 Tools: STM32CubeIDE, NUCLEO-F446RE, USB Host Shield, SSD1306 OLED Screen, Generic USB BT Dongle (e.g. 1Mii USB Bluetooth 4.0)
 
-       1. Use wireless controllers (e.g wireless PS4 controller) on the original XBOX using STM32 + USB Host Shield.
-       2. FreeRTOS for tasks (USB, Bluetooth, display, controls, etc.)
-       3. Successfully implemented custom XBOX USB vendor requests.
-       4. Much faster hardware than the OGX360.
-       5. USB Host Shield Libraries mostly stock, easy to add new controllers.
+       1. Use wireless controllers (e.g wireless PS4 controller) on the original XBOX using STM32 + USB Host Shield. (Wireless PS4 is the only controller supported atm)
+       2. FreeRTOS for tasks (USB, Bluetooth, display, controls, etc.) 
+       3. Very low input lag.
+       4. Rumble Support works, even in THPS 2.
+       5. Much faster hardware than the OGX360.
+       6. USB Host Shield Libraries mostly stock, easy to add new controllers.
 
 
 **This project uses two USB libraries.**
@@ -65,11 +66,14 @@ Building the Project:
        
        Should be able to build right away.
        
+       Be careful about changing the configuration with CubeMX. It will destroy the changes made to the USB files. Use gitkraken/source tree to restore those.
+       
 
 
 Special Thanks to:
 
 USB Host Shield team, especially Lauszus and bobbatcomcastdotnet for helping with USB Host Shield Connections.
+https://github.com/felis/USB_Host_Shield_2.0/issues/605
 
 OGX360 team 
 
