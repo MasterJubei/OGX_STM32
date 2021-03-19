@@ -31,6 +31,7 @@ Most important files outlined below:
        Arduino_libs\Arduino.h (We have to change the millis, micros, delayMicroseconds with STM32 HAL)
        
 Connecting the setup:
+
        OLED Screen is a SSD1306
        
        The first image made in fritzing shows a V1 USB Host Shield Board, most will have a V2.
@@ -66,7 +67,7 @@ Building the Project:
        
        Should be able to build right away.
        
-       Be careful about changing the configuration with CubeMX. It will destroy the changes made to the USB files. Use gitkraken/source tree to restore those.
+       Be careful about changing the configuration with CubeMX. It will destroy the changes made to the USB files. Use gitkraken/sourcetree to restore those.
        
 
 
