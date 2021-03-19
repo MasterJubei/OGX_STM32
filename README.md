@@ -1,3 +1,6 @@
+![fritzing_sketch_bb](https://user-images.githubusercontent.com/8354691/111726589-7b146100-8826-11eb-99d7-6f830656344b.png)
+![IMG_20210315_002914](https://user-images.githubusercontent.com/8354691/111726613-84053280-8826-11eb-8790-67b465b992d5.jpg)
+
 **Wireless Controller Adapter for the original XBOX (2001)**
 
 Tools: STM32CubeIDE, NUCLEO-F446RE, USB Host Shield 
