@@ -1,21 +1,21 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
+ * All rights reserved.</center></h2>
+ *
+ * This software component is licensed by ST under BSD 3-Clause license,
+ * the "License"; You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at:
+ *                        opensource.org/licenses/BSD-3-Clause
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -28,7 +28,6 @@
 #include "usbd_hid.h" 	//st library
 #include "ssd1306.h"		//oled screen library
 #include <stdbool.h>		//oled library uses bool
-
 
 /* USER CODE END Includes */
 
@@ -64,45 +63,45 @@ TIM_HandleTypeDef htim14;
 /* Definitions for getBT */
 osThreadId_t getBTHandle;
 const osThreadAttr_t getBT_attributes = {
-  .name = "getBT",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
+    .name = "getBT",
+    .stack_size = 128 * 4,
+    .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for sendUSB */
 osThreadId_t sendUSBHandle;
 const osThreadAttr_t sendUSB_attributes = {
-  .name = "sendUSB",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+    .name = "sendUSB",
+    .stack_size = 128 * 4,
+    .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for controllerJoin */
 osThreadId_t controllerJoinHandle;
 const osThreadAttr_t controllerJoin_attributes = {
-  .name = "controllerJoin",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow4,
+    .name = "controllerJoin",
+    .stack_size = 128 * 4,
+    .priority = (osPriority_t) osPriorityLow4,
 };
 /* Definitions for buttonPress */
 osThreadId_t buttonPressHandle;
 const osThreadAttr_t buttonPress_attributes = {
-  .name = "buttonPress",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow4,
+    .name = "buttonPress",
+    .stack_size = 128 * 4,
+    .priority = (osPriority_t) osPriorityLow4,
 };
 /* Definitions for updateLCD */
 osThreadId_t updateLCDHandle;
 const osThreadAttr_t updateLCD_attributes = {
-  .name = "updateLCD",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow4,
+    .name = "updateLCD",
+    .stack_size = 128 * 4,
+    .priority = (osPriority_t) osPriorityLow4,
 };
 
 /* USER CODE BEGIN PV */
 osThreadId_t getLatencies;
 const osThreadAttr_t getLatencies_attributes = {
-  .name = "getLatencies",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow4,
+    .name = "getLatencies",
+    .stack_size = 128 * 4,
+    .priority = (osPriority_t) osPriorityLow4,
 };
 
 /* USER CODE END PV */
@@ -128,9 +127,7 @@ void StartGetLatencies(void *argument);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 //#define PC_SETUP 1
-
 /* Digital Button Masks */
-
 
 SPI_HandleTypeDef SPI_Handle;
 UART_HandleTypeDef UART_Handle;
@@ -140,33 +137,31 @@ USB Usb;
 BTD Btd(&Usb);
 PS4BT PS4(&Btd);
 //PS4BT PS4(&Btd, PAIR);
-static bool printAngle, printTouch;
-static uint8_t oldL2Value, oldR2Value;
 static bool buttonPressed;
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
-uint8_t rumble_once = 0;
-uint8_t ps4_connected = 0;
+static uint8_t rumble_once = 0;
+static uint8_t ps4_connected = 0;
 
 typedef struct ps4ButtonsTag
 {
- uint8_t dummy:1;
- uint8_t button_ps:1;
- uint8_t button_start:1;
- uint8_t button_share:1;
- uint8_t button_right_trigger:1;
- uint8_t button_left_trigger:1;
- uint8_t button_cross:1;
- uint8_t button_circle:1;
+  uint8_t dummy :1;
+  uint8_t button_ps :1;
+  uint8_t button_start :1;
+  uint8_t button_share :1;
+  uint8_t button_right_trigger :1;
+  uint8_t button_left_trigger :1;
+  uint8_t button_cross :1;
+  uint8_t button_circle :1;
 
- uint8_t button_triangle:1;
- uint8_t button_square:1;
- uint8_t button_dpad_up:1;
- uint8_t button_dpad_right:1;
- uint8_t button_dpad_left:1;
- uint8_t button_dpad_down:1;
- uint8_t button_left_thumb:1;
- uint8_t button_right_thumb:1;
+  uint8_t button_triangle :1;
+  uint8_t button_square :1;
+  uint8_t button_dpad_up :1;
+  uint8_t button_dpad_right :1;
+  uint8_t button_dpad_left :1;
+  uint8_t button_dpad_down :1;
+  uint8_t button_left_thumb :1;
+  uint8_t button_right_thumb :1;
 
 } PS4_CC_BUTTONS;
 
@@ -174,28 +169,28 @@ typedef struct ps4ButtonsTag
 
 struct gameHID_t
 {
-	int8_t Joy_LT;
-	int8_t Joy_RT;
-	int8_t JoyX; 	// X 1 byte, signed value
-	int8_t JoyY; 	// Y 1 byte, signed value
-	int8_t Joy2X;
-	int8_t Joy2Y;
-	PS4_CC_BUTTONS ps4ButtonsTag;
+  int8_t Joy_LT;
+  int8_t Joy_RT;
+  int8_t JoyX; 	// X 1 byte, signed value
+  int8_t JoyY; 	// Y 1 byte, signed value
+  int8_t Joy2X;
+  int8_t Joy2Y;
+  PS4_CC_BUTTONS ps4ButtonsTag;
 };
 
 /*Used temporarily for adjusting contorller offsets*/
-uint8_t LeftHatX_val;
-uint8_t LeftHatY_val;
-uint8_t RightHatX_val;
-uint8_t RightHatY_val;
+static uint8_t LeftHatX_val;
+static uint8_t LeftHatY_val;
+static uint8_t RightHatX_val;
+static uint8_t RightHatY_val;
 
 /* Used for verifying CPU HCLK and Timer Functionality */
-uint32_t cpu_freq = 0;
-uint16_t timer_val = 0 ;
-uint32_t hal_gettick = 0;
+static uint32_t cpu_freq = 0;
+static uint16_t timer_val = 0;
+static uint32_t hal_gettick = 0;
 
 /* Display Controls */
-uint8_t display_no = 0;
+static uint8_t display_no = 0;
 
 /*Deadzone control */
 #define deadzone_enable 0
@@ -212,39 +207,39 @@ uint8_t display_no = 0;
 #define SELECT_BTN 5
 #define FORWARD_BTN 6
 
-uint8_t keyCode = NO_BUTTON_PRESSED;
-uint8_t buttonDebounced = 0;
-uint8_t buttonProcessed = 0;
-uint8_t display_force_update = 0;
+static uint8_t keyCode = NO_BUTTON_PRESSED;
+static uint8_t buttonDebounced = 0;
+static uint8_t buttonProcessed = 0;
+static uint8_t display_force_update = 0;
 
 /* Display Settings */
-uint8_t display_run_once = 0; //Used to update the screen
+static uint8_t display_run_once = 0; //Used to update the screen
 
 /* Debugging for freeRTOS */
 #define rtos_delay_view 1 // Measure the delay of tasks
-						  //Set to 2 for verbose
-uint16_t timer_val_getBT = 0 ;
-uint16_t timer_val_getUSB = 0 ;
-uint16_t timer_val_LCD = 0 ;
+//Set to 2 for verbose
+static uint16_t timer_val_getBT = 0;
+static uint16_t timer_val_getUSB = 0;
+static uint16_t timer_val_LCD = 0;
 /* Thanks to the OGX360 Project for the Byte Order */
 struct xboxHID_t
 {
-    uint8_t startByte;
-    uint8_t bLength;
-    uint8_t dButtons;
-    uint8_t reserved;
-    uint8_t A;
-    uint8_t B;
-    uint8_t X;
-    uint8_t Y;
-    uint8_t BLACK;
-    uint8_t WHITE;
-    uint8_t L;
-    uint8_t R;
-    int16_t leftStickX;
-    int16_t leftStickY;
-    int16_t rightStickX;
-    int16_t rightStickY;
+  uint8_t startByte;
+  uint8_t bLength;
+  uint8_t dButtons;
+  uint8_t reserved;
+  uint8_t A;
+  uint8_t B;
+  uint8_t X;
+  uint8_t Y;
+  uint8_t BLACK;
+  uint8_t WHITE;
+  uint8_t L;
+  uint8_t R;
+  int16_t leftStickX;
+  int16_t leftStickY;
+  int16_t rightStickX;
+  int16_t rightStickY;
 };
 
 struct gameHID_t gameHID;
@@ -257,21 +252,21 @@ extern uint8_t entered_xid_req;
 extern uint8_t dataout_ran;
 extern uint8_t rumble_brequest_sent;
 
-uint8_t old_rumble_val_L = 0;
-uint8_t old_rumble_val_R = 0;
-uint8_t new_rumble_val_L = 0;
-uint8_t new_rumble_val_R = 0;
+static uint8_t old_rumble_val_L = 0;
+static uint8_t old_rumble_val_R = 0;
+static uint8_t new_rumble_val_L = 0;
+static uint8_t new_rumble_val_R = 0;
 
-uint32_t button_press_idle = 0;
+static uint32_t button_press_idle = 0;
 
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
-{
+    {
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -311,19 +306,19 @@ int main(void)
   /* Verify our CPU Frequency
    * We should get a 500ms delay here */
   Serial.print(F("\r\nCPU Frequency is: "));
-  cpu_freq = HAL_RCC_GetHCLKFreq()/1000000;
-  Serial.print((int)cpu_freq);
+  cpu_freq = HAL_RCC_GetHCLKFreq() / 1000000;
+  Serial.print((int) cpu_freq);
   Serial.print("MHz");
   Serial.print("\r\nStart");
   timer_val = __HAL_TIM_GET_COUNTER(&htim14);
   HAL_Delay(500);
   timer_val = __HAL_TIM_GET_COUNTER(&htim14) - timer_val;
   Serial.print("\r\nTime Elapsed is: ");
-  Serial.print((int)timer_val/10);
+  Serial.print((int) timer_val / 10);
   Serial.print(" ms");
 //  hal_gettick = HAL_GetTick();
 //  hal_gettick/1000;
-  Serial.print((int)hal_gettick);
+  Serial.print((int) hal_gettick);
 
   /* USER CODE END 2 */
   /* Init scheduler */
@@ -386,22 +381,22 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
-{
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+    {
+  RCC_OscInitTypeDef RCC_OscInitStruct = { 0 };
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = { 0 };
+  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = { 0 };
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+   * in the RCC_OscInitTypeDef structure.
+   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -412,37 +407,37 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLQ = 7;
   RCC_OscInitStruct.PLL.PLLR = 2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
+      {
     Error_Handler();
   }
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
+      | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
-  {
+      {
     Error_Handler();
   }
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_CLK48;
   PeriphClkInitStruct.Clk48ClockSelection = RCC_CLK48CLKSOURCE_PLLQ;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
-  {
+      {
     Error_Handler();
   }
 }
 
 /**
-  * @brief TIM14 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief TIM14 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_TIM14_Init(void)
-{
+    {
 
   /* USER CODE BEGIN TIM14_Init 0 */
 
@@ -452,13 +447,13 @@ static void MX_TIM14_Init(void)
 
   /* USER CODE END TIM14_Init 1 */
   htim14.Instance = TIM14;
-  htim14.Init.Prescaler = (168/2)*100 -1;
+  htim14.Init.Prescaler = (168 / 2) * 100 - 1;
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim14.Init.Period = 10000-1;
+  htim14.Init.Period = 10000 - 1;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim14) != HAL_OK)
-  {
+      {
     Error_Handler();
   }
   /* USER CODE BEGIN TIM14_Init 2 */
@@ -467,12 +462,12 @@ static void MX_TIM14_Init(void)
 
 }
 /**
-  * @brief I2C1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_I2C1_Init(void)
-{
+    {
 
   /* USER CODE BEGIN I2C1_Init 0 */
 
@@ -491,7 +486,7 @@ static void MX_I2C1_Init(void)
   hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
   hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
   if (HAL_I2C_Init(&hi2c1) != HAL_OK)
-  {
+      {
     Error_Handler();
   }
   /* USER CODE BEGIN I2C1_Init 2 */
@@ -501,12 +496,12 @@ static void MX_I2C1_Init(void)
 }
 
 /**
-  * @brief SPI1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief SPI1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_SPI1_Init(void)
-{
+    {
 
   /* USER CODE BEGIN SPI1_Init 0 */
 
@@ -529,7 +524,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
   hspi1.Init.CRCPolynomial = 10;
   if (HAL_SPI_Init(&hspi1) != HAL_OK)
-  {
+      {
     Error_Handler();
   }
   /* USER CODE BEGIN SPI1_Init 2 */
@@ -539,12 +534,12 @@ static void MX_SPI1_Init(void)
 }
 
 /**
-  * @brief USART2 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief USART2 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_USART2_UART_Init(void)
-{
+    {
 
   /* USER CODE BEGIN USART2_Init 0 */
 
@@ -562,7 +557,7 @@ static void MX_USART2_UART_Init(void)
   huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
   if (HAL_UART_Init(&huart2) != HAL_OK)
-  {
+      {
     Error_Handler();
   }
   /* USER CODE BEGIN USART2_Init 2 */
@@ -572,13 +567,13 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief GPIO Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_GPIO_Init(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
+    {
+  GPIO_InitTypeDef GPIO_InitStruct = { 0 };
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
@@ -613,54 +608,54 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 void ProcessKeyCodeInContext(uint8_t keyCode)
-{
-	/*Updates the display_no
-	 * We could also just call display funcitons directly here, but since we have extra processing speed
-	 * Let's play with freeRTOS */
-	if (display_no == 0) { /* This is the status screen, show if controller or not connected */
-		if (keyCode == BACK_BTN)
-			display_no = 1;
-		else if (keyCode == FORWARD_BTN)
-			display_no = 1;
-	} else if (display_no == 1) { /* Pair Controller Screen */
-		if (keyCode == BACK_BTN)
-			display_no = 0;
-		else if (keyCode == FORWARD_BTN)
-			display_no = 0;
-		else if (keyCode == SELECT_BTN) {
-			display_no = 7; /* Only get to the pair status screen from here */
-		}
-	} else if (display_no == 2) {
+    {
+  /*Updates the display_no
+   * We could also just call display funcitons directly here, but since we have extra processing speed
+   * Let's play with freeRTOS */
+  if (display_no == 0) { /* This is the status screen, show if controller or not connected */
+    if (keyCode == BACK_BTN)
+      display_no = 1;
+    else if (keyCode == FORWARD_BTN)
+      display_no = 1;
+  } else if (display_no == 1) { /* Pair Controller Screen */
+    if (keyCode == BACK_BTN)
+      display_no = 0;
+    else if (keyCode == FORWARD_BTN)
+      display_no = 0;
+    else if (keyCode == SELECT_BTN) {
+      display_no = 7; /* Only get to the pair status screen from here */
+    }
+  } else if (display_no == 2) {
 
-	}
+  }
 //  Serial.print("\r\nDisplay no is: ");
 //  Serial.print(display_no);
-	display_run_once = 0;
-	display_force_update = 1;
+  display_run_once = 0;
+  display_force_update = 1;
 }
 
 /* USER CODE BEGIN Header_StartControllerJoin */
 /**
-* @brief Function implementing the controllerJoin thread.
-* @param argument: Not used
-* @retval None
-*/
+ * @brief Function implementing the controllerJoin thread.
+ * @param argument: Not used
+ * @retval None
+ */
 /* USER CODE END Header_StartControllerJoin */
 void StartGetLatencies(void *argument)
-{
+    {
   /* USER CODE BEGIN StartGetLatencies */
   /* Infinite loop */
-  for(;;)
-  {
+  for (;;)
+      {
 #if rtos_delay_view //this is just used to measure the delay of StartGetBT task
-	  if(timer_val_getBT >= 7) {
-		  Serial.print("\r\nWarning High CPU/BT Latency, getBT latency is: ");
-		  Serial.print(timer_val_getBT);
-	  }
-	  if(timer_val_getUSB >= 4) {
-		  Serial.print("\r\nWarning High CPU/USB Latency, getUSB latency is: ");
-		  Serial.print(timer_val_getUSB);
-	  }
+    if (timer_val_getBT >= 7) {
+      Serial.print("\r\nWarning High CPU/BT Latency, getBT latency is: ");
+      Serial.print(timer_val_getBT);
+    }
+    if (timer_val_getUSB >= 4) {
+      Serial.print("\r\nWarning High CPU/USB Latency, getUSB latency is: ");
+      Serial.print(timer_val_getUSB);
+    }
 #if rtos_delay_view == 2
 	  Serial.print("\r\ngetBT execution time is: ");
 	  Serial.print(timer_val_getBT);
@@ -674,42 +669,43 @@ void StartGetLatencies(void *argument)
 #endif
 
 #if rtos_delay_view
-	/*This does not have to do with RTOS, but good place for 1 second status updates */
-	/* Only rx_buf[3] and rx[5] have the rumble data */
-	/* dataout ran should only run for THPS 2 or if used on XBCD on a PC */
-	Serial.print("\r\nRumble Data: ");
+    /*This does not have to do with RTOS, but good place for 1 second status updates */
+    /* Only rx_buf[3] and rx[5] have the rumble data */
+    /* dataout ran should only run for THPS 2 or if used on XBCD on a PC */
+    Serial.print("\r\nRumble Data: ");
 //	Serial.print(rx_buf[0]);
 //	Serial.print(" ");
 //	Serial.print(rx_buf[1]);
 //	Serial.print(" ");
 //	Serial.print(rx_buf[2]);
 //	Serial.print(" ");
-	Serial.print(rx_buf[3]);
-	Serial.print(" ");
+    Serial.print(rx_buf[3]);
+    Serial.print(" ");
 //	Serial.print(rx_buf[4]);
 //	Serial.print(" ");
-	Serial.print(rx_buf[5]);
-	Serial.print("   ");
-	Serial.print(dataout_ran);
-	Serial.print(" ");
-	Serial.print(rumble_brequest_sent);
-	Serial.print("\r\nController Idle Time: ");
-	Serial.print(button_press_idle);
+    Serial.print(rx_buf[5]);
+    Serial.print("   ");
+    Serial.print(dataout_ran);
+    Serial.print(" ");
+    Serial.print(rumble_brequest_sent);
+    Serial.print("\r\nController Idle Time: ");
+    Serial.print(button_press_idle);
 #endif
-	osDelay(1000);
+    osDelay(1000);
   }
   /* USER CODE END StartGetLatencies */
 }
 /* USER CODE END 4 */
 
 void StartGetBT(void *argument)
-{
+    {
   /* init code for USB_DEVICE */
 
   /* USER CODE BEGIN 5 */
   if (Usb.Init() == -1) {
-  		Serial.print(F("\r\nOSC did not start"));
-  		while (1); // Halt
+    Serial.print(F("\r\nOSC did not start"));
+    while (1)
+      ; // Halt
   }
   Serial.print(F("\r\nPS4 Bluetooth Library Started"));
 
@@ -740,11 +736,11 @@ void StartGetBT(void *argument)
   xboxHID.rightStickY = 0;
   //ssd1306_TestAll();
   /* Infinite loop */
-  for(;;)
-  {
-	    /* USER CODE END WHILE */
+  for (;;)
+      {
+    /* USER CODE END WHILE */
 
-	    /* USER CODE BEGIN 3 */
+    /* USER CODE BEGIN 3 */
 //	    if(entered_xid_req) {
 //		    Serial.print("\r\nEntered xid req");
 //	    }
@@ -760,15 +756,15 @@ void StartGetBT(void *argument)
 //			Serial.print("\r\nUSBd failed");
 //		}
 #if rtos_delay_view
-	  	timer_val_getBT = __HAL_TIM_GET_COUNTER(&htim14);
+    timer_val_getBT = __HAL_TIM_GET_COUNTER(&htim14);
 #endif
-		Usb.Task();
-		if (PS4.connected()) {
-			ps4_connected = 1;
-			LeftHatX_val = PS4.getAnalogHat(LeftHatX);
-			LeftHatY_val = PS4.getAnalogHat(LeftHatY);
-			RightHatX_val = PS4.getAnalogHat(RightHatX);
-			RightHatY_val = PS4.getAnalogHat(RightHatY);
+    Usb.Task();
+    if (PS4.connected()) {
+      ps4_connected = 1;
+      LeftHatX_val = PS4.getAnalogHat(LeftHatX);
+      LeftHatY_val = PS4.getAnalogHat(LeftHatY);
+      RightHatX_val = PS4.getAnalogHat(RightHatX);
+      RightHatY_val = PS4.getAnalogHat(RightHatY);
 #if deadzone_enable
 			/* Let's have a builtin deadzone */
 			if (LeftHatX_val > 137 || LeftHatX_val < 117 || LeftHatY_val > 137 || LeftHatY_val < 117) {// || RightHatX_val > 137 || RightHatX_val < 117 || RightHatY_val > 137 || RightHatY_val < 117) {
@@ -801,185 +797,186 @@ void StartGetBT(void *argument)
 				xboxHID.rightStickY = 0;
 			}
 #elif !deadzone_enable
-			gameHID.JoyX = PS4.getAnalogHat(LeftHatX) - 128;
-			gameHID.JoyY = PS4.getAnalogHat(LeftHatY) - 128;
-			xboxHID.leftStickX = gameHID.JoyX << 8;	//only getting 8 bit value from bt
-			xboxHID.leftStickY = gameHID.JoyY << 8;	//xbox uses 16 bit signed
-			/* The Y axis by default is inverted on the Xbox */
-			xboxHID.leftStickY = -xboxHID.leftStickY - 128;
+      gameHID.JoyX = PS4.getAnalogHat(LeftHatX) - 128;
+      gameHID.JoyY = PS4.getAnalogHat(LeftHatY) - 128;
+      xboxHID.leftStickX = gameHID.JoyX << 8;	//only getting 8 bit value from bt
+      xboxHID.leftStickY = gameHID.JoyY << 8;	//xbox uses 16 bit signed
+      /* The Y axis by default is inverted on the Xbox */
+      xboxHID.leftStickY = -xboxHID.leftStickY - 128;
 
-			gameHID.Joy2X = PS4.getAnalogHat(RightHatX) - 128;
-			gameHID.Joy2Y = PS4.getAnalogHat(RightHatY) - 128;
-			xboxHID.rightStickX = gameHID.Joy2X << 8;
-			xboxHID.rightStickY = gameHID.Joy2Y << 8;
+      gameHID.Joy2X = PS4.getAnalogHat(RightHatX) - 128;
+      gameHID.Joy2Y = PS4.getAnalogHat(RightHatY) - 128;
+      xboxHID.rightStickX = gameHID.Joy2X << 8;
+      xboxHID.rightStickY = gameHID.Joy2Y << 8;
 
-			/* The Y axis by default is inverted on the Xbox */
-			xboxHID.rightStickY = -xboxHID.rightStickY - 128;
+      /* The Y axis by default is inverted on the Xbox */
+      xboxHID.rightStickY = -xboxHID.rightStickY - 128;
 #endif
-			xboxHID.L = PS4.getAnalogButton(L2);
-			xboxHID.R = PS4.getAnalogButton(R2);
-			gameHID.Joy_LT = xboxHID.L - 128;
-			gameHID.Joy_RT = xboxHID.R - 128;
+      xboxHID.L = PS4.getAnalogButton(L2);
+      xboxHID.R = PS4.getAnalogButton(R2);
+      gameHID.Joy_LT = xboxHID.L - 128;
+      gameHID.Joy_RT = xboxHID.R - 128;
 
-			if (PS4.getButtonClick(PS)) {
-				PS4.disconnect();
-				display_run_once = 0;
-				rumble_once = 0;
-        
-			}
-			if (PS4.getButtonPress(TRIANGLE)) {
-				gameHID.ps4ButtonsTag.button_triangle = 1;
-				xboxHID.Y = 0xFF;
-				button_press_idle = 0;
-			} else {
-				gameHID.ps4ButtonsTag.button_triangle = 0;
-				xboxHID.Y = 0;
-			}
+      if (PS4.getButtonClick(PS)) {
+        PS4.disconnect();
+        display_run_once = 0;
+        rumble_once = 0;
+      }
 
-			if (PS4.getButtonPress(CIRCLE)) {
-				gameHID.ps4ButtonsTag.button_circle = 1;
-				xboxHID.B = 0xFF;
-				button_press_idle = 0;
-			} else {
-				gameHID.ps4ButtonsTag.button_circle = 0;
-				xboxHID.B = 0;
-			}
+      if (PS4.getButtonPress(TRIANGLE)) {
+        gameHID.ps4ButtonsTag.button_triangle = 1;
+        xboxHID.Y = 0xFF;
+        button_press_idle = 0;
+      } else {
+        gameHID.ps4ButtonsTag.button_triangle = 0;
+        xboxHID.Y = 0;
+      }
 
-			if (PS4.getButtonPress(CROSS)) {
-				gameHID.ps4ButtonsTag.button_cross = 1;
-				xboxHID.A = 0xFF;
-				button_press_idle = 0;
-			} else {
-				gameHID.ps4ButtonsTag.button_cross = 0;
-				xboxHID.A = 0;
-			}
+      if (PS4.getButtonPress(CIRCLE)) {
+        gameHID.ps4ButtonsTag.button_circle = 1;
+        xboxHID.B = 0xFF;
+        button_press_idle = 0;
+      } else {
+        gameHID.ps4ButtonsTag.button_circle = 0;
+        xboxHID.B = 0;
+      }
 
-			if (PS4.getButtonPress(SQUARE)) {
-				gameHID.ps4ButtonsTag.button_square = 1;
-				xboxHID.X = 0xFF;
-				button_press_idle = 0;
-			} else {
-				gameHID.ps4ButtonsTag.button_square = 0;
-				xboxHID.X = 0;
-			}
+      if (PS4.getButtonPress(CROSS)) {
+        gameHID.ps4ButtonsTag.button_cross = 1;
+        xboxHID.A = 0xFF;
+        button_press_idle = 0;
+      } else {
+        gameHID.ps4ButtonsTag.button_cross = 0;
+        xboxHID.A = 0;
+      }
 
-			if (PS4.getButtonPress(UP)) {
-				gameHID.ps4ButtonsTag.button_dpad_up = 1;
-				xboxHID.dButtons |= XBOX_DUP;
-			} else {
-				gameHID.ps4ButtonsTag.button_dpad_up = 0;
-				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DUP;
-			}
+      if (PS4.getButtonPress(SQUARE)) {
+        gameHID.ps4ButtonsTag.button_square = 1;
+        xboxHID.X = 0xFF;
+        button_press_idle = 0;
+      } else {
+        gameHID.ps4ButtonsTag.button_square = 0;
+        xboxHID.X = 0;
+      }
 
-			if (PS4.getButtonPress(RIGHT)) {
-				gameHID.ps4ButtonsTag.button_dpad_right = 1;
-				xboxHID.dButtons |= XBOX_DRIGHT;
-			} else {
-				gameHID.ps4ButtonsTag.button_dpad_right = 0;
-				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DRIGHT;
-			}
+      if (PS4.getButtonPress(UP)) {
+        gameHID.ps4ButtonsTag.button_dpad_up = 1;
+        xboxHID.dButtons |= XBOX_DUP;
+      } else {
+        gameHID.ps4ButtonsTag.button_dpad_up = 0;
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DUP;
+      }
 
-			if (PS4.getButtonPress(DOWN)) {
-				gameHID.ps4ButtonsTag.button_dpad_down = 1;
-				xboxHID.dButtons |= XBOX_DDOWN;
-			} else {
-				gameHID.ps4ButtonsTag.button_dpad_down = 0;
-				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DDOWN;
-			}
+      if (PS4.getButtonPress(RIGHT)) {
+        gameHID.ps4ButtonsTag.button_dpad_right = 1;
+        xboxHID.dButtons |= XBOX_DRIGHT;
+      } else {
+        gameHID.ps4ButtonsTag.button_dpad_right = 0;
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DRIGHT;
+      }
 
-			if (PS4.getButtonPress(LEFT)) {
-				gameHID.ps4ButtonsTag.button_dpad_left = 1;
-				xboxHID.dButtons |= XBOX_DLEFT;
+      if (PS4.getButtonPress(DOWN)) {
+        gameHID.ps4ButtonsTag.button_dpad_down = 1;
+        xboxHID.dButtons |= XBOX_DDOWN;
+      } else {
+        gameHID.ps4ButtonsTag.button_dpad_down = 0;
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DDOWN;
+      }
 
-			} else {
-				gameHID.ps4ButtonsTag.button_dpad_left = 0;
-				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DLEFT;
-			}
+      if (PS4.getButtonPress(LEFT)) {
+        gameHID.ps4ButtonsTag.button_dpad_left = 1;
+        xboxHID.dButtons |= XBOX_DLEFT;
 
-			if (PS4.getButtonPress(L1)) {
-				gameHID.ps4ButtonsTag.button_left_trigger = 1;
-				xboxHID.WHITE = 0xFF;
-				button_press_idle = 0;
+      } else {
+        gameHID.ps4ButtonsTag.button_dpad_left = 0;
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DLEFT;
+      }
 
-			} else {
-				gameHID.ps4ButtonsTag.button_left_trigger = 0;
-				xboxHID.WHITE = 0;
-			}
+      if (PS4.getButtonPress(L1)) {
+        gameHID.ps4ButtonsTag.button_left_trigger = 1;
+        xboxHID.WHITE = 0xFF;
+        button_press_idle = 0;
 
-			if (PS4.getButtonPress(L3)) {
-				gameHID.ps4ButtonsTag.button_left_thumb = 1;
-				xboxHID.dButtons |= XBOX_LS_BTN;
-				button_press_idle = 0;
-			} else {
-				gameHID.ps4ButtonsTag.button_left_thumb = 0;
-				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_LS_BTN;
-			}
+      } else {
+        gameHID.ps4ButtonsTag.button_left_trigger = 0;
+        xboxHID.WHITE = 0;
+      }
 
-			if (PS4.getButtonPress(R1)) {
-				gameHID.ps4ButtonsTag.button_right_trigger = 1;
-				xboxHID.BLACK = 0xFF;
-				button_press_idle = 0;
-			} else {
-				gameHID.ps4ButtonsTag.button_right_trigger = 0;
-				xboxHID.BLACK = 0;
-			}
+      if (PS4.getButtonPress(L3)) {
+        gameHID.ps4ButtonsTag.button_left_thumb = 1;
+        xboxHID.dButtons |= XBOX_LS_BTN;
+        button_press_idle = 0;
+      } else {
+        gameHID.ps4ButtonsTag.button_left_thumb = 0;
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_LS_BTN;
+      }
 
-			if (PS4.getButtonPress(R3)) {
-				gameHID.ps4ButtonsTag.button_right_thumb = 1;
-				xboxHID.dButtons |= XBOX_RS_BTN;
-				button_press_idle = 0;
-			} else {
-				gameHID.ps4ButtonsTag.button_right_thumb = 0;
-				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_RS_BTN;
-			}
+      if (PS4.getButtonPress(R1)) {
+        gameHID.ps4ButtonsTag.button_right_trigger = 1;
+        xboxHID.BLACK = 0xFF;
+        button_press_idle = 0;
+      } else {
+        gameHID.ps4ButtonsTag.button_right_trigger = 0;
+        xboxHID.BLACK = 0;
+      }
 
-			if (PS4.getButtonPress(SHARE)) {
-				gameHID.ps4ButtonsTag.button_share = 1;
-				xboxHID.dButtons |= XBOX_BACK_BTN;
-				button_press_idle = 0;
-			} else {
-				gameHID.ps4ButtonsTag.button_share = 0;
-				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_BACK_BTN;
-			}
+      if (PS4.getButtonPress(R3)) {
+        gameHID.ps4ButtonsTag.button_right_thumb = 1;
+        xboxHID.dButtons |= XBOX_RS_BTN;
+        button_press_idle = 0;
+      } else {
+        gameHID.ps4ButtonsTag.button_right_thumb = 0;
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_RS_BTN;
+      }
 
-			if (PS4.getButtonPress(OPTIONS)) {
-				gameHID.ps4ButtonsTag.button_start = 1;
-				xboxHID.dButtons |= XBOX_START_BTN;
-				button_press_idle = 0;
-			} else {
-				gameHID.ps4ButtonsTag.button_start = 0;
-				xboxHID.dButtons = xboxHID.dButtons & ~XBOX_START_BTN;
-			}
+      if (PS4.getButtonPress(SHARE)) {
+        gameHID.ps4ButtonsTag.button_share = 1;
+        xboxHID.dButtons |= XBOX_BACK_BTN;
+        button_press_idle = 0;
+      } else {
+        gameHID.ps4ButtonsTag.button_share = 0;
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_BACK_BTN;
+      }
 
-			/*We don't want to spam the PS4 controller with rumble updates
-			 * If we do not do this, latency increases greatly */
-			new_rumble_val_L = rx_buf[3];
-			new_rumble_val_R = rx_buf[5];
+      if (PS4.getButtonPress(OPTIONS)) {
+        gameHID.ps4ButtonsTag.button_start = 1;
+        xboxHID.dButtons |= XBOX_START_BTN;
+        button_press_idle = 0;
+      } else {
+        gameHID.ps4ButtonsTag.button_start = 0;
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_START_BTN;
+      }
 
-			if(new_rumble_val_L != old_rumble_val_L || new_rumble_val_R != old_rumble_val_R) {
-				PS4.setRumbleOn(new_rumble_val_L, new_rumble_val_R);
-				old_rumble_val_L = new_rumble_val_L;
-				old_rumble_val_R = new_rumble_val_R;
-			}
-			/* After roughly 5+minutes of idle time, disconnect controller
-			 * Not the best solution since the rate the counter increases is based on BT Latency */
-			if(button_press_idle > 400000) {
-				PS4.disconnect();
-				rumble_once = 0;
-				button_press_idle = 0;
-			}
-			button_press_idle++;
+      /*We don't want to spam the PS4 controller with rumble updates
+       * If we do not do this, latency increases greatly */
+      new_rumble_val_L = rx_buf[3];
+      new_rumble_val_R = rx_buf[5];
 
-		} else if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
-			if (!buttonPressed) {
-				Serial.print(F("\r\nButton Pressed"));
-				PS4.pair(); // Start paring routine if user button was just pressed
-			}
-			buttonPressed = true;
-		} else
-			buttonPressed = false;
+      if (new_rumble_val_L != old_rumble_val_L || new_rumble_val_R != old_rumble_val_R) {
+        PS4.setRumbleOn(new_rumble_val_L, new_rumble_val_R);
+        old_rumble_val_L = new_rumble_val_L;
+        old_rumble_val_R = new_rumble_val_R;
+      }
+      /* After roughly 5+minutes of idle time, disconnect controller
+       * Not the best solution since the rate the counter increases is based on BT Latency */
+      if (button_press_idle > 400000) {
+        PS4.disconnect();
+        rumble_once = 0;
+        button_press_idle = 0;
+        display_run_once = 0;
+      }
+      button_press_idle++;
+
+    } else if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
+      if (!buttonPressed) {
+        Serial.print(F("\r\nButton Pressed"));
+        PS4.pair(); // Start paring routine if user button was just pressed
+      }
+      buttonPressed = true;
+    } else
+      buttonPressed = false;
 #if rtos_delay_view
-		timer_val_getBT = __HAL_TIM_GET_COUNTER(&htim14) - timer_val_getBT;
+    timer_val_getBT = __HAL_TIM_GET_COUNTER(&htim14) - timer_val_getBT;
 #endif
     osDelay(1);
   }
@@ -988,34 +985,34 @@ void StartGetBT(void *argument)
 
 /* USER CODE BEGIN Header_StartSendUSB */
 /**
-* @brief Function implementing the sendUSB thread.
-* @param argument: Not used
-* @retval None
-*/
+ * @brief Function implementing the sendUSB thread.
+ * @param argument: Not used
+ * @retval None
+ */
 /* USER CODE END Header_StartSendUSB */
 void StartSendUSB(void *argument)
-{
+    {
   /* USER CODE BEGIN StartSendUSB */
-	MX_USB_DEVICE_Init();
+  MX_USB_DEVICE_Init();
   /* Infinite loop */
-  for(;;)
-  {
-	/*We are defined as a USB Fullspeed device.
-	Polling rate is determined in usbd_hid.h as HID_FS_BINTERVAL, set to 0x04U
-	Most settings are defined in usbd_conf.h
-	So even though we are updating the report ~1000hz, we still only send at 250hz.
-	Host determines when to read with USB, not the slave, we are writing to a buffer */
+  for (;;)
+      {
+    /*We are defined as a USB Fullspeed device.
+     Polling rate is determined in usbd_hid.h as HID_FS_BINTERVAL, set to 0x04U
+     Most settings are defined in usbd_conf.h
+     So even though we are updating the report ~1000hz, we still only send at 250hz.
+     Host determines when to read with USB, not the slave, we are writing to a buffer */
 #if(PC_SETUP)
 	USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &gameHID, sizeof(struct gameHID_t));
 #endif
 
 #if OG_XBOX_SETUP
 #if rtos_delay_view
-	timer_val_getUSB = __HAL_TIM_GET_COUNTER(&htim14);
+    timer_val_getUSB = __HAL_TIM_GET_COUNTER(&htim14);
 #endif
-	USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &xboxHID, sizeof(struct xboxHID_t));
+    USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*) &xboxHID, sizeof(struct xboxHID_t));
 #if rtos_delay_view
-	timer_val_getUSB = __HAL_TIM_GET_COUNTER(&htim14) - timer_val_getUSB;
+    timer_val_getUSB = __HAL_TIM_GET_COUNTER(&htim14) - timer_val_getUSB;
 #endif
 #endif
     osDelay(1);
@@ -1025,58 +1022,58 @@ void StartSendUSB(void *argument)
 
 /* USER CODE BEGIN Header_StartControllerJoin */
 /**
-* @brief Function implementing the controllerJoin thread.
-* @param argument: Not used
-* @retval None
-*/
+ * @brief Function implementing the controllerJoin thread.
+ * @param argument: Not used
+ * @retval None
+ */
 /* USER CODE END Header_StartControllerJoin */
 void StartControllerJoin(void *argument)
-{
+    {
   /* USER CODE BEGIN StartControllerJoin */
   /* Infinite loop */
-  for(;;)
-  {
-	if(PS4.connected() && !rumble_once) {
-	  PS4.setRumbleOn(RumbleLow);
-	  osDelay(500);
-	  PS4.setRumbleOff();
-	  rumble_once = 1;
-	}
-	osDelay(300);
+  for (;;)
+      {
+    if (PS4.connected() && !rumble_once) {
+      PS4.setRumbleOn(RumbleLow);
+      osDelay(500);
+      PS4.setRumbleOff();
+      rumble_once = 1;
+    }
+    osDelay(300);
   }
   /* USER CODE END StartControllerJoin */
 }
 
 /* USER CODE BEGIN Header_StartButtonPress */
 /**
-* @brief Function implementing the buttonPress thread.
-* @param argument: Not used
-* @retval None
-*/
+ * @brief Function implementing the buttonPress thread.
+ * @param argument: Not used
+ * @retval None
+ */
 /* USER CODE END Header_StartButtonPress */
 void StartButtonPress(void *argument)
-{
+    {
   /* USER CODE BEGIN StartButtonPress */
   /* Infinite loop */
-  for(;;)
-  {
-  keyCode = (HAL_GPIO_ReadPin(BACK_BTN_GPIO) << 2) |
-					(HAL_GPIO_ReadPin(SELECT_BTN_GPIO) << 1) |
-					(HAL_GPIO_ReadPin(FORWARD_BTN_GPIO) << 0);
+  for (;;)
+      {
+    keyCode = (HAL_GPIO_ReadPin(BACK_BTN_GPIO) << 2) |
+        (HAL_GPIO_ReadPin(SELECT_BTN_GPIO) << 1) |
+        (HAL_GPIO_ReadPin(FORWARD_BTN_GPIO) << 0);
 
-  if (BUTTON_PRESSED) {
-	  if(buttonDebounced == 1) {  // you only get here if the same button combination has been pressed for 100mS
-		  if (buttonProcessed == 0) { // here's where we do the real work on the keyboard, and ensure we only do it once/keypress
-			  buttonProcessed = 1;
-			  ProcessKeyCodeInContext(keyCode);
-		  }
-	  } else {
-		  buttonDebounced = true;
-	  }
-  } else {
-	  buttonDebounced = false;
-	  buttonProcessed = false;
-  }
+    if (BUTTON_PRESSED) {
+      if (buttonDebounced == 1) {  // you only get here if the same button combination has been pressed for 100mS
+        if (buttonProcessed == 0) { // here's where we do the real work on the keyboard, and ensure we only do it once/keypress
+          buttonProcessed = 1;
+          ProcessKeyCodeInContext(keyCode);
+        }
+      } else {
+        buttonDebounced = true;
+      }
+    } else {
+      buttonDebounced = false;
+      buttonProcessed = false;
+    }
 //  	Serial.print("\r\n");
 //  	Serial.print(keyCode);
     osDelay(100);
@@ -1086,103 +1083,103 @@ void StartButtonPress(void *argument)
 
 /* USER CODE BEGIN Header_StartUpdateLCD */
 /**
-* @brief Function implementing the updateLCD thread.
-* @param argument: Not used
-* @retval None
-*/
+ * @brief Function implementing the updateLCD thread.
+ * @param argument: Not used
+ * @retval None
+ */
 /* USER CODE END Header_StartUpdateLCD */
 void StartUpdateLCD(void *argument) {
-	/* USER CODE BEGIN StartUpdateLCD */
-	/* Infinite loop */
+  /* USER CODE BEGIN StartUpdateLCD */
+  /* Infinite loop */
 
-	ssd1306_Fill(Black_);
-	ssd1306_UpdateScreen();
-	for (;;) {
+  ssd1306_Fill(Black_);
+  ssd1306_UpdateScreen();
+  for (;;) {
 #if rtos_delay_view
-		timer_val_LCD = __HAL_TIM_GET_COUNTER(&htim14);
+    timer_val_LCD = __HAL_TIM_GET_COUNTER(&htim14);
 #endif
-		if (display_run_once == 0) {
-			ssd1306_Fill(Black_);
-			ssd1306_UpdateScreen();
-			switch (display_no) {
-			case 0: {
-				uint8_t alternate_print = 1;
-				if (!PS4.connected()) {
-					ssd1306_SetCursor((128 - 11 * 3) / 2, 0);
-					ssd1306_WriteString("Not", Font_11x18, White_);
-					display_force_update = 0;
-					ssd1306_SetCursor((128 - 11 * 9) / 2, 26);
-					ssd1306_WriteString("Connected", Font_11x18, White_);
-				} else if (PS4.connected()) {
-					ssd1306_SetCursor((128 - 11 * 9) / 2, 26);
-					ssd1306_WriteString("Connected", Font_11x18, White_);
-					alternate_print = 0;
-					display_run_once = 1;
-					display_force_update = 0;
-				}
-				ssd1306_UpdateScreen();
+    if (display_run_once == 0) {
+      ssd1306_Fill(Black_);
+      ssd1306_UpdateScreen();
+      switch (display_no) {
+        case 0: {
+          uint8_t alternate_print = 1;
+          if (!PS4.connected()) {
+            ssd1306_SetCursor((128 - 11 * 3) / 2, 0);
+            ssd1306_WriteString("Not", Font_11x18, White_);
+            display_force_update = 0;
+            ssd1306_SetCursor((128 - 11 * 9) / 2, 26);
+            ssd1306_WriteString("Connected", Font_11x18, White_);
+          } else if (PS4.connected()) {
+            ssd1306_SetCursor((128 - 11 * 9) / 2, 26);
+            ssd1306_WriteString("Connected", Font_11x18, White_);
+            alternate_print = 0;
+            display_run_once = 1;
+            display_force_update = 0;
+          }
+          ssd1306_UpdateScreen();
 
-				while (!PS4.connected() && display_force_update == 0) {
-					osDelay(100);
-				}
-				/* If the user presses a Button, interrupt and show next screen */
-				if (display_force_update == 1) {
-					display_force_update = 0;
-					display_run_once = 0;
-					break;
-				}
-				/* When the controller is finally paired, update current screen
-				 * Only runs if the first PS4.connected() above does not run*/
-				if (PS4.connected() && alternate_print) {
-					ssd1306_Fill(Black_);
-					ssd1306_UpdateScreen();
-	//				    ssd1306_SetCursor(25,0);
-	//				    ssd1306_WriteString("Status:", Font_11x18, White_);
-					ssd1306_SetCursor((128 - 11 * 10) / 2, 26);
-					ssd1306_WriteString("Connected!", Font_11x18, White_);
-					ssd1306_UpdateScreen();
-					display_run_once = 1;
-				}
-				break;
-			}
+          while (!PS4.connected() && display_force_update == 0) {
+            osDelay(100);
+          }
+          /* If the user presses a Button, interrupt and show next screen */
+          if (display_force_update == 1) {
+            display_force_update = 0;
+            display_run_once = 0;
+            break;
+          }
+          /* When the controller is finally paired, update current screen
+           * Only runs if the first PS4.connected() above does not run*/
+          if (PS4.connected() && alternate_print) {
+            ssd1306_Fill(Black_);
+            ssd1306_UpdateScreen();
+            //				    ssd1306_SetCursor(25,0);
+            //				    ssd1306_WriteString("Status:", Font_11x18, White_);
+            ssd1306_SetCursor((128 - 11 * 10) / 2, 26);
+            ssd1306_WriteString("Connected!", Font_11x18, White_);
+            ssd1306_UpdateScreen();
+            display_run_once = 1;
+          }
+          break;
+        }
 
-			case 1:
-				display_run_once = 1;
-				display_force_update = 0;
-				ssd1306_Fill(Black_);
-				ssd1306_SetCursor((128 - 11 * 5) / 2, 0);
-				ssd1306_WriteString("Pair?", Font_11x18, White_);
-				ssd1306_UpdateScreen();
-				break;
+        case 1:
+          display_run_once = 1;
+          display_force_update = 0;
+          ssd1306_Fill(Black_);
+          ssd1306_SetCursor((128 - 11 * 5) / 2, 0);
+          ssd1306_WriteString("Pair?", Font_11x18, White_);
+          ssd1306_UpdateScreen();
+          break;
 
-			case 7:
-				display_run_once = 1;
-				display_force_update = 0;
-				ssd1306_Fill(Black_);
-				ssd1306_UpdateScreen();
-				ssd1306_SetCursor((128 - 11 * 10) / 2, 0);
-				ssd1306_WriteString("Pairing...", Font_11x18, White_);
-				ssd1306_UpdateScreen();
-				PS4.pair();
-				while (PS4.connected() == 0) {
-					osDelay(100);
-				}
-				ssd1306_SetCursor((128 - 11 * 10) / 2, 26);
-				ssd1306_WriteString("Paired!", Font_11x18, White_);
-				ssd1306_UpdateScreen();
-				break;
-			}
-		}
+        case 7:
+          display_run_once = 1;
+          display_force_update = 0;
+          ssd1306_Fill(Black_);
+          ssd1306_UpdateScreen();
+          ssd1306_SetCursor((128 - 11 * 10) / 2, 0);
+          ssd1306_WriteString("Pairing...", Font_11x18, White_);
+          ssd1306_UpdateScreen();
+          PS4.pair();
+          while (PS4.connected() == 0) {
+            osDelay(100);
+          }
+          ssd1306_SetCursor((128 - 11 * 10) / 2, 26);
+          ssd1306_WriteString("Paired!", Font_11x18, White_);
+          ssd1306_UpdateScreen();
+          break;
+      }
+    }
 #if rtos_delay_view
-		timer_val_LCD = __HAL_TIM_GET_COUNTER(&htim14) - timer_val_LCD;
+    timer_val_LCD = __HAL_TIM_GET_COUNTER(&htim14) - timer_val_LCD;
 #endif
-		osDelay(100);
-	}
-	/* USER CODE END StartUpdateLCD */
+    osDelay(100);
+  }
+  /* USER CODE END StartUpdateLCD */
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
+    {
   /* USER CODE BEGIN Callback 0 */
 
   /* USER CODE END Callback 0 */
@@ -1194,13 +1191,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   /* USER CODE END Callback 1 */
 }
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
-{
+    {
   /* USER CODE BEGIN Error_Handler_Debug */
-	Serial.print("\r\nSomething went wrong!");
+  Serial.print("\r\nSomething went wrong!");
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1)
