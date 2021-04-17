@@ -24,3 +24,5 @@ XBOXOLD.cpp:302:6:bool XBOXOLD::getButtonClick(ButtonEnum)	24	static
 XBOXOLD.cpp:317:9:int16_t XBOXOLD::getAnalogHat(AnalogHatEnum)	16	static
 XBOXOLD.cpp:322:6:void XBOXOLD::XboxCommand(uint8_t*, uint16_t)	56	static
 XBOXOLD.cpp:327:6:void XBOXOLD::setRumbleOn(uint8_t, uint8_t)	24	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static

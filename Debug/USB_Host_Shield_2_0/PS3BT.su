@@ -35,3 +35,5 @@ PS3BT.cpp:604:6:void PS3BT::moveSetBulb(uint8_t, uint8_t, uint8_t)	16	static
 PS3BT.cpp:613:6:void PS3BT::moveSetBulb(ColorsEnum)	16	static
 PS3BT.cpp:617:6:void PS3BT::moveSetRumble(uint8_t)	16	static
 PS3BT.cpp:628:6:virtual void PS3BT::onInit()	16	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static

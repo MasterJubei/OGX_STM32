@@ -20,6 +20,7 @@ usbh_midi.cpp:374:9:uint8_t USBH_MIDI::RecvData(uint16_t*, uint8_t*)	40	static
 usbh_midi.cpp:387:9:uint8_t USBH_MIDI::RecvData(uint8_t*, bool)	32	static
 usbh_midi.cpp:428:9:uint8_t USBH_MIDI::RecvRawData(uint8_t*)	16	static
 usbh_midi.cpp:434:9:uint8_t USBH_MIDI::SendData(uint8_t*, uint8_t)	40	static
+usbh_midi.cpp:482:6:void USBH_MIDI::PrintEndpointDescriptor(const USB_ENDPOINT_DESCRIPTOR*)	16	static
 usbh_midi.cpp:498:9:uint8_t USBH_MIDI::lookupMsgSize(uint8_t, uint8_t)	24	static
 usbh_midi.cpp:549:10:uint16_t USBH_MIDI::countSysExDataSize(uint8_t*)	24	static
 usbh_midi.cpp:573:9:uint8_t USBH_MIDI::SendSysEx(uint8_t*, uint16_t, uint8_t)	112	static
@@ -27,3 +28,5 @@ usbh_midi.cpp:631:9:uint8_t USBH_MIDI::SendRawData(uint16_t, uint8_t*)	40	static
 usbh_midi.cpp:637:9:uint8_t USBH_MIDI::extractSysExData(uint8_t*, uint8_t*)	32	static
 printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
 printhex.h:76:25:void D_PrintHex(T, int) [with T = short unsigned int]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static
+printhex.h:33:6:void PrintHex(T, int) [with T = short unsigned int]	24	static

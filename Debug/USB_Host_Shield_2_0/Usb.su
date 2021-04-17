@@ -42,6 +42,7 @@ address.h:262:22:void AddressPoolImpl<MAX_DEVICES_ALLOWED>::FreeAddress(uint8_t)
 address.h:113:14:void AddressPoolImpl<MAX_DEVICES_ALLOWED>::InitEntry(uint8_t) [with unsigned char MAX_DEVICES_ALLOWED = 16]	16	static
 address.h:162:14:void AddressPoolImpl<MAX_DEVICES_ALLOWED>::InitAllAddresses() [with unsigned char MAX_DEVICES_ALLOWED = 16]	24	static
 address.h:122:17:uint8_t AddressPoolImpl<MAX_DEVICES_ALLOWED>::FindAddressIndex(uint8_t) [with unsigned char MAX_DEVICES_ALLOWED = 16]	24	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static
 usbhost.h:557:9:uint8_t MAX3421e<SPI_SS, INTR>::IntHandler() [with SPI_SS = P10; INTR = P9]	24	static
 address.h:142:14:void AddressPoolImpl<MAX_DEVICES_ALLOWED>::FreeAddressByIndex(uint8_t) [with unsigned char MAX_DEVICES_ALLOWED = 16]	24	static
 usbhost.h:503:6:void MAX3421e<SPI_SS, INTR>::busprobe() [with SPI_SS = P10; INTR = P9]	24	static

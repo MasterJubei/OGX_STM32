@@ -17,3 +17,5 @@ BTHID.cpp:590:6:void BTHID::SDP_Command(uint8_t*, uint8_t)	40	static
 BTHID.cpp:594:6:void BTHID::serviceNotSupported(uint8_t, uint8_t)	16	static
 BTHID.cpp:615:6:void BTHID::setProtocol()	40	static
 BTHID.cpp:630:6:void BTHID::setLeds(uint8_t)	40	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static

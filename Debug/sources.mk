@@ -34,8 +34,8 @@ Arduino_libs \
 Arduino_libs/avr \
 Core/Src \
 Core/Startup \
-Drivers/SSD1306 \
 Drivers/STM32F4xx_HAL_Driver/Src \
+Drivers/ssd1306 \
 Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src \
 Middlewares/ST/STM32_USB_Device_Library/Core/Src \
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \

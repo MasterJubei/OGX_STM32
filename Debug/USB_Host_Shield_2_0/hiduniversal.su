@@ -12,3 +12,4 @@ hiduniversal.h:40:22:virtual void HIDUniversal::ParseHIDData(USBHID*, bool, uint
 hiduniversal.h:50:14:virtual void HIDUniversal::EndpointXtract(uint8_t, uint8_t, uint8_t, uint8_t, const USB_ENDPOINT_DESCRIPTOR*)	32	static
 hiduniversal.cpp:20:9:virtual uint8_t HIDUniversal::Poll()	112	static
 printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static

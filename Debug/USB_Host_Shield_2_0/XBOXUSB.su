@@ -29,3 +29,5 @@ XBOXUSB.cpp:336:6:void XBOXUSB::setLedBlink(LEDEnum)	16	static
 XBOXUSB.cpp:340:6:void XBOXUSB::setLedMode(LEDModeEnum)	16	static
 XBOXUSB.cpp:344:6:void XBOXUSB::setRumbleOn(uint8_t, uint8_t)	16	static
 XBOXUSB.cpp:357:6:void XBOXUSB::onInit()	16	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static

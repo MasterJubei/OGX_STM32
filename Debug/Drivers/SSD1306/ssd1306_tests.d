@@ -1,5 +1,5 @@
-Drivers/SSD1306/ssd1306_tests.o: ../Drivers/SSD1306/ssd1306_tests.c \
- ../Drivers/SSD1306/ssd1306.h ../Drivers/SSD1306/ssd1306_conf.h \
+Drivers/ssd1306/ssd1306_tests.o: ../Drivers/ssd1306/ssd1306_tests.c \
+ ../Drivers/ssd1306/ssd1306.h ../Drivers/ssd1306/ssd1306_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -34,11 +34,11 @@ Drivers/SSD1306/ssd1306_tests.o: ../Drivers/SSD1306/ssd1306_tests.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
- ../Drivers/SSD1306/ssd1306_fonts.h ../Drivers/SSD1306/ssd1306_tests.h
+ ../Drivers/ssd1306/ssd1306_fonts.h ../Drivers/ssd1306/ssd1306_tests.h
 
-../Drivers/SSD1306/ssd1306.h:
+../Drivers/ssd1306/ssd1306.h:
 
-../Drivers/SSD1306/ssd1306_conf.h:
+../Drivers/ssd1306/ssd1306_conf.h:
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 
@@ -108,6 +108,6 @@ Drivers/SSD1306/ssd1306_tests.o: ../Drivers/SSD1306/ssd1306_tests.c \
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h:
 
-../Drivers/SSD1306/ssd1306_fonts.h:
+../Drivers/ssd1306/ssd1306_fonts.h:
 
-../Drivers/SSD1306/ssd1306_tests.h:
+../Drivers/ssd1306/ssd1306_tests.h:

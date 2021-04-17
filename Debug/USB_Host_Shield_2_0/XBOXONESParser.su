@@ -6,3 +6,5 @@ XBOXONESParser.cpp:112:6:void XBOXONESParser::Parse(uint8_t, uint8_t*)	32	static
 XBOXONESParser.cpp:171:6:void XBOXONESParser::Reset()	24	static
 XBOXONESParser.cpp:186:6:void XBOXONESParser::setRumbleOff()	24	static
 XBOXONESParser.cpp:200:6:void XBOXONESParser::setRumbleOn(uint8_t, uint8_t, uint8_t, uint8_t)	24	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static

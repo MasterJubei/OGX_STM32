@@ -93,7 +93,7 @@ const osThreadAttr_t buttonPress_attributes = {
 osThreadId_t updateLCDHandle;
 const osThreadAttr_t updateLCD_attributes = {
     .name = "updateLCD",
-    .stack_size = 256 * 4,
+    .stack_size = 512 * 4,
     .priority = (osPriority_t) osPriorityLow4,
 };
 
@@ -138,11 +138,11 @@ USB Usb;
 BTD Btd(&Usb);
 PS4BT PS4(&Btd);
 //PS4BT PS4(&Btd, PAIR);
-static bool buttonPressed;
+bool buttonPressed;
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
-static uint8_t rumble_once = 0;
-static uint8_t ps4_connected = 0;
+uint8_t rumble_once = 0;
+uint8_t ps4_connected = 0;
 
 typedef struct ps4ButtonsTag
 {
@@ -180,18 +180,18 @@ struct gameHID_t
 };
 
 /*Used temporarily for adjusting contorller offsets*/
-static uint8_t LeftHatX_val;
-static uint8_t LeftHatY_val;
-static uint8_t RightHatX_val;
-static uint8_t RightHatY_val;
+uint8_t LeftHatX_val;
+uint8_t LeftHatY_val;
+uint8_t RightHatX_val;
+uint8_t RightHatY_val;
 
 /* Used for verifying CPU HCLK and Timer Functionality */
-static uint32_t cpu_freq = 0;
-static uint16_t timer_val = 0;
-static uint32_t hal_gettick = 0;
+uint32_t cpu_freq = 0;
+uint16_t timer_val = 0;
+uint32_t hal_gettick = 0;
 
 /* Display Controls */
-static uint8_t display_no = 0;
+uint8_t display_no = 0;
 
 /*Deadzone control */
 #define deadzone_enable 0
@@ -208,20 +208,20 @@ static uint8_t display_no = 0;
 #define SELECT_BTN 5
 #define FORWARD_BTN 6
 
-static uint8_t keyCode = NO_BUTTON_PRESSED;
-static uint8_t buttonDebounced = 0;
-static uint8_t buttonProcessed = 0;
-static uint8_t display_force_update = 0;
+uint8_t keyCode = NO_BUTTON_PRESSED;
+uint8_t buttonDebounced = 0;
+uint8_t buttonProcessed = 0;
+uint8_t display_force_update = 0;
 
 /* Display Settings */
-static uint8_t display_run_once = 0; //Used to update the screen
+uint8_t display_run_once = 0; //Used to update the screen
 
 /* Debugging for freeRTOS */
 #define rtos_delay_view 1 // Measure the delay of tasks
 //Set to 2 for verbose
-static uint16_t timer_val_getBT = 0;
-static uint16_t timer_val_getUSB = 0;
-static uint16_t timer_val_LCD = 0;
+uint16_t timer_val_getBT = 0;
+uint16_t timer_val_getUSB = 0;
+uint16_t timer_val_LCD = 0;
 /* Thanks to the OGX360 Project for the Byte Order */
 struct xboxHID_t
 {
@@ -253,12 +253,12 @@ extern uint8_t entered_xid_req;
 extern uint8_t dataout_ran;
 extern uint8_t rumble_brequest_sent;
 
-static uint8_t old_rumble_val_L = 0;
-static uint8_t old_rumble_val_R = 0;
-static uint8_t new_rumble_val_L = 0;
-static uint8_t new_rumble_val_R = 0;
+uint8_t old_rumble_val_L = 0;
+uint8_t old_rumble_val_R = 0;
+uint8_t new_rumble_val_L = 0;
+uint8_t new_rumble_val_R = 0;
 
-static uint32_t button_press_idle = 0;
+uint32_t button_press_idle = 0;
 
 /* USER CODE END 0 */
 
@@ -300,7 +300,7 @@ int main(void)
   /* For the USB Host Shield Library*/
   SPI_Handle = hspi1;
   UART_Handle = huart2;
-
+  //ssd1306_TestFPS();
   /* The Primary Timer, since using freeRTOS, not using systick */
   HAL_TIM_Base_Start_IT(&htim14);
 
@@ -317,12 +317,15 @@ int main(void)
   Serial.print("\r\nTime Elapsed is: ");
   Serial.print((int) timer_val / 10);
   Serial.print(" ms");
+
 //  hal_gettick = HAL_GetTick();
 //  hal_gettick/1000;
   Serial.print((int) hal_gettick);
 
   /* USER CODE END 2 */
   /* Init scheduler */
+
+  ssd1306_Init();
   osKernelInitialize();
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -673,24 +676,24 @@ void StartGetLatencies(void *argument)
     /*This does not have to do with RTOS, but good place for 1 second status updates */
     /* Only rx_buf[3] and rx[5] have the rumble data */
     /* dataout ran should only run for THPS 2 or if used on XBCD on a PC */
-    Serial.print("\r\nRumble Data: ");
+    //Serial.print("\r\nRumble Data: ");
 //	Serial.print(rx_buf[0]);
 //	Serial.print(" ");
 //	Serial.print(rx_buf[1]);
 //	Serial.print(" ");
 //	Serial.print(rx_buf[2]);
 //	Serial.print(" ");
-    Serial.print(rx_buf[3]);
-    Serial.print(" ");
+    //Serial.print(rx_buf[3]);
+    //Serial.print(" ");
 //	Serial.print(rx_buf[4]);
 //	Serial.print(" ");
-    Serial.print(rx_buf[5]);
-    Serial.print("   ");
-    Serial.print(dataout_ran);
-    Serial.print(" ");
-    Serial.print(rumble_brequest_sent);
-    Serial.print("\r\nController Idle Time: ");
-    Serial.print(button_press_idle);
+    //Serial.print(rx_buf[5]);
+    //Serial.print("   ");
+    //Serial.print(dataout_ran);
+    //Serial.print(" ");
+//    Serial.print(rumble_brequest_sent);
+    //Serial.print("\r\nController Idle Time: ");
+//    Serial.print(button_press_idle);
 #endif
     osDelay(1000);
   }
@@ -1067,6 +1070,7 @@ void StartButtonPress(void *argument)
         if (buttonProcessed == 0) { // here's where we do the real work on the keyboard, and ensure we only do it once/keypress
           buttonProcessed = 1;
           ProcessKeyCodeInContext(keyCode);
+          Serial.print("Button Pressed\n");
         }
       } else {
         buttonDebounced = true;
@@ -1093,8 +1097,9 @@ void StartUpdateLCD(void *argument) {
   /* USER CODE BEGIN StartUpdateLCD */
   /* Infinite loop */
   //ssd1306_TestAll();
-  ssd1306_Fill(Black_);
-  ssd1306_UpdateScreen();
+  //ssd1306_TestAll();
+  //ssd1306_Fill(Black_);
+  //ssd1306_UpdateScreen();
   for (;;) {
 #if rtos_delay_view
     timer_val_LCD = __HAL_TIM_GET_COUNTER(&htim14);
@@ -1104,6 +1109,7 @@ void StartUpdateLCD(void *argument) {
       ssd1306_UpdateScreen();
       switch (display_no) {
         case 0: {
+          Serial.print("\nInside case 0\n");
           uint8_t alternate_print = 1;
           if (!PS4.connected()) {
             ssd1306_SetCursor((128 - 11 * 3) / 2, 0);
@@ -1119,7 +1125,7 @@ void StartUpdateLCD(void *argument) {
             display_force_update = 0;
           }
           ssd1306_UpdateScreen();
-
+          Serial.print("\nInside case 0-1\n");
           while (!PS4.connected() && display_force_update == 0) {
             osDelay(100);
           }
@@ -1154,6 +1160,7 @@ void StartUpdateLCD(void *argument) {
           break;
 
         case 7:
+          Serial.print("Hi");
           display_run_once = 1;
           display_force_update = 0;
           ssd1306_Fill(Black_);
@@ -1161,9 +1168,10 @@ void StartUpdateLCD(void *argument) {
           ssd1306_SetCursor((128 - 11 * 10) / 2, 0);
           ssd1306_WriteString("Pairing...", Font_11x18, White_);
           ssd1306_UpdateScreen();
+
           PS4.pair();
           while (PS4.connected() == 0) {
-            osDelay(1);
+
           }
 
           display_no = 0;

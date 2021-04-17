@@ -39,3 +39,5 @@ Wii.cpp:1127:10:uint16_t WII::getAnalogHat(AnalogHatEnum)	24	static
 Wii.cpp:1139:6:virtual void WII::onInit()	16	static
 Wii.cpp:1150:7:float WII::getWeight(BalanceBoardEnum)	16	static
 Wii.cpp:1163:7:float WII::getTotalWeight()	24	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static

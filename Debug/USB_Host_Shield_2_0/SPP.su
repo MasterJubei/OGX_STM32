@@ -31,3 +31,5 @@ SPP.cpp:797:5:virtual int SPP::available()	16	static
 SPP.cpp:801:6:void SPP::discard()	16	static
 SPP.cpp:805:5:virtual int SPP::peek()	16	static
 SPP.cpp:811:5:virtual int SPP::read()	40	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static

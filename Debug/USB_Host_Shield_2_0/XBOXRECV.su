@@ -18,7 +18,7 @@ XBOXRECV.cpp:41:9:virtual uint8_t XBOXRECV::ConfigureDevice(uint8_t, uint8_t, bo
 XBOXRECV.cpp:138:9:virtual uint8_t XBOXRECV::Init(uint8_t, uint8_t, bool)	32	static
 XBOXRECV.cpp:283:9:virtual uint8_t XBOXRECV::Release()	24	static
 XBOXRECV.cpp:293:9:virtual uint8_t XBOXRECV::Poll()	40	static
-XBOXRECV.cpp:330:6:void XBOXRECV::readReport(uint8_t)	16	static
+XBOXRECV.cpp:330:6:void XBOXRECV::readReport(uint8_t)	24	static
 XBOXRECV.cpp:395:6:void XBOXRECV::printReport(uint8_t, uint8_t)	16	static
 XBOXRECV.cpp:410:9:uint8_t XBOXRECV::getButtonPress(ButtonEnum, uint8_t)	16	static
 XBOXRECV.cpp:418:6:bool XBOXRECV::getButtonClick(ButtonEnum, uint8_t)	24	static
@@ -34,3 +34,5 @@ XBOXRECV.cpp:527:6:void XBOXRECV::setLedMode(LEDModeEnum, uint8_t)	16	static
 XBOXRECV.cpp:535:6:void XBOXRECV::checkStatus()	24	static
 XBOXRECV.cpp:557:6:void XBOXRECV::setRumbleOn(uint8_t, uint8_t, uint8_t)	16	static
 XBOXRECV.cpp:569:6:void XBOXRECV::onInit(uint8_t)	24	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static

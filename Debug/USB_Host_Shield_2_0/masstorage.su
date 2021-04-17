@@ -71,5 +71,8 @@ UsbCore.h:205:7:constexpr USBReadParser::USBReadParser()	16	static
 confdescparser.h:79:1:ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ConfigDescParser(UsbConfigXtracter*) [with unsigned char CLASS_ID = 8; unsigned char SUBCLASS_ID = 6; unsigned char PROTOCOL_ID = 80; unsigned char MASK = 7]	16	static
 message.h:76:6:void ErrorMessage(const char*, ERROR_TYPE) [with ERROR_TYPE = unsigned char]	16	static
 message.h:76:6:void ErrorMessage(const char*, ERROR_TYPE) [with ERROR_TYPE = long unsigned int]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static
+printhex.h:33:6:void PrintHex(T, int) [with T = long unsigned int]	24	static
+printhex.h:33:6:void PrintHex(T, int) [with T = short unsigned int]	24	static
 confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 8; unsigned char SUBCLASS_ID = 6; unsigned char PROTOCOL_ID = 80; unsigned char MASK = 7]	32	static
 confdescparser.h:103:6:bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor(uint8_t**, uint16_t*) [with unsigned char CLASS_ID = 8; unsigned char SUBCLASS_ID = 6; unsigned char PROTOCOL_ID = 80; unsigned char MASK = 7]	56	static

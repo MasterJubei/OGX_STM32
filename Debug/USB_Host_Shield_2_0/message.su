@@ -3,3 +3,17 @@ message.cpp:41:6:void E_Notify(const char*, int)	24	static
 message.cpp:49:6:void E_NotifyStr(const char*, int)	24	static
 message.cpp:57:6:void E_Notify(uint8_t, int)	16	static
 message.cpp:67:6:void E_Notify(double, int)	24	static
+message.cpp:75:6:void NotifyFailGetDevDescr()	8	static
+message.cpp:79:6:void NotifyFailSetDevTblEntry()	8	static
+message.cpp:83:6:void NotifyFailGetConfDescr()	8	static
+message.cpp:87:6:void NotifyFailSetConfDescr()	8	static
+message.cpp:91:6:void NotifyFailGetDevDescr(uint8_t)	16	static
+message.cpp:96:6:void NotifyFailSetDevTblEntry(uint8_t)	16	static
+message.cpp:102:6:void NotifyFailGetConfDescr(uint8_t)	16	static
+message.cpp:107:6:void NotifyFailSetConfDescr(uint8_t)	16	static
+message.cpp:112:6:void NotifyFailUnknownDevice(uint16_t, uint16_t)	16	static
+message.cpp:119:6:void NotifyFail(uint8_t)	16	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = short unsigned int]	16	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = short unsigned int]	24	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static

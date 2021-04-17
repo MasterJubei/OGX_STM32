@@ -9,3 +9,5 @@ usbhid.cpp:74:6:void USBHID::PrintEndpointDescriptor(const USB_ENDPOINT_DESCRIPT
 usbhid.cpp:90:6:void USBHID::PrintHidDescriptor(const USB_HID_DESCRIPTOR*)	16	static
 printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
 printhex.h:76:25:void D_PrintHex(T, int) [with T = short unsigned int]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static
+printhex.h:33:6:void PrintHex(T, int) [with T = short unsigned int]	24	static

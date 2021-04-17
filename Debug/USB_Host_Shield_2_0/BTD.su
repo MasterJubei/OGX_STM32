@@ -32,7 +32,7 @@ BTD.cpp:379:9:virtual uint8_t BTD::Release()	16	static
 BTD.cpp:385:9:virtual uint8_t BTD::Poll()	16	static
 BTD.cpp:397:6:void BTD::disconnect()	24	static
 BTD.cpp:403:6:void BTD::HCI_event_task()	48	static
-BTD.cpp:765:6:void BTD::HCI_task()	16	static
+BTD.cpp:765:6:void BTD::HCI_task()	32	static
 BTD.cpp:1081:6:void BTD::ACL_event_task()	40	static
 BTD.cpp:1108:6:void BTD::HCI_Command(uint8_t*, uint16_t)	56	static
 BTD.cpp:1113:6:void BTD::hci_reset()	16	static
@@ -68,9 +68,11 @@ BTD.cpp:1554:6:void BTD::l2cap_disconnection_response(uint16_t, uint8_t, uint8_t
 BTD.cpp:1567:6:void BTD::l2cap_information_response(uint16_t, uint8_t, uint8_t, uint8_t)	24	static
 BTD.cpp:1585:6:void BTD::setBdaddr(uint8_t*)	64	static
 BTD.cpp:1598:6:void BTD::setMoveBdaddr(uint8_t*)	64	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
 UsbCore.h:205:7:constexpr USBReadParser::USBReadParser()	16	static
 confdescparser.h:79:1:ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ConfigDescParser(UsbConfigXtracter*) [with unsigned char CLASS_ID = 255; unsigned char SUBCLASS_ID = 1; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	16	static
 confdescparser.h:79:1:ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ConfigDescParser(UsbConfigXtracter*) [with unsigned char CLASS_ID = 224; unsigned char SUBCLASS_ID = 1; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	16	static
+printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static
 confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 224; unsigned char SUBCLASS_ID = 1; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	32	static
 confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 255; unsigned char SUBCLASS_ID = 1; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	32	static
 confdescparser.h:103:6:bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor(uint8_t**, uint16_t*) [with unsigned char CLASS_ID = 224; unsigned char SUBCLASS_ID = 1; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	56	static

@@ -34,3 +34,4 @@ printhex.h:33:6:void PrintHex(T, int) [with T = unsigned char]	24	static
 printhex.h:44:6:void PrintBin(T, int) [with T = unsigned char]	24	static
 printhex.h:33:6:void PrintHex(T, int) [with T = short unsigned int]	24	static
 message.h:76:6:void ErrorMessage(const char*, ERROR_TYPE) [with ERROR_TYPE = unsigned char]	16	static
+printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
