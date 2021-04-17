@@ -27,6 +27,7 @@
 #include <usbhub.h>			//usb host shield library
 #include "usbd_hid.h" 	//st library
 #include "ssd1306.h"		//oled screen library
+#include "ssd1306_tests.h"
 #include <stdbool.h>		//oled library uses bool
 
 /* USER CODE END Includes */
@@ -64,14 +65,14 @@ TIM_HandleTypeDef htim14;
 osThreadId_t getBTHandle;
 const osThreadAttr_t getBT_attributes = {
     .name = "getBT",
-    .stack_size = 128 * 4,
+    .stack_size = 1024 * 4,
     .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for sendUSB */
 osThreadId_t sendUSBHandle;
 const osThreadAttr_t sendUSB_attributes = {
     .name = "sendUSB",
-    .stack_size = 128 * 4,
+    .stack_size = 256 * 4,
     .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for controllerJoin */
@@ -85,14 +86,14 @@ const osThreadAttr_t controllerJoin_attributes = {
 osThreadId_t buttonPressHandle;
 const osThreadAttr_t buttonPress_attributes = {
     .name = "buttonPress",
-    .stack_size = 128 * 4,
+    .stack_size = 256 * 4,
     .priority = (osPriority_t) osPriorityLow4,
 };
 /* Definitions for updateLCD */
 osThreadId_t updateLCDHandle;
 const osThreadAttr_t updateLCD_attributes = {
     .name = "updateLCD",
-    .stack_size = 128 * 4,
+    .stack_size = 256 * 4,
     .priority = (osPriority_t) osPriorityLow4,
 };
 
@@ -100,7 +101,7 @@ const osThreadAttr_t updateLCD_attributes = {
 osThreadId_t getLatencies;
 const osThreadAttr_t getLatencies_attributes = {
     .name = "getLatencies",
-    .stack_size = 128 * 4,
+    .stack_size = 256 * 4,
     .priority = (osPriority_t) osPriorityLow4,
 };
 
@@ -477,7 +478,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 400000;
+  hi2c1.Init.ClockSpeed = 100000;
   hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -1091,7 +1092,7 @@ void StartButtonPress(void *argument)
 void StartUpdateLCD(void *argument) {
   /* USER CODE BEGIN StartUpdateLCD */
   /* Infinite loop */
-
+  //ssd1306_TestAll();
   ssd1306_Fill(Black_);
   ssd1306_UpdateScreen();
   for (;;) {
@@ -1162,11 +1163,15 @@ void StartUpdateLCD(void *argument) {
           ssd1306_UpdateScreen();
           PS4.pair();
           while (PS4.connected() == 0) {
-            osDelay(100);
+            osDelay(1);
           }
-          ssd1306_SetCursor((128 - 11 * 10) / 2, 26);
-          ssd1306_WriteString("Paired!", Font_11x18, White_);
-          ssd1306_UpdateScreen();
+
+          display_no = 0;
+          display_run_once = 0;
+
+          //ssd1306_SetCursor((128 - 11 * 10) / 2, 26);
+          //ssd1306_WriteString("Paired!", Font_11x18, White_);
+          //ssd1306_UpdateScreen();
           break;
       }
     }
