@@ -5,6 +5,7 @@
 "Arduino_libs/itoa.o"
 "Arduino_libs/newlib.o"
 "Arduino_libs/avr/dtostrf.o"
+"Arduino_libs/utility/stm32_eeprom.o"
 "Core/Src/freertos.o"
 "Core/Src/main.o"
 "Core/Src/ssd1306_display.o"

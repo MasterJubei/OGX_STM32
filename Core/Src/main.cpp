@@ -25,11 +25,11 @@
 /* USER CODE BEGIN Includes */
 #include <PS4BT.h>			//usb host shield library
 #include <usbhub.h>			//usb host shield library
-#include "usbd_hid.h" 	//st library
+#include "usbd_hid.h" 	//st librar
 #include "ssd1306.h"		//oled screen library
 #include "ssd1306_tests.h"
 #include <stdbool.h>		//oled library uses bool
-
+#include <EEPROM.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

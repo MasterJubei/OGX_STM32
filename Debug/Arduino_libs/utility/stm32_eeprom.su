@@ -1,0 +1,6 @@
+stm32_eeprom.c:154:9:eeprom_read_byte	16	static
+stm32_eeprom.c:175:6:eeprom_write_byte	16	static
+stm32_eeprom.c:198:9:eeprom_buffered_read_byte	16	static
+stm32_eeprom.c:209:6:eeprom_buffered_write_byte	16	static
+stm32_eeprom.c:219:6:eeprom_buffer_fill	8	static
+stm32_eeprom.c:243:6:eeprom_buffer_flush	48	static

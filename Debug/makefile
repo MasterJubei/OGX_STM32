@@ -22,6 +22,7 @@ RM := rm -rf
 -include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
+-include Arduino_libs/utility/subdir.mk
 -include Arduino_libs/avr/subdir.mk
 -include Arduino_libs/subdir.mk
 -include subdir.mk
