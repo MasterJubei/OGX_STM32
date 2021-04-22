@@ -24,12 +24,13 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <PS4BT.h>			//usb host shield library
+#include <XBOXONESBT.h> //usb host shield library
 #include <usbhub.h>			//usb host shield library
 #include "usbd_hid.h" 	//st librar
 #include "ssd1306.h"		//oled screen library
 #include "ssd1306_tests.h"
 #include <stdbool.h>		//oled library uses bool
-#include <EEPROM.h>
+#include <EEPROM.h>     //eeprom emulation, lets you use arduino eeprom library
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -137,6 +138,7 @@ SerialClass Serial(&huart2);
 USB Usb;
 BTD Btd(&Usb);
 PS4BT PS4(&Btd);
+XBOXONESBT XboxOneS(&Btd);
 //PS4BT PS4(&Btd, PAIR);
 bool buttonPressed;
 extern USBD_HandleTypeDef hUsbDeviceFS;

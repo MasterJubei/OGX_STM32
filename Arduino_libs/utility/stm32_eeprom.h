@@ -38,7 +38,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32_def.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -78,7 +77,7 @@ extern "C" {
  * emulation. Anyway, all the sector size will be erased.
  * So pay attention to not use this sector for other stuff.
  */
-#define FLASH_PAGE_SIZE     ((uint32_t)(16*1024)) /* 16kB page */
+#define FLASH_PAGE_SIZE     ((uint32_t)(512)) /* 512B page */
 #endif
 
 #if defined(DATA_EEPROM_BASE) || defined(FLASH_EEPROM_BASE)
