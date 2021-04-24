@@ -31,6 +31,7 @@
 #include "ssd1306_tests.h"
 #include <stdbool.h>		//oled library uses bool
 #include <EEPROM.h>     //eeprom emulation, lets you use arduino eeprom library
+#include <BTHID.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -103,6 +104,13 @@ osThreadId_t getLatencies;
 const osThreadAttr_t getLatencies_attributes = {
     .name = "getLatencies",
     .stack_size = 256 * 4,
+    .priority = (osPriority_t) osPriorityNormal,
+};
+
+osThreadId_t pairingHandle;
+const osThreadAttr_t pairing_attributes = {
+    .name = "pairing",
+    .stack_size = 256 * 4,
     .priority = (osPriority_t) osPriorityLow4,
 };
 
@@ -122,6 +130,8 @@ void StartButtonPress(void *argument);
 void StartUpdateLCD(void *argument);
 /* USER CODE BEGIN PFP */
 void ProcessKeyCodeInContext(uint8_t keyCode);
+void StartPairing(void *argument);
+
 void StartGetLatencies(void *argument);
 long map(long x, long in_min, long in_max, long out_min, long out_max);
 /* USER CODE END PFP */
@@ -134,13 +144,18 @@ long map(long x, long in_min, long in_max, long out_min, long out_max);
 SPI_HandleTypeDef SPI_Handle;
 UART_HandleTypeDef UART_Handle;
 SerialClass Serial(&huart2);
-
+enum system_states {
+  SYS_DEFAULT = 0,
+  SYS_PAIRING = 1,
+  SYS_CONT_F_PAIR = 2
+};
 uint8_t system_state_machine = 0; /* For pairing we will write the pairing state to eeprom and then reboot. We will then continue from there. This is to reduce bluetooth bugs */
 
 USB Usb;
 BTD Btd(&Usb);
 PS4BT PS4(&Btd);
 XBOXONESBT XboxOneS(&Btd);
+BTHID BT_TEST(&Btd);
 //PS4BT PS4(&Btd, PAIR);
 bool buttonPressed;
 extern USBD_HandleTypeDef hUsbDeviceFS;
@@ -264,6 +279,12 @@ uint8_t new_rumble_val_R = 0;
 
 uint32_t button_press_idle = 0;
 
+uint8_t time_up = 0;
+char timer_str[5];
+
+uint32_t free_start = 0;
+uint32_t free_start_2 = 0;
+uint8_t state = 0;
 /* USER CODE END 0 */
 
 /**
@@ -330,6 +351,12 @@ int main(void)
   /* Init scheduler */
 
   ssd1306_Init();
+
+  /* If the user requested to pair, we reboot then run this code
+   * We pair the controller here and then reboot
+   * This is done because pairing is very sensitive to bugs, so running it clean reduces them
+   */
+  system_state_machine = EEPROM.read(40);
   osKernelInitialize();
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -350,23 +377,29 @@ int main(void)
 
   /* Create the thread(s) */
   /* creation of getBT */
-  getBTHandle = osThreadNew(StartGetBT, NULL, &getBT_attributes);
+  if(system_state_machine == SYS_PAIRING) {
+    pairingHandle = osThreadNew(StartPairing, NULL, &pairing_attributes);
+  } else {
+    getBTHandle = osThreadNew(StartGetBT, NULL, &getBT_attributes);
 
-  /* creation of sendUSB */
-  sendUSBHandle = osThreadNew(StartSendUSB, NULL, &sendUSB_attributes);
+    /* creation of sendUSB */
+    sendUSBHandle = osThreadNew(StartSendUSB, NULL, &sendUSB_attributes);
 
-  /* creation of controllerJoin */
-  controllerJoinHandle = osThreadNew(StartControllerJoin, NULL, &controllerJoin_attributes);
+    /* creation of controllerJoin */
+    controllerJoinHandle = osThreadNew(StartControllerJoin, NULL, &controllerJoin_attributes);
 
-  /* creation of buttonPress */
-  buttonPressHandle = osThreadNew(StartButtonPress, NULL, &buttonPress_attributes);
+    /* creation of buttonPress */
+    buttonPressHandle = osThreadNew(StartButtonPress, NULL, &buttonPress_attributes);
 
-  /* creation of updateLCD */
-  updateLCDHandle = osThreadNew(StartUpdateLCD, NULL, &updateLCD_attributes);
+    /* creation of updateLCD */
+    updateLCDHandle = osThreadNew(StartUpdateLCD, NULL, &updateLCD_attributes);
 
-  /* USER CODE BEGIN RTOS_THREADS */
-  /* creation of getLatencies, Used to Meaesure latencies of tasks*/
-  getLatencies = osThreadNew(StartGetLatencies, NULL, &getLatencies_attributes);
+    /* USER CODE BEGIN RTOS_THREADS */
+    /* creation of getLatencies, Used to Meaesure latencies of tasks*/
+    getLatencies = osThreadNew(StartGetLatencies, NULL, &getLatencies_attributes);
+
+  }
+
 
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -455,9 +488,10 @@ static void MX_TIM14_Init(void)
 
   /* USER CODE END TIM14_Init 1 */
   htim14.Instance = TIM14;
-  htim14.Init.Prescaler = (168 / 2) * 100 - 1;
+  //htim14.Init.Prescaler = (168 / 2) * 100 - 1;
+  htim14.Init.Prescaler = (168*100)/2 - 1;
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim14.Init.Period = 10000 - 1;
+  htim14.Init.Period = 65535;
   htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim14) != HAL_OK)
@@ -772,7 +806,10 @@ void StartGetBT(void *argument)
     timer_val_getBT = __HAL_TIM_GET_COUNTER(&htim14);
 #endif
     Usb.Task();
-    if (Btd.incomingPSController) {
+    incomingPSController_global = Btd.incomingPSController;
+    incomingXboxOneSontroller_global = Btd.incomingXboxOneS;
+    if (PS4.connected() == 1 && Btd.incomingPSController) {
+      Serial.print("\rps4 controller connected");
       ps4_connected = 1;
       LeftHatX_val = PS4.getAnalogHat(LeftHatX);
       LeftHatY_val = PS4.getAnalogHat(LeftHatY);
@@ -990,7 +1027,7 @@ void StartGetBT(void *argument)
       xboxHID.L = map(XboxOneS.getButtonPress(L2), 0, 1023, 0, 255);
       xboxHID.R = map(XboxOneS.getButtonPress(R2), 0, 1023, 0, 255);
 
-      if (PS4.getButtonClick(XBOX)) {
+      if (XboxOneS.getButtonClick(XBOX)) {
         XboxOneS.disconnect();
         display_run_once = 0;
         rumble_once = 0;
@@ -1184,6 +1221,70 @@ void StartControllerJoin(void *argument)
   /* USER CODE END StartControllerJoin */
 }
 
+void StartPairing(void *argument)
+    {
+  /* USER CODE BEGIN StartPairing */
+      ssd1306_Fill(Black_);
+      ssd1306_UpdateScreen();
+      ssd1306_SetCursor((128 - 11 * 10) / 2, 0);
+      ssd1306_WriteString("Pairing...", Font_11x18, White_);
+      ssd1306_UpdateScreen();
+
+      if (Usb.Init() == -1) {
+              Serial.print(F("\r\nOSC did not start"));
+              while (1)
+                ; // Halt
+          } else {
+            Serial.print("\nStarting pairing\r\n");
+          }
+      Usb.Task();
+      BT_TEST.pair();
+
+      while(Btd.connectToHIDDevice == 0) {
+            Usb.Task();
+            if(state == 0) {
+              free_start = xTaskGetTickCount();
+              state = 1;
+            }
+            if (state == 1) {
+              free_start_2 = xTaskGetTickCount();
+            }
+            if(time_up > 100) {
+              EEPROM.write(40, SYS_DEFAULT);
+              NVIC_SystemReset();
+            }
+            if(free_start_2 - free_start >= 1000) {
+              state = 0;
+              time_up++;
+              sprintf(timer_str, "%d", (100-time_up));
+              ssd1306_SetCursor((128 - 3 * 10) / 2, 26);
+              ssd1306_WriteString(timer_str, Font_11x18, White_);
+              ssd1306_UpdateScreen();
+              osDelay(1000);
+            }
+
+          }
+
+          ssd1306_Fill(Black_);
+          ssd1306_UpdateScreen();
+          ssd1306_SetCursor((128 - 7 * 10) / 2, 0);
+          ssd1306_WriteString("Paired!", Font_11x18, White_);
+          ssd1306_UpdateScreen();
+
+
+          osDelay(10000);
+
+          Serial.print("\r\nConnected!");
+          EEPROM.write(40, 0);
+          NVIC_SystemReset();
+  /* Infinite loop */
+  for (;;)
+      {
+
+  }
+  /* USER CODE END StartControllerJoin */
+}
+
 /* USER CODE BEGIN Header_StartButtonPress */
 /**
  * @brief Function implementing the buttonPress thread.
@@ -1305,10 +1406,10 @@ void StartUpdateLCD(void *argument) {
           ssd1306_WriteString("Pairing...", Font_11x18, White_);
           ssd1306_UpdateScreen();
 
-          PS4.pair();
-          while (PS4.connected() == 0) {
-
-          }
+          /* Prepare to reboot system to pair mode */
+          EEPROM.write(40, 1);
+          NVIC_SystemReset();
+          //PS4.pair();
 
           display_no = 0;
           display_run_once = 0;

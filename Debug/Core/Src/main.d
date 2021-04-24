@@ -75,7 +75,8 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h \
  ../Drivers/SSD1306/ssd1306.h ../Drivers/SSD1306/ssd1306_conf.h \
- ../Drivers/SSD1306/ssd1306_fonts.h ../Drivers/SSD1306/ssd1306_tests.h
+ ../Drivers/SSD1306/ssd1306_fonts.h ../Drivers/SSD1306/ssd1306_tests.h \
+ ../USB_Host_Shield_2_0/BTHID.h
 
 ../Core/Inc/main.h:
 
@@ -270,3 +271,5 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
 ../Drivers/SSD1306/ssd1306_fonts.h:
 
 ../Drivers/SSD1306/ssd1306_tests.h:
+
+../USB_Host_Shield_2_0/BTHID.h:
