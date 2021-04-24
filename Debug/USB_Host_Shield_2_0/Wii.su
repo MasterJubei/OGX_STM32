@@ -1,6 +1,6 @@
-BTD.h:320:16:int8_t BTD::registerBluetoothService(BluetoothService*)	24	static
-BTD.h:605:9:BluetoothService::BluetoothService(BTD*)	16	static
-BTD.h:638:14:bool BluetoothService::checkHciHandle(uint8_t*, uint16_t)	24	static
+BTD.h:321:16:int8_t BTD::registerBluetoothService(BluetoothService*)	24	static
+BTD.h:618:9:BluetoothService::BluetoothService(BTD*)	16	static
+BTD.h:651:14:bool BluetoothService::checkHciHandle(uint8_t*, uint16_t)	24	static
 Wii.h:212:15:float WII::getWiimotePitch()	16	static
 Wii.h:216:15:float WII::getWiimoteRoll()	16	static
 Wii.cpp:85:1:WII::WII(BTD*, bool)	24	static

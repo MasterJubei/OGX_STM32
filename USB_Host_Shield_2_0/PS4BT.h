@@ -17,10 +17,9 @@
 
 #ifndef _ps4bt_h_
 #define _ps4bt_h_
-
 #include "BTHID.h"
 #include "PS4Parser.h"
-
+bool incomingPSController_global;
 /**
  * This class implements support for the PS4 controller via Bluetooth.
  * It uses the BTHID class for all the Bluetooth communication.
@@ -54,6 +53,7 @@ protected:
          * @param buf Pointer to the data buffer.
          */
         virtual void ParseBTHIDData(uint8_t len, uint8_t *buf) {
+                if(incomingPSController_global)
                 PS4Parser::Parse(len, buf);
         };
 
@@ -77,6 +77,7 @@ protected:
 
         /** @name PS4Parser implementation */
         virtual void sendOutputReport(PS4Output *output) { // Source: https://github.com/chrippa/ds4drv
+
                 uint8_t buf[79];
                 memset(buf, 0, sizeof(buf));
 
@@ -96,10 +97,10 @@ protected:
                 buf[13] = output->flashOff; // Time to flash dark (255 = 2.5 seconds)
 
                 output->reportChanged = false;
-
                 // The PS4 console actually set the four last bytes to a CRC32 checksum, but it seems like it is actually not needed
 
                 HID_Command(buf, sizeof(buf));
+
         };
         /**@}*/
 

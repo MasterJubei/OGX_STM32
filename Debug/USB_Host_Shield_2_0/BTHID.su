@@ -1,6 +1,6 @@
-BTD.h:320:16:int8_t BTD::registerBluetoothService(BluetoothService*)	24	static
-BTD.h:605:9:BluetoothService::BluetoothService(BTD*)	16	static
-BTD.h:638:14:bool BluetoothService::checkHciHandle(uint8_t*, uint16_t)	24	static
+BTD.h:321:16:int8_t BTD::registerBluetoothService(BluetoothService*)	24	static
+BTD.h:618:9:BluetoothService::BluetoothService(BTD*)	16	static
+BTD.h:651:14:bool BluetoothService::checkHciHandle(uint8_t*, uint16_t)	24	static
 BTHID.h:121:14:virtual void BTHID::onInit()	16	static
 BTHID.h:134:22:virtual void BTHID::ParseBTHIDData(uint8_t, uint8_t*)	24	static
 BTHID.h:141:22:virtual void BTHID::ParseBTHIDControlData(uint8_t, uint8_t*)	24	static

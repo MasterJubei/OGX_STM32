@@ -20,6 +20,7 @@
 
 #include "BTHID.h"
 #include "XBOXONESParser.h"
+bool incomingXboxOneSontroller_global;
 
 /**
  * This class implements support for the Xbox One S controller via Bluetooth.
@@ -54,7 +55,9 @@ protected:
          * @param buf Pointer to the data buffer.
          */
         virtual void ParseBTHIDData(uint8_t len, uint8_t *buf) {
+
                 XBOXONESParser::Parse(len, buf);
+
         };
 
         /**

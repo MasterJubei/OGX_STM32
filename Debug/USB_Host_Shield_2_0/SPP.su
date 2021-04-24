@@ -1,8 +1,8 @@
 Print.h:43:5:Print::Print()	16	static
 Stream.h:53:5:Stream::Stream()	16	static
-BTD.h:320:16:int8_t BTD::registerBluetoothService(BluetoothService*)	24	static
-BTD.h:605:9:BluetoothService::BluetoothService(BTD*)	16	static
-BTD.h:638:14:bool BluetoothService::checkHciHandle(uint8_t*, uint16_t)	24	static
+BTD.h:321:16:int8_t BTD::registerBluetoothService(BluetoothService*)	24	static
+BTD.h:618:9:BluetoothService::BluetoothService(BTD*)	16	static
+BTD.h:651:14:bool BluetoothService::checkHciHandle(uint8_t*, uint16_t)	24	static
 SPP.h:88:14:virtual void SPP::flush()	16	static
 SPP.cpp:45:1:SPP::SPP(BTD*, const char*, const char*)	24	static
 SPP.cpp:60:6:virtual void SPP::Reset()	16	static

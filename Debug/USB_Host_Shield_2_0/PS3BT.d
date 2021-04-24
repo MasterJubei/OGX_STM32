@@ -47,7 +47,9 @@ USB_Host_Shield_2_0/PS3BT.o: ../USB_Host_Shield_2_0/PS3BT.cpp \
  ../USB_Host_Shield_2_0/usbhost.h ../USB_Host_Shield_2_0/UsbCore.h \
  ../USB_Host_Shield_2_0/parsetools.h \
  ../USB_Host_Shield_2_0/confdescparser.h ../USB_Host_Shield_2_0/usbhid.h \
- ../USB_Host_Shield_2_0/hidusagestr.h ../USB_Host_Shield_2_0/PS3Enums.h \
+ ../USB_Host_Shield_2_0/hidusagestr.h ../Arduino_libs/EEPROM.h \
+ ../Arduino_libs/Arduino.h ../Arduino_libs/utility/stm32_eeprom.h \
+ ../Arduino_libs/utility/stm32_def.h ../USB_Host_Shield_2_0/PS3Enums.h \
  ../USB_Host_Shield_2_0/controllerEnums.h
 
 ../USB_Host_Shield_2_0/PS3BT.h:
@@ -171,6 +173,14 @@ USB_Host_Shield_2_0/PS3BT.o: ../USB_Host_Shield_2_0/PS3BT.cpp \
 ../USB_Host_Shield_2_0/usbhid.h:
 
 ../USB_Host_Shield_2_0/hidusagestr.h:
+
+../Arduino_libs/EEPROM.h:
+
+../Arduino_libs/Arduino.h:
+
+../Arduino_libs/utility/stm32_eeprom.h:
+
+../Arduino_libs/utility/stm32_def.h:
 
 ../USB_Host_Shield_2_0/PS3Enums.h:
 

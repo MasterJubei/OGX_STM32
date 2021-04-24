@@ -123,7 +123,7 @@ void StartUpdateLCD(void *argument);
 /* USER CODE BEGIN PFP */
 void ProcessKeyCodeInContext(uint8_t keyCode);
 void StartGetLatencies(void *argument);
-
+long map(long x, long in_min, long in_max, long out_min, long out_max);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -134,6 +134,8 @@ void StartGetLatencies(void *argument);
 SPI_HandleTypeDef SPI_Handle;
 UART_HandleTypeDef UART_Handle;
 SerialClass Serial(&huart2);
+
+uint8_t system_state_machine = 0; /* For pairing we will write the pairing state to eeprom and then reboot. We will then continue from there. This is to reduce bluetooth bugs */
 
 USB Usb;
 BTD Btd(&Usb);
@@ -639,6 +641,11 @@ void ProcessKeyCodeInContext(uint8_t keyCode)
   display_run_once = 0;
   display_force_update = 1;
 }
+//From wiring project
+long map(long x, long in_min, long in_max, long out_min, long out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
 
 /* USER CODE BEGIN Header_StartControllerJoin */
 /**
@@ -765,7 +772,7 @@ void StartGetBT(void *argument)
     timer_val_getBT = __HAL_TIM_GET_COUNTER(&htim14);
 #endif
     Usb.Task();
-    if (PS4.connected()) {
+    if (Btd.incomingPSController) {
       ps4_connected = 1;
       LeftHatX_val = PS4.getAnalogHat(LeftHatX);
       LeftHatY_val = PS4.getAnalogHat(LeftHatY);
@@ -973,14 +980,141 @@ void StartGetBT(void *argument)
       }
       button_press_idle++;
 
-    } else if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13)) {
-      if (!buttonPressed) {
-        Serial.print(F("\r\nButton Pressed"));
-        PS4.pair(); // Start paring routine if user button was just pressed
+    } else if(Btd.incomingXboxOneS) {
+      xboxHID.leftStickX = XboxOneS.getAnalogHat(LeftHatX);
+      xboxHID.leftStickY = -XboxOneS.getAnalogHat(LeftHatY);
+      /* The Y axis by default is inverted on the Xbox */
+      xboxHID.rightStickX = XboxOneS.getAnalogHat(RightHatX);
+      xboxHID.rightStickY = -XboxOneS.getAnalogHat(RightHatY);
+
+      xboxHID.L = map(XboxOneS.getButtonPress(L2), 0, 1023, 0, 255);
+      xboxHID.R = map(XboxOneS.getButtonPress(R2), 0, 1023, 0, 255);
+
+      if (PS4.getButtonClick(XBOX)) {
+        XboxOneS.disconnect();
+        display_run_once = 0;
+        rumble_once = 0;
       }
-      buttonPressed = true;
-    } else
-      buttonPressed = false;
+
+      if(XboxOneS.getButtonClick(A)) {
+        xboxHID.A = 0xFF;
+        button_press_idle = 0;
+      } else {
+        xboxHID.A = 0;
+      }
+
+      if(XboxOneS.getButtonClick(B)) {
+        xboxHID.B = 0xFF;
+        button_press_idle = 0;
+      } else {
+        xboxHID.B = 0;
+      }
+
+      if(XboxOneS.getButtonClick(X)) {
+        xboxHID.X = 0xFF;
+        button_press_idle = 0;
+      } else {
+        xboxHID.X = 0;
+      }
+
+      if(XboxOneS.getButtonClick(Y)) {
+        xboxHID.Y = 0xFF;
+        button_press_idle = 0;
+      } else {
+        xboxHID.Y = 0;
+      }
+
+      if(XboxOneS.getButtonClick(UP)) {
+        xboxHID.dButtons |= XBOX_DUP;
+      } else {
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DUP;
+      }
+
+      if(XboxOneS.getButtonClick(RIGHT)) {
+        xboxHID.dButtons |= XBOX_DRIGHT;
+      } else {
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DRIGHT;
+      }
+
+      if(XboxOneS.getButtonClick(DOWN)) {
+        xboxHID.dButtons |= XBOX_DDOWN;
+      } else {
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DDOWN;
+      }
+
+      if(XboxOneS.getButtonClick(LEFT)) {
+        xboxHID.dButtons |= XBOX_DLEFT;
+      } else {
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_DLEFT;
+      }
+
+      if(XboxOneS.getButtonClick(L1)) {
+        xboxHID.WHITE = 0xFF;
+        button_press_idle = 0;
+      } else {
+        xboxHID.WHITE = 0;
+      }
+
+      if(XboxOneS.getButtonClick(R1)) {
+        xboxHID.BLACK = 0xFF;
+        button_press_idle = 0;
+      } else {
+        xboxHID.BLACK = 0;
+      }
+
+      if (XboxOneS.getButtonClick(L3)) {
+        gameHID.ps4ButtonsTag.button_left_thumb = 1;
+        xboxHID.dButtons |= XBOX_LS_BTN;
+        button_press_idle = 0;
+      } else {
+        gameHID.ps4ButtonsTag.button_left_thumb = 0;
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_LS_BTN;
+      }
+
+      if (XboxOneS.getButtonClick(R3)) {
+        xboxHID.dButtons |= XBOX_RS_BTN;
+        button_press_idle = 0;
+      } else {
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_RS_BTN;
+      }
+
+      if (XboxOneS.getButtonClick(VIEW)) {
+        xboxHID.dButtons |= XBOX_BACK_BTN;
+        button_press_idle = 0;
+      } else {
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_BACK_BTN;
+      }
+
+      if (XboxOneS.getButtonClick(MENU)) {
+        xboxHID.dButtons |= XBOX_START_BTN;
+        button_press_idle = 0;
+      } else {
+        xboxHID.dButtons = xboxHID.dButtons & ~XBOX_START_BTN;
+      }
+
+      /*We don't want to spam the XboxOneS controller with rumble updates
+       * If we do not do this, latency increases greatly */
+      new_rumble_val_L = rx_buf[3];
+      new_rumble_val_R = rx_buf[5];
+
+      if (new_rumble_val_L != old_rumble_val_L || new_rumble_val_R != old_rumble_val_R) {
+        XboxOneS.setRumbleOn(new_rumble_val_L, new_rumble_val_R, new_rumble_val_L, new_rumble_val_R);
+        old_rumble_val_L = new_rumble_val_L;
+        old_rumble_val_R = new_rumble_val_R;
+      }
+
+      /* After roughly 5+minutes of idle time, disconnect controller
+       * Not the best solution since the rate the counter increases is based on BT Latency */
+      if (button_press_idle > 400000) {
+        XboxOneS.disconnect();
+        rumble_once = 0;
+        button_press_idle = 0;
+        display_run_once = 0;
+      }
+      button_press_idle++;
+    }
+
+
 #if rtos_delay_view
     timer_val_getBT = __HAL_TIM_GET_COUNTER(&htim14) - timer_val_getBT;
 #endif

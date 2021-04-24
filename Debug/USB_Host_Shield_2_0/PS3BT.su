@@ -1,9 +1,9 @@
 WString.h:113:11:String& String::operator+=(const String&)	16	static
 WString.h:114:11:String& String::operator+=(const char*)	16	static
 Print.h:49:12:size_t Print::write(const char*)	24	static
-BTD.h:320:16:int8_t BTD::registerBluetoothService(BluetoothService*)	24	static
-BTD.h:605:9:BluetoothService::BluetoothService(BTD*)	16	static
-BTD.h:638:14:bool BluetoothService::checkHciHandle(uint8_t*, uint16_t)	24	static
+BTD.h:321:16:int8_t BTD::registerBluetoothService(BluetoothService*)	24	static
+BTD.h:618:9:BluetoothService::BluetoothService(BTD*)	16	static
+BTD.h:651:14:bool BluetoothService::checkHciHandle(uint8_t*, uint16_t)	24	static
 PS3BT.cpp:23:1:PS3BT::PS3BT(BTD*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t)	24	static
 PS3BT.cpp:49:6:bool PS3BT::getButtonPress(ButtonEnum)	16	static
 PS3BT.cpp:53:6:bool PS3BT::getButtonClick(ButtonEnum)	24	static
