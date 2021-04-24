@@ -5302,8 +5302,8 @@ void StartPairing(void *argument)
  8002440:	f007 fa24 	bl	800988c <ssd1306_UpdateScreen>
 
 
-          osDelay(10000);
- 8002444:	f242 7010 	movw	r0, #10000	; 0x2710
+          osDelay(2000);
+ 8002444:	f44f 60fa 	mov.w	r0, #2000	; 0x7d0
  8002448:	f009 f8e6 	bl	800b618 <osDelay>
 
           Serial.print("\r\nConnected!");

@@ -279,12 +279,12 @@ uint8_t new_rumble_val_R = 0;
 
 uint32_t button_press_idle = 0;
 
+/*Variables used during controller pairing setup */
 uint8_t time_up = 0;
-char timer_str[5];
-
-uint32_t free_start = 0;
-uint32_t free_start_2 = 0;
-uint8_t state = 0;
+char timer_str[5]; /*Used to display the time left for pairing*/
+uint32_t RTOS_timer_1 = 0;
+uint32_t RTOS_timer_2 = 0;
+uint8_t pair_state = 0; /*Used during pairing to manage timers */
 /* USER CODE END 0 */
 
 /**
@@ -376,10 +376,12 @@ int main(void)
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* creation of getBT */
+
   if(system_state_machine == SYS_PAIRING) {
+    /* creating of pairing */
     pairingHandle = osThreadNew(StartPairing, NULL, &pairing_attributes);
   } else {
+    /* creation of getBT */
     getBTHandle = osThreadNew(StartGetBT, NULL, &getBT_attributes);
 
     /* creation of sendUSB */
@@ -399,8 +401,6 @@ int main(void)
     getLatencies = osThreadNew(StartGetLatencies, NULL, &getLatencies_attributes);
 
   }
-
-
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
@@ -808,7 +808,7 @@ void StartGetBT(void *argument)
     Usb.Task();
     incomingPSController_global = Btd.incomingPSController;
     incomingXboxOneSontroller_global = Btd.incomingXboxOneS;
-    if (PS4.connected() == 1 && Btd.incomingPSController) {
+    if (Btd.incomingPSController) {
       Serial.print("\rps4 controller connected");
       ps4_connected = 1;
       LeftHatX_val = PS4.getAnalogHat(LeftHatX);
@@ -1224,59 +1224,57 @@ void StartControllerJoin(void *argument)
 void StartPairing(void *argument)
     {
   /* USER CODE BEGIN StartPairing */
-      ssd1306_Fill(Black_);
+  ssd1306_Fill(Black_);
+  ssd1306_UpdateScreen();
+  ssd1306_SetCursor((128 - 11 * 10) / 2, 0);
+  ssd1306_WriteString("Pairing...", Font_11x18, White_);
+  ssd1306_UpdateScreen();
+
+  if(Usb.Init() == -1) {
+    Serial.print(F("\r\nOSC did not start"));
+    NVIC_SystemReset();
+  } else {
+    Serial.print("\nStarting pairing\r\n");
+  }
+  Usb.Task();
+  BT_TEST.pair();
+  while(Btd.connectToHIDDevice == 0) {
+    Usb.Task();
+    if(pair_state == 0) {
+      RTOS_timer_1 = xTaskGetTickCount();
+      pair_state = 1;
+    }
+    if (pair_state == 1) {
+      RTOS_timer_2 = xTaskGetTickCount();
+    }
+    if(time_up > 100) {
+      EEPROM.write(40, SYS_DEFAULT);
+      NVIC_SystemReset();
+    }
+    if(RTOS_timer_2 - RTOS_timer_1 >= 1000) {
+      pair_state = 0;
+      time_up++;
+      sprintf(timer_str, "%d", (100-time_up));
+      ssd1306_SetCursor((128 - 3 * 10) / 2, 26);
+      ssd1306_WriteString(timer_str, Font_11x18, White_);
       ssd1306_UpdateScreen();
-      ssd1306_SetCursor((128 - 11 * 10) / 2, 0);
-      ssd1306_WriteString("Pairing...", Font_11x18, White_);
-      ssd1306_UpdateScreen();
+      osDelay(1000);
+    }
 
-      if (Usb.Init() == -1) {
-              Serial.print(F("\r\nOSC did not start"));
-              while (1)
-                ; // Halt
-          } else {
-            Serial.print("\nStarting pairing\r\n");
-          }
-      Usb.Task();
-      BT_TEST.pair();
+  }
 
-      while(Btd.connectToHIDDevice == 0) {
-            Usb.Task();
-            if(state == 0) {
-              free_start = xTaskGetTickCount();
-              state = 1;
-            }
-            if (state == 1) {
-              free_start_2 = xTaskGetTickCount();
-            }
-            if(time_up > 100) {
-              EEPROM.write(40, SYS_DEFAULT);
-              NVIC_SystemReset();
-            }
-            if(free_start_2 - free_start >= 1000) {
-              state = 0;
-              time_up++;
-              sprintf(timer_str, "%d", (100-time_up));
-              ssd1306_SetCursor((128 - 3 * 10) / 2, 26);
-              ssd1306_WriteString(timer_str, Font_11x18, White_);
-              ssd1306_UpdateScreen();
-              osDelay(1000);
-            }
-
-          }
-
-          ssd1306_Fill(Black_);
-          ssd1306_UpdateScreen();
-          ssd1306_SetCursor((128 - 7 * 10) / 2, 0);
-          ssd1306_WriteString("Paired!", Font_11x18, White_);
-          ssd1306_UpdateScreen();
+  ssd1306_Fill(Black_);
+  ssd1306_UpdateScreen();
+  ssd1306_SetCursor((128 - 7 * 10) / 2, 0);
+  ssd1306_WriteString("Paired!", Font_11x18, White_);
+  ssd1306_UpdateScreen();
 
 
-          osDelay(10000);
+  osDelay(2000);
 
-          Serial.print("\r\nConnected!");
-          EEPROM.write(40, 0);
-          NVIC_SystemReset();
+  Serial.print("\r\nConnected!");
+  EEPROM.write(40, 0);
+  NVIC_SystemReset();
   /* Infinite loop */
   for (;;)
       {
