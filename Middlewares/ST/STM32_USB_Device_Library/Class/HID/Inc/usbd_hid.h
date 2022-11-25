@@ -123,7 +123,7 @@ typedef struct
 /** @defgroup USBD_CORE_Exported_Variables
   * @{
   */
-uint8_t rx_buf[HID_EPOUT_SIZE];
+extern uint8_t rx_buf[HID_EPOUT_SIZE];
 extern USBD_ClassTypeDef USBD_HID;
 #define USBD_HID_CLASS &USBD_HID
 /**

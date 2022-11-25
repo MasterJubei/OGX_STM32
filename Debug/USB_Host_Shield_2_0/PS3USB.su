@@ -1,50 +1,50 @@
-Print.h:49:12:size_t Print::write(const char*)	24	static
-UsbCore.h:137:25:virtual uint8_t USBDeviceConfig::Init(uint8_t, uint8_t, bool)	16	static
-UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
-UsbCore.h:145:25:virtual uint8_t USBDeviceConfig::Release()	16	static
-UsbCore.h:149:25:virtual uint8_t USBDeviceConfig::Poll()	16	static
-UsbCore.h:153:25:virtual uint8_t USBDeviceConfig::GetAddress()	16	static
-UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
-UsbCore.h:161:22:virtual bool USBDeviceConfig::VIDPIDOK(uint16_t, uint16_t)	16	static
-UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
-UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
-UsbCore.h:226:22:AddressPool& USB::GetAddressPool()	16	static
-UsbCore.h:230:17:uint8_t USB::RegisterDeviceClass(USBDeviceConfig*)	24	static
-UsbCore.h:134:7:constexpr USBDeviceConfig::USBDeviceConfig()	16	static
-PS3USB.h:84:25:virtual uint8_t PS3USB::GetAddress()	16	static
-PS3USB.h:92:22:virtual bool PS3USB::isReady()	16	static
-PS3USB.h:102:22:virtual bool PS3USB::VIDPIDOK(uint16_t, uint16_t)	16	static
-PS3USB.cpp:23:1:PS3USB::PS3USB(USB*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t)	32	static
-PS3USB.cpp:47:9:virtual uint8_t PS3USB::Init(uint8_t, uint8_t, bool)	80	static
-PS3USB.cpp:262:9:virtual uint8_t PS3USB::Release()	16	static
-PS3USB.cpp:272:9:virtual uint8_t PS3USB::Poll()	40	static
-PS3USB.cpp:294:6:void PS3USB::readReport()	16	static
-PS3USB.cpp:306:6:void PS3USB::printReport()	16	static
-PS3USB.cpp:316:6:bool PS3USB::getButtonPress(ButtonEnum)	16	static
-PS3USB.cpp:320:6:bool PS3USB::getButtonClick(ButtonEnum)	24	static
-PS3USB.cpp:327:9:uint8_t PS3USB::getAnalogButton(ButtonEnum)	16	static
-PS3USB.cpp:331:9:uint8_t PS3USB::getAnalogHat(AnalogHatEnum)	16	static
-PS3USB.cpp:335:10:uint16_t PS3USB::getSensor(SensorEnum)	16	static
-PS3USB.cpp:339:7:float PS3USB::getAngle(AngleEnum)	32	static
-PS3USB.cpp:360:6:bool PS3USB::getStatus(StatusEnum)	16	static
-PS3USB.cpp:364:6:void PS3USB::printStatusString()	128	static
-PS3USB.cpp:398:6:void PS3USB::PS3_Command(uint8_t*, uint16_t)	56	static
-PS3USB.cpp:403:6:void PS3USB::setAllOff()	24	static
-PS3USB.cpp:410:6:void PS3USB::setRumbleOff()	96	static
-PS3USB.cpp:420:6:void PS3USB::setRumbleOn(RumbleEnum)	32	static
-PS3USB.cpp:431:6:void PS3USB::setRumbleOn(uint8_t, uint8_t, uint8_t, uint8_t)	96	static
-PS3USB.cpp:441:6:void PS3USB::setLedRaw(uint8_t)	16	static
-PS3USB.cpp:446:6:void PS3USB::setLedOff(LEDEnum)	16	static
-PS3USB.cpp:451:6:void PS3USB::setLedOn(LEDEnum)	16	static
-PS3USB.cpp:460:6:void PS3USB::setLedToggle(LEDEnum)	16	static
-PS3USB.cpp:465:6:void PS3USB::setBdaddr(uint8_t*)	64	static
-PS3USB.cpp:478:6:void PS3USB::getBdaddr(uint8_t*)	64	static
-PS3USB.cpp:488:6:void PS3USB::enable_sixaxis()	56	static
-PS3USB.cpp:500:6:void PS3USB::Move_Command(uint8_t*, uint16_t)	40	static
-PS3USB.cpp:504:6:void PS3USB::moveSetBulb(uint8_t, uint8_t, uint8_t)	16	static
-PS3USB.cpp:513:6:void PS3USB::moveSetBulb(ColorsEnum)	16	static
-PS3USB.cpp:517:6:void PS3USB::moveSetRumble(uint8_t)	16	static
-PS3USB.cpp:527:6:void PS3USB::setMoveBdaddr(uint8_t*)	64	static
-PS3USB.cpp:543:6:void PS3USB::getMoveBdaddr(uint8_t*)	72	static
-PS3USB.cpp:553:6:void PS3USB::getMoveCalibration(uint8_t*)	104	static
-PS3USB.cpp:565:6:void PS3USB::onInit()	16	static
+../Arduino_libs/Print.h:49:12:size_t Print::write(const char*)	24	static
+../USB_Host_Shield_2_0/UsbCore.h:137:25:virtual uint8_t USBDeviceConfig::Init(uint8_t, uint8_t, bool)	16	static
+../USB_Host_Shield_2_0/UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
+../USB_Host_Shield_2_0/UsbCore.h:145:25:virtual uint8_t USBDeviceConfig::Release()	16	static
+../USB_Host_Shield_2_0/UsbCore.h:149:25:virtual uint8_t USBDeviceConfig::Poll()	16	static
+../USB_Host_Shield_2_0/UsbCore.h:153:25:virtual uint8_t USBDeviceConfig::GetAddress()	16	static
+../USB_Host_Shield_2_0/UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
+../USB_Host_Shield_2_0/UsbCore.h:161:22:virtual bool USBDeviceConfig::VIDPIDOK(uint16_t, uint16_t)	16	static
+../USB_Host_Shield_2_0/UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
+../USB_Host_Shield_2_0/UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
+../USB_Host_Shield_2_0/UsbCore.h:226:22:AddressPool& USB::GetAddressPool()	16	static
+../USB_Host_Shield_2_0/UsbCore.h:230:17:uint8_t USB::RegisterDeviceClass(USBDeviceConfig*)	24	static
+../USB_Host_Shield_2_0/UsbCore.h:134:7:constexpr USBDeviceConfig::USBDeviceConfig()	16	static
+../USB_Host_Shield_2_0/PS3USB.h:84:25:virtual uint8_t PS3USB::GetAddress()	16	static
+../USB_Host_Shield_2_0/PS3USB.h:92:22:virtual bool PS3USB::isReady()	16	static
+../USB_Host_Shield_2_0/PS3USB.h:102:22:virtual bool PS3USB::VIDPIDOK(uint16_t, uint16_t)	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:23:1:PS3USB::PS3USB(USB*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t)	32	static
+../USB_Host_Shield_2_0/PS3USB.cpp:47:9:virtual uint8_t PS3USB::Init(uint8_t, uint8_t, bool)	80	static
+../USB_Host_Shield_2_0/PS3USB.cpp:262:9:virtual uint8_t PS3USB::Release()	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:272:9:virtual uint8_t PS3USB::Poll()	40	static
+../USB_Host_Shield_2_0/PS3USB.cpp:294:6:void PS3USB::readReport()	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:306:6:void PS3USB::printReport()	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:316:6:bool PS3USB::getButtonPress(ButtonEnum)	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:320:6:bool PS3USB::getButtonClick(ButtonEnum)	24	static
+../USB_Host_Shield_2_0/PS3USB.cpp:327:9:uint8_t PS3USB::getAnalogButton(ButtonEnum)	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:331:9:uint8_t PS3USB::getAnalogHat(AnalogHatEnum)	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:335:10:uint16_t PS3USB::getSensor(SensorEnum)	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:339:7:float PS3USB::getAngle(AngleEnum)	32	static
+../USB_Host_Shield_2_0/PS3USB.cpp:360:6:bool PS3USB::getStatus(StatusEnum)	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:364:6:void PS3USB::printStatusString()	128	static
+../USB_Host_Shield_2_0/PS3USB.cpp:398:6:void PS3USB::PS3_Command(uint8_t*, uint16_t)	56	static
+../USB_Host_Shield_2_0/PS3USB.cpp:403:6:void PS3USB::setAllOff()	24	static
+../USB_Host_Shield_2_0/PS3USB.cpp:410:6:void PS3USB::setRumbleOff()	96	static
+../USB_Host_Shield_2_0/PS3USB.cpp:420:6:void PS3USB::setRumbleOn(RumbleEnum)	32	static
+../USB_Host_Shield_2_0/PS3USB.cpp:431:6:void PS3USB::setRumbleOn(uint8_t, uint8_t, uint8_t, uint8_t)	96	static
+../USB_Host_Shield_2_0/PS3USB.cpp:441:6:void PS3USB::setLedRaw(uint8_t)	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:446:6:void PS3USB::setLedOff(LEDEnum)	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:451:6:void PS3USB::setLedOn(LEDEnum)	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:460:6:void PS3USB::setLedToggle(LEDEnum)	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:465:6:void PS3USB::setBdaddr(uint8_t*)	64	static
+../USB_Host_Shield_2_0/PS3USB.cpp:478:6:void PS3USB::getBdaddr(uint8_t*)	64	static
+../USB_Host_Shield_2_0/PS3USB.cpp:488:6:void PS3USB::enable_sixaxis()	56	static
+../USB_Host_Shield_2_0/PS3USB.cpp:500:6:void PS3USB::Move_Command(uint8_t*, uint16_t)	40	static
+../USB_Host_Shield_2_0/PS3USB.cpp:504:6:void PS3USB::moveSetBulb(uint8_t, uint8_t, uint8_t)	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:513:6:void PS3USB::moveSetBulb(ColorsEnum)	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:517:6:void PS3USB::moveSetRumble(uint8_t)	16	static
+../USB_Host_Shield_2_0/PS3USB.cpp:527:6:void PS3USB::setMoveBdaddr(uint8_t*)	64	static
+../USB_Host_Shield_2_0/PS3USB.cpp:543:6:void PS3USB::getMoveBdaddr(uint8_t*)	72	static
+../USB_Host_Shield_2_0/PS3USB.cpp:553:6:void PS3USB::getMoveCalibration(uint8_t*)	104	static
+../USB_Host_Shield_2_0/PS3USB.cpp:565:6:void PS3USB::onInit()	16	static

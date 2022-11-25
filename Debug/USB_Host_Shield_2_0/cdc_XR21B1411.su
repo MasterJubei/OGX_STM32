@@ -1,33 +1,33 @@
-UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
-UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
-UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
-UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
-UsbCore.h:226:22:AddressPool& USB::GetAddressPool()	16	static
-parsetools.h:36:9:MultiValueBuffer::MultiValueBuffer()	16	static
-parsetools.h:47:9:MultiByteValueParser::MultiByteValueParser()	16	static
-parsetools.h:54:14:void MultiByteValueParser::Initialize(MultiValueBuffer*)	16	static
-parsetools.h:69:9:ByteSkipper::ByteSkipper()	16	static
-parsetools.h:72:14:void ByteSkipper::Initialize(MultiValueBuffer*)	16	static
-parsetools.h:77:14:bool ByteSkipper::Skip(uint8_t**, uint16_t*, uint16_t)	24	static
-cdcacm.h:209:25:virtual uint8_t ACM::GetAddress()	16	static
-cdcacm.h:213:22:virtual bool ACM::isReady()	16	static
-cdcacm.h:217:30:virtual tty_features ACM::enhanced_status()	16	static
-cdcacm.h:244:22:virtual void ACM::wide(bool)	16	static
-cdc_XR21B1411.h:115:22:virtual bool XR21B1411::VIDPIDOK(uint16_t, uint16_t)	16	static
-cdc_XR21B1411.h:121:30:virtual tty_features XR21B1411::enhanced_features()	24	static
-cdc_XR21B1411.h:132:17:uint8_t XR21B1411::read_register(uint16_t, uint16_t*)	56	static
-cdc_XR21B1411.h:136:17:uint8_t XR21B1411::write_register(uint16_t, uint16_t)	56	static
-cdc_XR21B1411.h:145:22:virtual void XR21B1411::autoflowRTS(bool)	32	static
-cdc_XR21B1411.h:176:22:virtual void XR21B1411::autoflowDSR(bool)	32	static
-cdc_XR21B1411.h:211:22:virtual void XR21B1411::autoflowXON(bool)	32	static
-cdc_XR21B1411.h:243:22:virtual void XR21B1411::half_duplex(bool)	32	static
-cdc_XR21B1411.cpp:19:1:XR21B1411::XR21B1411(USB*, CDCAsyncOper*)	32	static
-cdc_XR21B1411.cpp:25:9:virtual uint8_t XR21B1411::Init(uint8_t, uint8_t, bool)	192	static
-printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
-UsbCore.h:205:7:constexpr USBReadParser::USBReadParser()	16	static
-confdescparser.h:79:1:ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ConfigDescParser(UsbConfigXtracter*) [with unsigned char CLASS_ID = 2; unsigned char SUBCLASS_ID = 2; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	16	static
-confdescparser.h:79:1:ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ConfigDescParser(UsbConfigXtracter*) [with unsigned char CLASS_ID = 10; unsigned char SUBCLASS_ID = 0; unsigned char PROTOCOL_ID = 0; unsigned char MASK = 1]	16	static
-confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 10; unsigned char SUBCLASS_ID = 0; unsigned char PROTOCOL_ID = 0; unsigned char MASK = 1]	32	static
-confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 2; unsigned char SUBCLASS_ID = 2; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	32	static
-confdescparser.h:103:6:bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor(uint8_t**, uint16_t*) [with unsigned char CLASS_ID = 10; unsigned char SUBCLASS_ID = 0; unsigned char PROTOCOL_ID = 0; unsigned char MASK = 1]	56	static
-confdescparser.h:103:6:bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor(uint8_t**, uint16_t*) [with unsigned char CLASS_ID = 2; unsigned char SUBCLASS_ID = 2; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	56	static
+../USB_Host_Shield_2_0/UsbCore.h:141:25:virtual uint8_t USBDeviceConfig::ConfigureDevice(uint8_t, uint8_t, bool)	16	static
+../USB_Host_Shield_2_0/UsbCore.h:157:22:virtual void USBDeviceConfig::ResetHubPort(uint8_t)	16	static
+../USB_Host_Shield_2_0/UsbCore.h:165:22:virtual bool USBDeviceConfig::DEVCLASSOK(uint8_t)	16	static
+../USB_Host_Shield_2_0/UsbCore.h:169:22:virtual bool USBDeviceConfig::DEVSUBCLASSOK(uint8_t)	16	static
+../USB_Host_Shield_2_0/UsbCore.h:226:22:AddressPool& USB::GetAddressPool()	16	static
+../USB_Host_Shield_2_0/parsetools.h:36:9:MultiValueBuffer::MultiValueBuffer()	16	static
+../USB_Host_Shield_2_0/parsetools.h:47:9:MultiByteValueParser::MultiByteValueParser()	16	static
+../USB_Host_Shield_2_0/parsetools.h:54:14:void MultiByteValueParser::Initialize(MultiValueBuffer*)	16	static
+../USB_Host_Shield_2_0/parsetools.h:69:9:ByteSkipper::ByteSkipper()	16	static
+../USB_Host_Shield_2_0/parsetools.h:72:14:void ByteSkipper::Initialize(MultiValueBuffer*)	16	static
+../USB_Host_Shield_2_0/parsetools.h:77:14:bool ByteSkipper::Skip(uint8_t**, uint16_t*, uint16_t)	24	static
+../USB_Host_Shield_2_0/cdcacm.h:209:25:virtual uint8_t ACM::GetAddress()	16	static
+../USB_Host_Shield_2_0/cdcacm.h:213:22:virtual bool ACM::isReady()	16	static
+../USB_Host_Shield_2_0/cdcacm.h:217:30:virtual tty_features ACM::enhanced_status()	16	static
+../USB_Host_Shield_2_0/cdcacm.h:244:22:virtual void ACM::wide(bool)	16	static
+../USB_Host_Shield_2_0/cdc_XR21B1411.h:115:22:virtual bool XR21B1411::VIDPIDOK(uint16_t, uint16_t)	16	static
+../USB_Host_Shield_2_0/cdc_XR21B1411.h:121:30:virtual tty_features XR21B1411::enhanced_features()	24	static
+../USB_Host_Shield_2_0/cdc_XR21B1411.h:132:17:uint8_t XR21B1411::read_register(uint16_t, uint16_t*)	56	static
+../USB_Host_Shield_2_0/cdc_XR21B1411.h:136:17:uint8_t XR21B1411::write_register(uint16_t, uint16_t)	56	static
+../USB_Host_Shield_2_0/cdc_XR21B1411.h:145:22:virtual void XR21B1411::autoflowRTS(bool)	32	static
+../USB_Host_Shield_2_0/cdc_XR21B1411.h:176:22:virtual void XR21B1411::autoflowDSR(bool)	32	static
+../USB_Host_Shield_2_0/cdc_XR21B1411.h:211:22:virtual void XR21B1411::autoflowXON(bool)	32	static
+../USB_Host_Shield_2_0/cdc_XR21B1411.h:243:22:virtual void XR21B1411::half_duplex(bool)	32	static
+../USB_Host_Shield_2_0/cdc_XR21B1411.cpp:19:1:XR21B1411::XR21B1411(USB*, CDCAsyncOper*)	32	static
+../USB_Host_Shield_2_0/cdc_XR21B1411.cpp:25:9:virtual uint8_t XR21B1411::Init(uint8_t, uint8_t, bool)	192	static
+../USB_Host_Shield_2_0/printhex.h:76:25:void D_PrintHex(T, int) [with T = unsigned char]	16	static
+../USB_Host_Shield_2_0/UsbCore.h:205:7:constexpr USBReadParser::USBReadParser()	16	static
+../USB_Host_Shield_2_0/confdescparser.h:79:1:ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ConfigDescParser(UsbConfigXtracter*) [with unsigned char CLASS_ID = 2; unsigned char SUBCLASS_ID = 2; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	16	static
+../USB_Host_Shield_2_0/confdescparser.h:79:1:ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ConfigDescParser(UsbConfigXtracter*) [with unsigned char CLASS_ID = 10; unsigned char SUBCLASS_ID = 0; unsigned char PROTOCOL_ID = 0; unsigned char MASK = 1]	16	static
+../USB_Host_Shield_2_0/confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 10; unsigned char SUBCLASS_ID = 0; unsigned char PROTOCOL_ID = 0; unsigned char MASK = 1]	32	static
+../USB_Host_Shield_2_0/confdescparser.h:91:6:void ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::Parse(uint16_t, const uint8_t*, const uint16_t&) [with unsigned char CLASS_ID = 2; unsigned char SUBCLASS_ID = 2; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	32	static
+../USB_Host_Shield_2_0/confdescparser.h:103:6:bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor(uint8_t**, uint16_t*) [with unsigned char CLASS_ID = 10; unsigned char SUBCLASS_ID = 0; unsigned char PROTOCOL_ID = 0; unsigned char MASK = 1]	56	static
+../USB_Host_Shield_2_0/confdescparser.h:103:6:bool ConfigDescParser<CLASS_ID, SUBCLASS_ID, PROTOCOL_ID, MASK>::ParseDescriptor(uint8_t**, uint16_t*) [with unsigned char CLASS_ID = 2; unsigned char SUBCLASS_ID = 2; unsigned char PROTOCOL_ID = 1; unsigned char MASK = 7]	56	static

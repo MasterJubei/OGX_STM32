@@ -259,6 +259,9 @@ static uint8_t new_rumble_val_R = 0;
 
 static uint32_t button_press_idle = 0;
 
+/* Defines for extern declarations */
+uint8_t rx_buf[HID_EPOUT_SIZE]
+
 /* USER CODE END 0 */
 
 /**

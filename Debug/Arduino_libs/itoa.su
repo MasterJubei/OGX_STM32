@@ -1,4 +1,4 @@
-itoa.c:69:14:itoa	24	static
-itoa.c:74:14:ltoa	80	static
-itoa.c:124:14:utoa	24	static
-itoa.c:129:14:ultoa	80	static
+../Arduino_libs/itoa.c:69:14:itoa	24	static
+../Arduino_libs/itoa.c:74:14:ltoa	80	static
+../Arduino_libs/itoa.c:124:14:utoa	24	static
+../Arduino_libs/itoa.c:129:14:ultoa	80	static

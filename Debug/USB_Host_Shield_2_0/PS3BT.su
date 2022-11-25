@@ -1,37 +1,37 @@
-WString.h:113:11:String& String::operator+=(const String&)	16	static
-WString.h:114:11:String& String::operator+=(const char*)	16	static
-Print.h:49:12:size_t Print::write(const char*)	24	static
-BTD.h:320:16:int8_t BTD::registerBluetoothService(BluetoothService*)	24	static
-BTD.h:605:9:BluetoothService::BluetoothService(BTD*)	16	static
-BTD.h:638:14:bool BluetoothService::checkHciHandle(uint8_t*, uint16_t)	24	static
-PS3BT.cpp:23:1:PS3BT::PS3BT(BTD*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t)	24	static
-PS3BT.cpp:49:6:bool PS3BT::getButtonPress(ButtonEnum)	16	static
-PS3BT.cpp:53:6:bool PS3BT::getButtonClick(ButtonEnum)	24	static
-PS3BT.cpp:60:9:uint8_t PS3BT::getAnalogButton(ButtonEnum)	16	static
-PS3BT.cpp:64:9:uint8_t PS3BT::getAnalogHat(AnalogHatEnum)	16	static
-PS3BT.cpp:68:9:int16_t PS3BT::getSensor(SensorEnum)	16	static
-PS3BT.cpp:85:7:float PS3BT::getAngle(AngleEnum)	40	static
-PS3BT.cpp:112:7:float PS3BT::get9DOFValues(SensorEnum)	24	static
-PS3BT.cpp:141:8:String PS3BT::getTemperature()	48	static
-PS3BT.cpp:156:6:bool PS3BT::getStatus(StatusEnum)	16	static
-PS3BT.cpp:160:6:void PS3BT::printStatusString()	128	static
-PS3BT.cpp:204:6:virtual void PS3BT::Reset()	24	static
-PS3BT.cpp:217:6:virtual void PS3BT::disconnect()	32	static
-PS3BT.cpp:224:6:virtual void PS3BT::ACLData(uint8_t*)	32	static
-PS3BT.cpp:371:6:void PS3BT::L2CAP_task()	32	static
-PS3BT.cpp:454:6:virtual void PS3BT::Run()	24	static
-PS3BT.cpp:512:6:void PS3BT::HID_Command(uint8_t*, uint8_t)	40	static
-PS3BT.cpp:519:6:void PS3BT::setAllOff()	16	static
-PS3BT.cpp:530:6:void PS3BT::setRumbleOff()	88	static
-PS3BT.cpp:540:6:void PS3BT::setRumbleOn(RumbleEnum)	32	static
-PS3BT.cpp:549:6:void PS3BT::setRumbleOn(uint8_t, uint8_t, uint8_t, uint8_t)	88	static
-PS3BT.cpp:559:6:void PS3BT::setLedRaw(uint8_t)	16	static
-PS3BT.cpp:564:6:void PS3BT::setLedOff(LEDEnum)	16	static
-PS3BT.cpp:569:6:void PS3BT::setLedOn(LEDEnum)	16	static
-PS3BT.cpp:578:6:void PS3BT::setLedToggle(LEDEnum)	16	static
-PS3BT.cpp:583:6:void PS3BT::enable_sixaxis()	24	static
-PS3BT.cpp:597:6:void PS3BT::HIDMove_Command(uint8_t*, uint8_t)	40	static
-PS3BT.cpp:604:6:void PS3BT::moveSetBulb(uint8_t, uint8_t, uint8_t)	16	static
-PS3BT.cpp:613:6:void PS3BT::moveSetBulb(ColorsEnum)	16	static
-PS3BT.cpp:617:6:void PS3BT::moveSetRumble(uint8_t)	16	static
-PS3BT.cpp:628:6:virtual void PS3BT::onInit()	16	static
+../Arduino_libs/WString.h:113:11:String& String::operator+=(const String&)	16	static
+../Arduino_libs/WString.h:114:11:String& String::operator+=(const char*)	16	static
+../Arduino_libs/Print.h:49:12:size_t Print::write(const char*)	24	static
+../USB_Host_Shield_2_0/BTD.h:320:16:int8_t BTD::registerBluetoothService(BluetoothService*)	24	static
+../USB_Host_Shield_2_0/BTD.h:605:9:BluetoothService::BluetoothService(BTD*)	16	static
+../USB_Host_Shield_2_0/BTD.h:638:14:bool BluetoothService::checkHciHandle(uint8_t*, uint16_t)	24	static
+../USB_Host_Shield_2_0/PS3BT.cpp:23:1:PS3BT::PS3BT(BTD*, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t)	24	static
+../USB_Host_Shield_2_0/PS3BT.cpp:49:6:bool PS3BT::getButtonPress(ButtonEnum)	16	static
+../USB_Host_Shield_2_0/PS3BT.cpp:53:6:bool PS3BT::getButtonClick(ButtonEnum)	24	static
+../USB_Host_Shield_2_0/PS3BT.cpp:60:9:uint8_t PS3BT::getAnalogButton(ButtonEnum)	16	static
+../USB_Host_Shield_2_0/PS3BT.cpp:64:9:uint8_t PS3BT::getAnalogHat(AnalogHatEnum)	16	static
+../USB_Host_Shield_2_0/PS3BT.cpp:68:9:int16_t PS3BT::getSensor(SensorEnum)	16	static
+../USB_Host_Shield_2_0/PS3BT.cpp:85:7:float PS3BT::getAngle(AngleEnum)	40	static
+../USB_Host_Shield_2_0/PS3BT.cpp:112:7:float PS3BT::get9DOFValues(SensorEnum)	24	static
+../USB_Host_Shield_2_0/PS3BT.cpp:141:8:String PS3BT::getTemperature()	48	static
+../USB_Host_Shield_2_0/PS3BT.cpp:156:6:bool PS3BT::getStatus(StatusEnum)	16	static
+../USB_Host_Shield_2_0/PS3BT.cpp:160:6:void PS3BT::printStatusString()	128	static
+../USB_Host_Shield_2_0/PS3BT.cpp:204:6:virtual void PS3BT::Reset()	24	static
+../USB_Host_Shield_2_0/PS3BT.cpp:217:6:virtual void PS3BT::disconnect()	32	static
+../USB_Host_Shield_2_0/PS3BT.cpp:224:6:virtual void PS3BT::ACLData(uint8_t*)	32	static
+../USB_Host_Shield_2_0/PS3BT.cpp:371:6:void PS3BT::L2CAP_task()	32	static
+../USB_Host_Shield_2_0/PS3BT.cpp:454:6:virtual void PS3BT::Run()	24	static
+../USB_Host_Shield_2_0/PS3BT.cpp:512:6:void PS3BT::HID_Command(uint8_t*, uint8_t)	40	static
+../USB_Host_Shield_2_0/PS3BT.cpp:519:6:void PS3BT::setAllOff()	16	static
+../USB_Host_Shield_2_0/PS3BT.cpp:530:6:void PS3BT::setRumbleOff()	88	static
+../USB_Host_Shield_2_0/PS3BT.cpp:540:6:void PS3BT::setRumbleOn(RumbleEnum)	32	static
+../USB_Host_Shield_2_0/PS3BT.cpp:549:6:void PS3BT::setRumbleOn(uint8_t, uint8_t, uint8_t, uint8_t)	88	static
+../USB_Host_Shield_2_0/PS3BT.cpp:559:6:void PS3BT::setLedRaw(uint8_t)	16	static
+../USB_Host_Shield_2_0/PS3BT.cpp:564:6:void PS3BT::setLedOff(LEDEnum)	16	static
+../USB_Host_Shield_2_0/PS3BT.cpp:569:6:void PS3BT::setLedOn(LEDEnum)	16	static
+../USB_Host_Shield_2_0/PS3BT.cpp:578:6:void PS3BT::setLedToggle(LEDEnum)	16	static
+../USB_Host_Shield_2_0/PS3BT.cpp:583:6:void PS3BT::enable_sixaxis()	24	static
+../USB_Host_Shield_2_0/PS3BT.cpp:597:6:void PS3BT::HIDMove_Command(uint8_t*, uint8_t)	40	static
+../USB_Host_Shield_2_0/PS3BT.cpp:604:6:void PS3BT::moveSetBulb(uint8_t, uint8_t, uint8_t)	16	static
+../USB_Host_Shield_2_0/PS3BT.cpp:613:6:void PS3BT::moveSetBulb(ColorsEnum)	16	static
+../USB_Host_Shield_2_0/PS3BT.cpp:617:6:void PS3BT::moveSetRumble(uint8_t)	16	static
+../USB_Host_Shield_2_0/PS3BT.cpp:628:6:virtual void PS3BT::onInit()	16	static

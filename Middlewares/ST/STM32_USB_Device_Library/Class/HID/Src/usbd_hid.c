@@ -119,6 +119,7 @@ uint8_t USBD_HID_Report_ID = 0;
 uint8_t USBD_HID_Report_LENGTH = 0;
 uint8_t ctl_report_buf[6] = {0};
 uint8_t rumble_flag = 0;
+uint8_t rx_buf[HID_EPOUT_SIZE];
 
 char caller_str[100];
 
