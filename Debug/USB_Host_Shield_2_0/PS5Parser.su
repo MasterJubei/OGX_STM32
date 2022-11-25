@@ -1,8 +1,0 @@
-../USB_Host_Shield_2_0/PS5Trigger.h:100:10:void PS5Trigger::Reset()	16	static
-../USB_Host_Shield_2_0/PS5Parser.cpp:39:6:bool PS5Parser::checkDpad(ButtonEnum)	16	static
-../USB_Host_Shield_2_0/PS5Parser.cpp:54:6:bool PS5Parser::getButtonPress(ButtonEnum)	16	static
-../USB_Host_Shield_2_0/PS5Parser.cpp:61:6:bool PS5Parser::getButtonClick(ButtonEnum)	24	static
-../USB_Host_Shield_2_0/PS5Parser.cpp:68:9:uint8_t PS5Parser::getAnalogButton(ButtonEnum)	16	static
-../USB_Host_Shield_2_0/PS5Parser.cpp:76:9:uint8_t PS5Parser::getAnalogHat(AnalogHatEnum)	16	static
-../USB_Host_Shield_2_0/PS5Parser.cpp:80:6:void PS5Parser::Parse(uint8_t, uint8_t*)	32	static
-../USB_Host_Shield_2_0/PS5Parser.cpp:140:6:void PS5Parser::Reset()	24	static

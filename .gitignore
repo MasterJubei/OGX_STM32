@@ -1,1 +1,6 @@
 .vscode/
+
+# Ignore all files in the Debug folder except the ones ending in .elf
+Debug/*
+!Debug/*.elf
+.settings/

@@ -1,7 +1,0 @@
-../USB_Host_Shield_2_0/PS4Parser.cpp:35:6:bool PS4Parser::checkDpad(ButtonEnum)	16	static
-../USB_Host_Shield_2_0/PS4Parser.cpp:50:6:bool PS4Parser::getButtonPress(ButtonEnum)	16	static
-../USB_Host_Shield_2_0/PS4Parser.cpp:57:6:bool PS4Parser::getButtonClick(ButtonEnum)	24	static
-../USB_Host_Shield_2_0/PS4Parser.cpp:64:9:uint8_t PS4Parser::getAnalogButton(ButtonEnum)	16	static
-../USB_Host_Shield_2_0/PS4Parser.cpp:72:9:uint8_t PS4Parser::getAnalogHat(AnalogHatEnum)	16	static
-../USB_Host_Shield_2_0/PS4Parser.cpp:76:6:void PS4Parser::Parse(uint8_t, uint8_t*)	32	static
-../USB_Host_Shield_2_0/PS4Parser.cpp:130:6:void PS4Parser::Reset()	24	static
